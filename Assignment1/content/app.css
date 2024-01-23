@@ -1,0 +1,16 @@
+/* Links */
+
+/* Underlines a link when hovered */
+.underline-hover:hover {
+    text-decoration: underline; 
+}
+
+/* Gives a link a dashed underline by default 
+   Gives a solid underline when hovered */
+.dashed-underline {
+    text-decoration: none;
+    border-bottom: 1px dashed;
+}
+.dashed-underline:hover {
+    border-bottom: 1px solid; 
+}
