@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Harmony Hub - Home</title>
 
     <!-- CSS Section -->
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
@@ -11,7 +11,8 @@
 
 </head>
 
-<body>
+<!-- Ensures the body fills the whole viewport -->
+<body class="d-flex flex-column min-vh-100">
 
     <!-- Navbar -->
     <header>
@@ -45,13 +46,14 @@
     </header>
 
     <!-- Main Content -->
-    <div class="container">
+    <!-- Ensures footer is forced to bottom of viewport -->
+    <div class="container flex-grow-1">
 
     </div>
 
     <!-- Footer -->
     <footer>
-        <nav class="py-3 bg-body-tertiary fixed-bottom">
+        <nav class="py-3 mt-3 bg-body-tertiary">
             <div class="container">
                 <ul class="nav justify-content-center border-bottom pb-3 mb-3">
                     <li class="nav-item">
@@ -64,7 +66,7 @@
                         <a href="contact.html" class="nav-link px-2 text-body-secondary">Contact Us</a>
                     </li>
                 </ul>
-                <p class="text-center text-body-secondary">© 2024 Harmony Hub, Inc</p>
+                <p class="text-center text-body-secondary">&copy; 2024 Harmony Hub, Inc</p>
             </div>  
         </nav>
     </footer>
