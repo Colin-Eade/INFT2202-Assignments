@@ -56,7 +56,7 @@ const projects = [
     }
 
     function DisplayPortfolioPage(){
-        console.log("Called DisplayProductPage...");
+        console.log("Called DisplayPortfolioPage...");
 
         const projectContainer = document.getElementById("project-container");
         const loadMoreButton = document.getElementById("load-more-button");
@@ -145,13 +145,11 @@ const projects = [
     }
 
     function DisplayServicesPage(){
-        console.log("Called DisplayAboutPage...");
-
-        let servicesAccordion = new bootstrap.Accordion(document.querySelector('#servicesAccordion'));
+        console.log("Called DisplayServicesPage...");
     }
 
     function DisplayTeamPage(){
-        console.log("Called DisplayServicesPage...")
+        console.log("Called DisplayTeamPage...")
     }
 
     function DisplayBlogPage(){
@@ -329,7 +327,7 @@ const projects = [
             case `${titlePrefix}Services`:
                 DisplayServicesPage();
                 break;
-            case `${titlePrefix}Our Team`:
+            case `${titlePrefix}Team`:
                 DisplayTeamPage();
                 break;
             case `${titlePrefix}Blog`:

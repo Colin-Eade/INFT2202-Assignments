@@ -39,3 +39,8 @@
     font-size: 20px;
     border-radius: 0;
 }
+
+/* Sets maximum size of the profile images on the Team page. */
+.img-max-width {
+    max-width: 300px;
+}
