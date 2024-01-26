@@ -56,7 +56,7 @@ const projects = [
     }
 
     function DisplayPortfolioPage(){
-        console.log("Called DisplayProductPage...")
+        console.log("Called DisplayProductPage...");
 
         const projectContainer = document.getElementById("project-container");
         const loadMoreButton = document.getElementById("load-more-button");
@@ -145,7 +145,9 @@ const projects = [
     }
 
     function DisplayServicesPage(){
-        console.log("Called DisplayAboutPage...")
+        console.log("Called DisplayAboutPage...");
+
+        let servicesAccordion = new bootstrap.Accordion(document.querySelector('#servicesAccordion'));
     }
 
     function DisplayTeamPage(){
