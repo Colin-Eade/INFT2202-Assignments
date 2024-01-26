@@ -203,7 +203,6 @@ const projects = [
         // Classes and attributes for the elements
         header.setAttribute("class", "");
         nav.setAttribute("class", "navbar navbar-expand-lg bg-body-tertiary");
-
         container.setAttribute("class", "container");
 
         brandLink.setAttribute("class", "navbar-brand");
@@ -224,6 +223,7 @@ const projects = [
         collapseDiv.setAttribute("id", "navbarSupportedContent");
 
         navList.setAttribute("class", "navbar-nav mb-auto mb-2 mb-lg-0");
+        navList.setAttribute("id", "navLinkList")
 
         // text content for the brand link
         brandLink.textContent = "Harmony Hub";
@@ -254,6 +254,8 @@ const projects = [
 
         // Insert the header at the beginning
         document.body.insertBefore(header, document.body.firstChild)
+
+        ChangeNavBar();
     }
 
     /**
@@ -309,6 +311,37 @@ const projects = [
 
         // Insert the footer after the main content in the document
         mainContent.parentNode.insertBefore(footer, mainContent.nextSibling);
+    }
+
+    /**
+     * Modifies the navigation bar in two ways:
+     * 1. Adds a new 'Careers' item to the navigation list.
+     * 2. Changes the text of the existing 'Blog' item to 'News'.
+     */
+    function ChangeNavBar() {
+
+        // Get link list id
+        let navList = document.getElementById("navLinkList")
+
+        // Set new list item attributes
+        let newItem = document.createElement("li");
+        newItem.setAttribute("class", "nav-item");
+
+        // Set new link attributes
+        let newLink = document.createElement("a");
+        newLink.setAttribute("class", "nav-link");
+        newLink.setAttribute("href", "careers.html");
+        newLink.setAttribute("id", "navCareersLink");
+        newLink.textContent = "Careers";
+
+        // Append the new items
+        newItem.appendChild(newLink);
+        navList.appendChild(newItem);
+
+        // Change Blog to News
+        let blogLink = document.getElementById("navBlogLink");
+        blogLink.textContent = "News";
+
     }
 
     function Start(){
