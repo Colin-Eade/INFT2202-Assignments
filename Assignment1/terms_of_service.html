@@ -13,35 +13,34 @@
 </head>
 
 <!-- Ensures the body fills the whole viewport -->
-
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Navbar -->
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container">
-                <a class="navbar-brand" href="index.html">Harmony Hub</a>
+                <a id="navHomeLogo" class="navbar-brand" href="index.html">Harmony Hub</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mb-auto mb-2 mb-lg-0">
+                    <ul id="navLinkList" class="navbar-nav mb-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                            <a id="navHomeLink" class="nav-link" href="index.html">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="portfolio.html">Portfolio</a>
+                            <a id="navPortfolioLink" class="nav-link" href="portfolio.html">Portfolio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="services.html">Services</a>
+                            <a id="navServicesLink" class="nav-link" href="services.html">Services</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="team.html">Team</a>
+                            <a id="navTeamLink" class="nav-link" href="team.html">Team</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="blog.html">Blog</a>
+                            <a id="navBlogLink" class="nav-link" href="blog.html">Blog</a>
                         </li>
                     </ul>
                 </div>
@@ -51,15 +50,13 @@
 
     <!-- Main Content -->
     <!-- Ensures footer is forced to bottom of viewport -->
-    <div class="container flex-grow-1">
+    <main class="container flex-grow-1">
         <h1 class="my-3 text-center">Terms of Service</h1>
 
         <p>Last Revised: January 23, 2024</p>
 
-        <p class="my-5">This Terms of Service agreement is binding for all visitors and users of Harmony Hub. By
-            accessing
-            or using our website, you are acknowledging your acceptance and agreement to abide by the terms and
-            conditions
+        <p class="my-5">This Terms of Service agreement is binding for all visitors and users of Harmony Hub. By accessing
+            or using our website, you are acknowledging your acceptance and agreement to abide by the terms and conditions
             outlined herein.</p>
 
         <div class="accordion accordion-flush" id="accordionFlush">
@@ -154,7 +151,7 @@
             </div>
         </div>
 
-    </div>
+    </main>
 
     <!-- Footer -->
     <footer>
