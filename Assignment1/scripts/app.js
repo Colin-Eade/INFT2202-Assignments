@@ -175,8 +175,12 @@ const projects = [
         });
     }
 
+    /**
+     * Creates and inserts a header element and navigation bar at the beginning of the body.
+     */
     function CreateHeader() {
 
+        // menu items for the navigation bar
         const menuItems = [
             { id: "navHomeLink", text: "Home", href: "index.html" },
             { id: "navPortfolioLink", text: "Portfolio", href: "portfolio.html" },
@@ -185,19 +189,27 @@ const projects = [
             { id: "navBlogLink", text: "Blog", href: "blog.html" }
         ];
 
+        // HTML elements for header
         let header = document.createElement("header");
         let nav = document.createElement("nav");
         let container = document.createElement("div");
         let brandLink = document.createElement("a");
         let toggleButton = document.createElement("button");
+        let toggleIcon = document.createElement("span");
         let collapseDiv = document.createElement("div");
         let navList = document.createElement("ul");
 
-        header.setAttribute("class", "bg-body-tertiary");
-        nav.setAttribute("class", "navbar navbar-expand-lg");
+
+        // Classes and attributes for the elements
+        header.setAttribute("class", "");
+        nav.setAttribute("class", "navbar navbar-expand-lg bg-body-tertiary");
+
         container.setAttribute("class", "container");
+
         brandLink.setAttribute("class", "navbar-brand");
         brandLink.setAttribute("href", "index.html");
+        brandLink.setAttribute("id", "navHomeLogo");
+
         toggleButton.setAttribute("class", "navbar-toggler");
         toggleButton.setAttribute("type", "button");
         toggleButton.setAttribute("data-bs-toggle", "collapse");
@@ -205,31 +217,42 @@ const projects = [
         toggleButton.setAttribute("aria-controls", "navbarSupportedContent");
         toggleButton.setAttribute("aria-expanded", "false");
         toggleButton.setAttribute("aria-label", "Toggle navigation");
+
+        toggleIcon.setAttribute("class", "navbar-toggler-icon");
+
         collapseDiv.setAttribute("class", "collapse navbar-collapse");
         collapseDiv.setAttribute("id", "navbarSupportedContent");
+
         navList.setAttribute("class", "navbar-nav mb-auto mb-2 mb-lg-0");
 
+        // text content for the brand link
         brandLink.textContent = "Harmony Hub";
 
+        // Create header structure
         header.appendChild(nav);
         nav.appendChild(container);
         container.appendChild(brandLink);
         container.appendChild(toggleButton);
+        toggleButton.appendChild(toggleIcon);
         container.appendChild(collapseDiv);
         collapseDiv.appendChild(navList);
 
+        // List items with links for each navbar item
         for (const item of menuItems) {
             let listItem = document.createElement("li");
             listItem.setAttribute("class", "nav-item");
+
             let link = document.createElement("a");
             link.setAttribute("class", "nav-link");
             link.setAttribute("id", item.id);
             link.setAttribute("href", item.href);
             link.textContent = item.text;
+
             listItem.appendChild(link);
             navList.appendChild(listItem);
         }
 
+        // Insert the header at the beginning
         document.body.insertBefore(header, document.body.firstChild)
     }
 
