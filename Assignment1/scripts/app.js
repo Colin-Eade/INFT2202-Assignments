@@ -173,65 +173,114 @@ const projects = [
         });
     }
 
+    function CreateHeader() {
+
+        const menuItems = [
+            { id: "navHomeLink", text: "Home", href: "index.html" },
+            { id: "navPortfolioLink", text: "Portfolio", href: "portfolio.html" },
+            { id: "navServicesLink", text: "Services", href: "services.html" },
+            { id: "navTeamLink", text: "Team", href: "team.html" },
+            { id: "navBlogLink", text: "Blog", href: "blog.html" }
+        ];
+
+        let header = document.createElement("header");
+        let nav = document.createElement("nav");
+        let container = document.createElement("div");
+        let brandLink = document.createElement("a");
+        let toggleButton = document.createElement("button");
+        let collapseDiv = document.createElement("div");
+        let navList = document.createElement("ul");
+
+        header.setAttribute("class", "bg-body-tertiary");
+        nav.setAttribute("class", "navbar navbar-expand-lg");
+        container.setAttribute("class", "container");
+        brandLink.setAttribute("class", "navbar-brand");
+        brandLink.setAttribute("href", "index.html");
+        toggleButton.setAttribute("class", "navbar-toggler");
+        toggleButton.setAttribute("type", "button");
+        toggleButton.setAttribute("data-bs-toggle", "collapse");
+        toggleButton.setAttribute("data-bs-target", "#navbarSupportedContent");
+        toggleButton.setAttribute("aria-controls", "navbarSupportedContent");
+        toggleButton.setAttribute("aria-expanded", "false");
+        toggleButton.setAttribute("aria-label", "Toggle navigation");
+        collapseDiv.setAttribute("class", "collapse navbar-collapse");
+        collapseDiv.setAttribute("id", "navbarSupportedContent");
+        navList.setAttribute("class", "navbar-nav mb-auto mb-2 mb-lg-0");
+
+        brandLink.textContent = "Harmony Hub";
+
+        header.appendChild(nav);
+        nav.appendChild(container);
+        container.appendChild(brandLink);
+        container.appendChild(toggleButton);
+        container.appendChild(collapseDiv);
+        collapseDiv.appendChild(navList);
+
+        for (const item of menuItems) {
+            let listItem = document.createElement("li");
+            listItem.setAttribute("class", "nav-item");
+            let link = document.createElement("a");
+            link.setAttribute("class", "nav-link");
+            link.setAttribute("id", item.id);
+            link.setAttribute("href", item.href);
+            link.textContent = item.text;
+            listItem.appendChild(link);
+            navList.appendChild(listItem);
+        }
+
+        document.body.insertBefore(header, document.body.firstChild)
+    }
+
     /**
      * Creates and inserts a footer element with navigation links
      */
     function CreateFooter() {
 
         // Array of footer links with titles
-        const footerLinks = [
-            {
-                title: "Privacy Policy",
-                link: "privacy_policy.html"
-            },
-            {
-                title: "Terms of Service",
-                link: "terms_of_service.html"
-            },
-            {
-                title: "Contact Us",
-                link: "contact.html"
-            },
+        const footerItems = [
+            { text: "Privacy Policy", href: "privacy_policy.html" },
+            { text: "Terms of Service", href: "terms_of_service.html" },
+            { text: "Contact Us", href: "contact.html"}
         ];
 
         // HTML elements for the footer
         let footer = document.createElement("footer");
-        let navTag = document.createElement("nav");
-        let divTag = document.createElement("div");
-        let ulTag = document.createElement("ul");
-        let pTag = document.createElement("p");
+        let nav = document.createElement("nav");
+        let container = document.createElement("div");
+        let footerList = document.createElement("ul");
+        let copyrightText = document.createElement("p");
 
         // Locate the main content tags
         let mainContent = document.querySelector("main");
 
         // Attributes and content for the footer elements
-        navTag.setAttribute("class", "py-3 mt-3 bg-body-tertiary");
-        divTag.setAttribute("class", "container");
-        ulTag.setAttribute("class", "nav justify-content-center border-bottom pb-3 mb-3");
-        pTag.setAttribute("class", "text-center text-body-secondary");
-        pTag.textContent = "© 2024 Harmony Hub, Inc";
+        nav.setAttribute("class", "py-3 mt-3 bg-body-tertiary");
+        container.setAttribute("class", "container");
+        footerList.setAttribute("class", "nav justify-content-center border-bottom pb-3 mb-3");
+        copyrightText.setAttribute("class", "text-center text-body-secondary");
+        copyrightText.textContent = "© 2024 Harmony Hub, Inc";
 
         // Create footer structure
-        footer.appendChild(navTag);
-        navTag.appendChild(divTag);
-        divTag.appendChild(ulTag);
+        footer.appendChild(nav);
+        nav.appendChild(container);
+        container.appendChild(footerList);
 
         // List items with links for each footer link
-        for(const link of footerLinks) {
-            let liTag = document.createElement("li"); 
-            liTag.setAttribute("class", "nav-item"); 
+        for(const item of footerItems) {
+            let listItem = document.createElement("li");
+            listItem.setAttribute("class", "nav-item");
 
-            let aTag = document.createElement("a");
-            aTag.setAttribute("class", "nav-link px-2 text-body-secondary underline-hover");
-            aTag.setAttribute("href", link.link);
-            aTag.textContent = link.title;
+            let listLink = document.createElement("a");
+            listLink.setAttribute("class", "nav-link px-2 text-body-secondary underline-hover");
+            listLink.setAttribute("href", item.href);
+            listLink.textContent = item.text;
 
-            liTag.appendChild(aTag); 
-            ulTag.appendChild(liTag);
+            listItem.appendChild(listLink);
+            footerList.appendChild(listItem);
         }
 
         // Bottom text
-        divTag.appendChild(pTag);
+        container.appendChild(copyrightText);
 
         // Insert the footer after the main content in the document
         mainContent.parentNode.insertBefore(footer, mainContent.nextSibling);
@@ -242,6 +291,7 @@ const projects = [
 
         console.log("App Started");
 
+        CreateHeader();
         CreateFooter();
 
         switch (document.title) {
