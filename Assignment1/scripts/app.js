@@ -173,34 +173,100 @@ const projects = [
         });
     }
 
+    /**
+     * Creates and inserts a footer element with navigation links
+     */
+    function CreateFooter() {
 
+        // Array of footer links with titles
+        const footerLinks = [
+            {
+                title: "Privacy Policy",
+                link: "privacy_policy.html"
+            },
+            {
+                title: "Terms of Service",
+                link: "terms_of_service.html"
+            },
+            {
+                title: "Contact Us",
+                link: "contact.html"
+            },
+        ];
+
+        // HTML elements for the footer
+        let footer = document.createElement("footer");
+        let navTag = document.createElement("nav");
+        let divTag = document.createElement("div");
+        let ulTag = document.createElement("ul");
+        let pTag = document.createElement("p");
+
+        // Locate the main content tags
+        let mainContent = document.querySelector("main");
+
+        // Attributes and content for the footer elements
+        navTag.setAttribute("class", "py-3 mt-3 bg-body-tertiary");
+        divTag.setAttribute("class", "container");
+        ulTag.setAttribute("class", "nav justify-content-center border-bottom pb-3 mb-3");
+        pTag.setAttribute("class", "text-center text-body-secondary");
+        pTag.textContent = "© 2024 Harmony Hub, Inc";
+
+        // Create footer structure
+        footer.appendChild(navTag);
+        navTag.appendChild(divTag);
+        divTag.appendChild(ulTag);
+
+        // List items with links for each footer link
+        for(const link of footerLinks) {
+            let liTag = document.createElement("li"); 
+            liTag.setAttribute("class", "nav-item"); 
+
+            let aTag = document.createElement("a");
+            aTag.setAttribute("class", "nav-link px-2 text-body-secondary underline-hover");
+            aTag.setAttribute("href", link.link);
+            aTag.textContent = link.title;
+
+            liTag.appendChild(aTag); 
+            ulTag.appendChild(liTag);
+        }
+
+        // Bottom text
+        divTag.appendChild(pTag);
+
+        // Insert the footer after the main content in the document
+        mainContent.parentNode.insertBefore(footer, mainContent.nextSibling);
+    }
 
     function Start(){
+        const titlePrefix = "Harmony Hub - "
+
         console.log("App Started");
 
-        switch(document.title){
-            case "Home":
+        CreateFooter();
+
+        switch (document.title) {
+            case `${titlePrefix}Home`:
                 DisplayHomePage();
                 break;
-            case "Portfolio":
+            case `${titlePrefix}Portfolio`:
                 DisplayPortfolioPage();
                 break;
-            case "Services":
+            case `${titlePrefix}Services`:
                 DisplayServicesPage();
                 break;
-            case "Our Team":
+            case `${titlePrefix}Our Team`:
                 DisplayTeamPage();
                 break;
-            case "Blog":
+            case `${titlePrefix}Blog`:
                 DisplayBlogPage();
                 break;
-            case "Privacy Policy":
+            case `${titlePrefix}Privacy Policy`:
                 DisplayPrivacyPolicyPage();
                 break;
-            case "Terms Of Service":
+            case `${titlePrefix}Terms Of Service`:
                 DisplayTermsOfServicePage();
                 break;
-            case "Contact Us":
+            case `${titlePrefix}Contact Us`:
                 DisplayContactPage();
                 break;
         }
