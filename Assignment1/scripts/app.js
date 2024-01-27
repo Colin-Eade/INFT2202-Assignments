@@ -1,8 +1,8 @@
 /**
- *  Names: Colin Eade (ID:100329105) and Megan Clarke (ID:100881229).
- *  Date: January 26, 2024.
- *  File: app.js
- *  Description: This is the JavaScript file that contains all the functions to run the Harmony Hub Website. We utilize
+ *  @Authors Colin Eade (ID:100329105) and Megan Clarke (ID:100881229).
+ *  @Date January 26, 2024.
+ *  @File app.js
+ *  @Description This is the JavaScript file that contains all the functions to run the Harmony Hub Website. We utilize
  *  an IIFE to immediately invoke the site when it is launched and dynamically select which page functions to load
  *  based on the title of the page that was loaded.
  */
@@ -129,7 +129,7 @@ const projects = [
         }
 
         /**
-         Function to display projects on the page
+         * Function to display projects on the page
          */
         function displayProjects(startIndex, endIndex) {
             for (let i = startIndex; i < endIndex && i < projects.length; i++) {
@@ -165,22 +165,22 @@ const projects = [
     }
 
     /**
-        Called when the services page is displayed and logs to the console
+     * Called when the services page is displayed and logs to the console
      */
     function DisplayServicesPage(){
         console.log("Called DisplayServicesPage...");
     }
 
     /**
-        Called when the Team page is displayed and logs to the console
+     * Called when the Team page is displayed and logs to the console
      */
     function DisplayTeamPage(){
         console.log("Called DisplayTeamPage...")
     }
 
     /**
-        Called when the Blog page is displayed, logs to the console and updates the DOM to display "Community News"
-        instead of "Community Blog"
+     * Called when the Blog page is displayed, logs to the console and updates the DOM to display "Community News"
+     * instead of "Community Blog"
      */
     function DisplayBlogPage(){
         console.log("Called DisplayContactListPage...");
@@ -195,16 +195,61 @@ const projects = [
     function DisplayContactPage(){
         console.log("Called DisplayContactPage...");
 
-        let sendButton = document.getElementById("sendButton")
-        let subscribeButton = document.getElementById("subscribeCheckbox")
+        let contactForm = document.getElementById('contactForm');
+        let submitButton = document.getElementById("formSubmit")
 
-        sendButton.addEventListener("click", function() {
-            if(subscribeButton.checked) {
-                let contact= new Contact(fullName.value, contactNumber.value, emailAddress.value);
-                if(contact.serialize()){
-                    let key = contact.fullName.substring(0,1) + Date.now();
-                    localStorage.setItem(key, contact.serialize());
-                }
+        submitButton.addEventListener("click", function() {
+
+            if (contactForm.checkValidity()) {
+                event.preventDefault();
+                let modalFullName = document.getElementById("modalFullName");
+                let modalEmailAddress = document.getElementById("modalEmailAddress");
+                let modalSubject = document.getElementById("modalSubject");
+                let modalMessage = document.getElementById("modalMessage");
+
+                // Get values from form fields
+                let formFullName = document.getElementById("fullName").value;
+                let formEmailAddress = document.getElementById("emailAddress").value;
+                let formSubject = document.getElementById("subject").value;
+                let formMessage = document.getElementById("message").value;
+
+                // Set text content of modal elements
+                modalFullName.textContent = formFullName;
+                modalEmailAddress.textContent = formEmailAddress;
+                modalSubject.textContent = formSubject;
+                modalMessage.textContent = formMessage;
+
+                let contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
+                contactModal.show();
+
+                let modalSubmit = document.getElementById("modalSubmit")
+
+                modalSubmit.addEventListener("click", function() {
+                    contactModal.hide();
+
+                    let redirectModal = new bootstrap.Modal(document.getElementById('redirectModal'));
+                    redirectModal.show();
+
+                    let counter = 5;
+                    let counterDisplay = document.getElementById("redirectCounter");
+                    counterDisplay.textContent = counter;  // Set the initial display value
+
+                    let interval = setInterval(function() {
+                        counter--;
+                        counterDisplay.textContent = counter;
+                        if (counter <= 0) {
+                            clearInterval(interval);
+
+                            redirectModal.hide();
+                        }
+                    }, 1000);
+
+                    document.getElementById('redirectModal').addEventListener('hidden.bs.modal',
+                        function () {
+                        window.location.href = "index.html";
+                    });
+
+                });
             }
         });
     }

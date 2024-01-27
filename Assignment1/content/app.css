@@ -44,3 +44,8 @@
 .img-max-width {
     max-width: 300px;
 }
+
+.modal-body {
+    word-break: break-word; /* Breaks long unbroken text */
+    overflow-wrap: break-word; /* Alternative property for wrapping long words */
+}
