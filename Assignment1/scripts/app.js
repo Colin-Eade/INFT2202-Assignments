@@ -9,7 +9,6 @@
 
 "use strict";
 
-// Constants
 const projects = [
     {
         title: "Accessible Playground",
@@ -187,71 +186,105 @@ const projects = [
 
         let blogPageHeading = document.getElementsByTagName("h1")[0]
         blogPageHeading.textContent = "Community News";
+
+        document.title = "Harmony Hub - News"
     }
 
-    /*
-
+    /**
+     * Displays the contact page and sets up event listeners for form submission and modal interactions.
      */
-    function DisplayContactPage(){
+    function DisplayContactPage() {
         console.log("Called DisplayContactPage...");
 
+        // Obtain references to form elements and modals
         let contactForm = document.getElementById('contactForm');
-        let submitButton = document.getElementById("formSubmit")
+        let modalSubmit = document.getElementById("modalSubmit");
 
-        submitButton.addEventListener("click", function() {
+        // Initialize Bootstrap modals
+        let contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
+        let redirectModal = new bootstrap.Modal(document.getElementById('redirectModal'));
 
-            if (contactForm.checkValidity()) {
-                event.preventDefault();
-                let modalFullName = document.getElementById("modalFullName");
-                let modalEmailAddress = document.getElementById("modalEmailAddress");
-                let modalSubject = document.getElementById("modalSubject");
-                let modalMessage = document.getElementById("modalMessage");
+        // Set up event listeners
+        contactForm.addEventListener("submit", SubmitContactForm);
+        modalSubmit.addEventListener("click", SubmitModalSubmitClick);
 
-                // Get values from form fields
-                let formFullName = document.getElementById("fullName").value;
-                let formEmailAddress = document.getElementById("emailAddress").value;
-                let formSubject = document.getElementById("subject").value;
-                let formMessage = document.getElementById("message").value;
+        /**
+         * Handles the submission of the contact form.
+         * Prevents default form submission, checks form validity, and shows the contact modal.
+         * @param {Event} event - The event for the form submission.
+         */
+        function SubmitContactForm(event) {
+            event.preventDefault();
+            if (!contactForm.checkValidity())
+                return;
+            PopulateSubmitModal();
+            contactModal.show();
+        }
 
-                // Set text content of modal elements
-                modalFullName.textContent = formFullName;
-                modalEmailAddress.textContent = formEmailAddress;
-                modalSubject.textContent = formSubject;
-                modalMessage.textContent = formMessage;
+        /**
+         * Populates the contact modal with data from the form.
+         */
+        function PopulateSubmitModal() {
+            // Retrieve form field elements
+            let formFullName = document.getElementById("fullName").value;
+            let formEmailAddress = document.getElementById("emailAddress").value;
+            let formSubject = document.getElementById("subject").value;
+            let formMessage = document.getElementById("message").value;
 
-                let contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
-                contactModal.show();
+            // Retrieve modal elements
+            let modalFullName = document.getElementById("modalFullName");
+            let modalEmailAddress = document.getElementById("modalEmailAddress");
+            let modalSubject = document.getElementById("modalSubject");
+            let modalMessage = document.getElementById("modalMessage");
 
-                let modalSubmit = document.getElementById("modalSubmit")
+            // Update text content of modal elements
+            modalFullName.textContent = formFullName;
+            modalEmailAddress.textContent = formEmailAddress;
+            modalSubject.textContent = formSubject;
+            modalMessage.textContent = formMessage;
+        }
 
-                modalSubmit.addEventListener("click", function() {
-                    contactModal.hide();
+        /**
+         * Handles the click event on the modal submit button.
+         * Hides the contact modal, resets the form, and displays a redirect modal with a countdown.
+         */
+        function SubmitModalSubmitClick() {
+            contactModal.hide();
+            contactForm.reset();
+            RedirectModalCountdown();
+            redirectModal.show();
+        }
 
-                    let redirectModal = new bootstrap.Modal(document.getElementById('redirectModal'));
-                    redirectModal.show();
+        /**
+         * Initiates the countdown for the redirect modal and hides it when the countdown reaches zero.
+         * Uses Lodash's delay function to schedule the redirection.
+         */
+        function RedirectModalCountdown() {
+            // Lodash delay for redirect
+            _.delay(RedirectToHome, 5500);
 
-                    let counter = 5;
-                    let counterDisplay = document.getElementById("redirectCounter");
-                    counterDisplay.textContent = counter;  // Set the initial display value
+            // Counter displayed on modal
+            let counter = 5;
+            let counterDisplay = document.getElementById("redirectCounter");
+            counterDisplay.textContent = counter;
 
-                    let interval = setInterval(function() {
-                        counter--;
-                        counterDisplay.textContent = counter;
-                        if (counter <= 0) {
-                            clearInterval(interval);
+            // Update the countdown every second and hide the modal at the end
+            let interval = setInterval(function() {
+                counter--;
+                counterDisplay.textContent = counter;
+                if (counter <= 0) {
+                    clearInterval(interval);
+                    redirectModal.hide();
+                }
+            }, 1000);
+        }
 
-                            redirectModal.hide();
-                        }
-                    }, 1000);
-
-                    document.getElementById('redirectModal').addEventListener('hidden.bs.modal',
-                        function () {
-                        window.location.href = "index.html";
-                    });
-
-                });
-            }
-        });
+        /**
+         * Redirects the user to the home page.
+         */
+        function RedirectToHome() {
+            window.location.href = "index.html";
+        }
     }
 
     /**
@@ -304,11 +337,6 @@ const projects = [
         navList.setAttribute("class", "navbar-nav mb-auto mb-2 mb-lg-0");
         navList.setAttribute("id", "navLinkList")
 
-        const fontAwesomeLink = document.createElement("link");
-        fontAwesomeLink.setAttribute("rel", "stylesheet");
-        fontAwesomeLink.setAttribute("href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
-        document.head.appendChild(fontAwesomeLink);
-
         // Create the brand link element
         brandLink.classList.add("navbar-brand");
         brandLink.href = "index.html";
@@ -350,6 +378,7 @@ const projects = [
         // Insert the header at the beginning
         document.body.insertBefore(header, document.body.firstChild)
 
+        // Dynamically changes navbar as per requirements
         ChangeNavBar();
     }
 
@@ -376,7 +405,7 @@ const projects = [
         let mainContent = document.querySelector("main");
 
         // Attributes and content for the footer elements
-        nav.setAttribute("class", "py-3 mt-3 bg-body-tertiary");
+        nav.setAttribute("class", "py-3 mt-5 bg-body-tertiary");
         container.setAttribute("class", "container");
         footerList.setAttribute("class", "nav justify-content-center border-bottom pb-3 mb-3");
         copyrightText.setAttribute("class", "text-center text-body-secondary");
@@ -425,7 +454,7 @@ const projects = [
         // Set new link attributes
         let newLink = document.createElement("a");
         newLink.setAttribute("class", "nav-link");
-        newLink.setAttribute("href", "careers.html");
+        newLink.setAttribute("href", "#");
         newLink.setAttribute("id", "navCareersLink");
         newLink.textContent = "Careers";
 
@@ -444,13 +473,16 @@ const projects = [
      * is used to detect which page has been loaded based on the Document Title.
      */
     function Start(){
+        // Page title prefix
         const titlePrefix = "Harmony Hub - "
 
         console.log("App Started");
 
+        // Generate the header and footer
         CreateHeader();
         CreateFooter();
 
+        // Switch function depending on page
         switch (document.title) {
             case `${titlePrefix}Home`:
                 DisplayHomePage();
