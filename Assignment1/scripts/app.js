@@ -1,3 +1,12 @@
+/**
+ *  Names: Colin Eade (ID:100329105) and Megan Clarke (ID:100881229).
+ *  Date: January 26, 2024.
+ *  File: app.js
+ *  Description: This is the JavaScript file that contains all the functions to run the Harmony Hub Website. We utilize
+ *  an IIFE to immediately invoke the site when it is launched and dynamically select which page functions to load
+ *  based on the title of the page that was loaded.
+ */
+
 "use strict";
 
 // Constants
@@ -51,17 +60,26 @@ const projects = [
 
 // IIFE - Immediately Invoked Functional Expression
 (function(){
+
+    /**
+      Logs to the console when the home page is displayed
+     */
     function DisplayHomePage(){
         console.log("Called DisplayHomePage...");
     }
 
+    /**
+        Called to display the portfolio page and dynamically create the project cards for display
+     */
     function DisplayPortfolioPage(){
         console.log("Called DisplayPortfolioPage...");
 
         const projectContainer = document.getElementById("project-container");
         const loadMoreButton = document.getElementById("load-more-button");
 
-        // Function to create a project card
+        /**
+            Function to create a project card
+         */
         function createProjectCard(project) {
 
             const col = document.createElement("div");
@@ -110,7 +128,9 @@ const projects = [
             return col;
         }
 
-        // Function to display projects on the page
+        /**
+         Function to display projects on the page
+         */
         function displayProjects(startIndex, endIndex) {
             for (let i = startIndex; i < endIndex && i < projects.length; i++) {
                 if (!projects[i].displayed) {
@@ -144,14 +164,24 @@ const projects = [
         });
     }
 
+    /**
+        Called when the services page is displayed and logs to the console
+     */
     function DisplayServicesPage(){
         console.log("Called DisplayServicesPage...");
     }
 
+    /**
+        Called when the Team page is displayed and logs to the console
+     */
     function DisplayTeamPage(){
         console.log("Called DisplayTeamPage...")
     }
 
+    /**
+        Called when the Blog page is displayed, logs to the console and updates the DOM to display "Community News"
+        instead of "Community Blog"
+     */
     function DisplayBlogPage(){
         console.log("Called DisplayContactListPage...");
 
@@ -159,6 +189,9 @@ const projects = [
         blogPageHeading.textContent = "Community News";
     }
 
+    /*
+
+     */
     function DisplayContactPage(){
         console.log("Called DisplayContactPage...");
 
@@ -361,6 +394,10 @@ const projects = [
 
     }
 
+    /**
+     * Called when the website is launched to create the header and footer to display on the page. A switch statement
+     * is used to detect which page has been loaded based on the Document Title.
+     */
     function Start(){
         const titlePrefix = "Harmony Hub - "
 
