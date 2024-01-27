@@ -1,6 +1,6 @@
 "use strict";
 
-// Sample project data (replace with your actual project data)
+// Constants
 const projects = [
     {
         title: "Accessible Playground",
@@ -226,8 +226,24 @@ const projects = [
         navList.setAttribute("class", "navbar-nav mb-auto mb-2 mb-lg-0");
         navList.setAttribute("id", "navLinkList")
 
+        const fontAwesomeLink = document.createElement("link");
+        fontAwesomeLink.setAttribute("rel", "stylesheet");
+        fontAwesomeLink.setAttribute("href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
+        document.head.appendChild(fontAwesomeLink);
+
+        // Create the brand link element
+        brandLink.classList.add("navbar-brand");
+        brandLink.href = "index.html";
+        brandLink.setAttribute("id", "navHomeLogo");
+
+        // Create a new i element for the icon
+        const icon = document.createElement("i");
+        icon.classList.add("fa-solid", "fa-people-roof");
+
+        brandLink.appendChild(icon);
+
         // text content for the brand link
-        brandLink.textContent = "Harmony Hub";
+        brandLink.appendChild(document.createTextNode(" Harmony Hub"));
 
         // Create header structure
         header.appendChild(nav);
