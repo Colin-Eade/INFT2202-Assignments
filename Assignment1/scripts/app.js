@@ -469,6 +469,20 @@ const projects = [
     }
 
     /**
+     * Called when the Privacy Policy page is displayed, logs to the console
+     */
+    function DisplayPrivacyPolicyPage(){
+        console.log("Called DisplayPrivacyPolicyPage...");
+    }
+
+    /**
+     * Called when the Display Terms Of Service Page is displayed, logs to the console
+     */
+    function DisplayTermsOfServicePage(){
+        console.log("Called DisplayTermsOfServicePage...");
+    }
+
+    /**
      * Called when the website is launched to create the header and footer to display on the page. A switch statement
      * is used to detect which page has been loaded based on the Document Title.
      */
