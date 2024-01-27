@@ -154,6 +154,9 @@ const projects = [
 
     function DisplayBlogPage(){
         console.log("Called DisplayContactListPage...");
+
+        let blogPageHeading = document.getElementsByTagName("h1")[0]
+        blogPageHeading.textContent = "Community News";
     }
 
     function DisplayContactPage(){
