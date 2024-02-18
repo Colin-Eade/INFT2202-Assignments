@@ -9,6 +9,8 @@
 
 "use strict";
 
+// Page title prefix
+const titlePrefix = "Harmony Hub - "
 const projects = [
     {
         title: "Accessible Playground",
@@ -59,6 +61,58 @@ const projects = [
 
 // IIFE - Immediately Invoked Functional Expression
 (function(){
+
+    /**
+     *
+     */
+    function LoadHeader() {
+        $.get("./includes/header.html", (data) => {
+            let noPrefixTitle =  document.title.replace(titlePrefix, "");
+            $("header").html(data);
+            ChangeNavBar();
+            $(`li>a:contains(${noPrefixTitle})`).addClass("active").attr("aria-current", "page");
+        });
+    }
+
+    /**
+     *
+     */
+    function LoaderFooter() {
+        $.get("./includes/footer.html", (data) => {
+            $("footer").html(data);
+        });
+    }
+
+    /**
+     * Modifies the navigation bar in two ways:
+     * 1. Adds a new 'Careers' item to the navigation list.
+     * 2. Changes the text of the existing 'Blog' item to 'News'.
+     */
+    function ChangeNavBar() {
+
+        // Get link list id
+        let navList = document.getElementById("navLinkList")
+
+        // Set new list item attributes
+        let newItem = document.createElement("li");
+        newItem.setAttribute("class", "nav-item");
+
+        // Set new link attributes
+        let newLink = document.createElement("a");
+        newLink.setAttribute("class", "nav-link");
+        newLink.setAttribute("href", "#");
+        newLink.setAttribute("id", "navCareersLink");
+        newLink.textContent = "Careers";
+
+        // Append the new items
+        newItem.appendChild(newLink);
+        navList.appendChild(newItem);
+
+        // Change Blog to News
+        let blogLink = document.getElementById("navBlogLink");
+        blogLink.textContent = "News";
+
+    }
 
     /**
       Logs to the console when the home page is displayed
@@ -288,187 +342,6 @@ const projects = [
     }
 
     /**
-     * Creates and inserts a header element and navigation bar at the beginning of the body.
-     */
-    function CreateHeader() {
-
-        // menu items for the navigation bar
-        const menuItems = [
-            { id: "navHomeLink", text: "Home", href: "index.html" },
-            { id: "navPortfolioLink", text: "Portfolio", href: "portfolio.html" },
-            { id: "navServicesLink", text: "Services", href: "services.html" },
-            { id: "navTeamLink", text: "Team", href: "team.html" },
-            { id: "navBlogLink", text: "Blog", href: "blog.html" }
-        ];
-
-        // HTML elements for header
-        let header = document.createElement("header");
-        let nav = document.createElement("nav");
-        let container = document.createElement("div");
-        let brandLink = document.createElement("a");
-        let toggleButton = document.createElement("button");
-        let toggleIcon = document.createElement("span");
-        let collapseDiv = document.createElement("div");
-        let navList = document.createElement("ul");
-
-
-        // Classes and attributes for the elements
-        header.setAttribute("class", "");
-        nav.setAttribute("class", "navbar navbar-expand-lg bg-body-tertiary");
-        container.setAttribute("class", "container");
-
-        brandLink.setAttribute("class", "navbar-brand");
-        brandLink.setAttribute("href", "index.html");
-        brandLink.setAttribute("id", "navHomeLogo");
-
-        toggleButton.setAttribute("class", "navbar-toggler");
-        toggleButton.setAttribute("type", "button");
-        toggleButton.setAttribute("data-bs-toggle", "collapse");
-        toggleButton.setAttribute("data-bs-target", "#navbarSupportedContent");
-        toggleButton.setAttribute("aria-controls", "navbarSupportedContent");
-        toggleButton.setAttribute("aria-expanded", "false");
-        toggleButton.setAttribute("aria-label", "Toggle navigation");
-
-        toggleIcon.setAttribute("class", "navbar-toggler-icon");
-
-        collapseDiv.setAttribute("class", "collapse navbar-collapse");
-        collapseDiv.setAttribute("id", "navbarSupportedContent");
-
-        navList.setAttribute("class", "navbar-nav mb-auto mb-2 mb-lg-0");
-        navList.setAttribute("id", "navLinkList")
-
-        // Create the brand link element
-        brandLink.classList.add("navbar-brand");
-        brandLink.href = "index.html";
-        brandLink.setAttribute("id", "navHomeLogo");
-
-        // Create a new i element for the icon
-        const icon = document.createElement("i");
-        icon.classList.add("fa-solid", "fa-people-roof");
-
-        brandLink.appendChild(icon);
-
-        // text content for the brand link
-        brandLink.appendChild(document.createTextNode(" Harmony Hub"));
-
-        // Create header structure
-        header.appendChild(nav);
-        nav.appendChild(container);
-        container.appendChild(brandLink);
-        container.appendChild(toggleButton);
-        toggleButton.appendChild(toggleIcon);
-        container.appendChild(collapseDiv);
-        collapseDiv.appendChild(navList);
-
-        // List items with links for each navbar item
-        for (const item of menuItems) {
-            let listItem = document.createElement("li");
-            listItem.setAttribute("class", "nav-item");
-
-            let link = document.createElement("a");
-            link.setAttribute("class", "nav-link");
-            link.setAttribute("id", item.id);
-            link.setAttribute("href", item.href);
-            link.textContent = item.text;
-
-            listItem.appendChild(link);
-            navList.appendChild(listItem);
-        }
-
-        // Insert the header at the beginning
-        document.body.insertBefore(header, document.body.firstChild)
-
-        // Dynamically changes navbar as per requirements
-        ChangeNavBar();
-    }
-
-    /**
-     * Creates and inserts a footer element with navigation links
-     */
-    function CreateFooter() {
-
-        // Array of footer links with titles
-        const footerItems = [
-            { text: "Privacy Policy", href: "privacy_policy.html" },
-            { text: "Terms of Service", href: "terms_of_service.html" },
-            { text: "Contact Us", href: "contact.html"}
-        ];
-
-        // HTML elements for the footer
-        let footer = document.createElement("footer");
-        let nav = document.createElement("nav");
-        let container = document.createElement("div");
-        let footerList = document.createElement("ul");
-        let copyrightText = document.createElement("p");
-
-        // Locate the main content tags
-        let mainContent = document.querySelector("main");
-
-        // Attributes and content for the footer elements
-        nav.setAttribute("class", "py-3 mt-5 bg-body-tertiary");
-        container.setAttribute("class", "container");
-        footerList.setAttribute("class", "nav justify-content-center border-bottom pb-3 mb-3");
-        copyrightText.setAttribute("class", "text-center text-body-secondary");
-        copyrightText.textContent = "© 2024 Harmony Hub, Inc";
-
-        // Create footer structure
-        footer.appendChild(nav);
-        nav.appendChild(container);
-        container.appendChild(footerList);
-
-        // List items with links for each footer link
-        for(const item of footerItems) {
-            let listItem = document.createElement("li");
-            listItem.setAttribute("class", "nav-item");
-
-            let listLink = document.createElement("a");
-            listLink.setAttribute("class", "nav-link px-2 text-body-secondary underline-hover");
-            listLink.setAttribute("href", item.href);
-            listLink.textContent = item.text;
-
-            listItem.appendChild(listLink);
-            footerList.appendChild(listItem);
-        }
-
-        // Bottom text
-        container.appendChild(copyrightText);
-
-        // Insert the footer after the main content in the document
-        mainContent.parentNode.insertBefore(footer, mainContent.nextSibling);
-    }
-
-    /**
-     * Modifies the navigation bar in two ways:
-     * 1. Adds a new 'Careers' item to the navigation list.
-     * 2. Changes the text of the existing 'Blog' item to 'News'.
-     */
-    function ChangeNavBar() {
-
-        // Get link list id
-        let navList = document.getElementById("navLinkList")
-
-        // Set new list item attributes
-        let newItem = document.createElement("li");
-        newItem.setAttribute("class", "nav-item");
-
-        // Set new link attributes
-        let newLink = document.createElement("a");
-        newLink.setAttribute("class", "nav-link");
-        newLink.setAttribute("href", "#");
-        newLink.setAttribute("id", "navCareersLink");
-        newLink.textContent = "Careers";
-
-        // Append the new items
-        newItem.appendChild(newLink);
-        navList.appendChild(newItem);
-
-        // Change Blog to News
-        let blogLink = document.getElementById("navBlogLink");
-        blogLink.textContent = "News";
-
-    }
-
-    /**
      * Called when the Privacy Policy page is displayed, logs to the console
      */
     function DisplayPrivacyPolicyPage(){
@@ -483,18 +356,44 @@ const projects = [
     }
 
     /**
+     *
+     */
+    function DisplayEventsPage() {
+        console.log("Called DisplayEventsPage...");
+    }
+
+    /**
+     *
+     */
+    function DisplayGalleryPage() {
+        console.log("Called DisplayGalleryPage...");
+    }
+
+    /**
+     *
+     */
+    function DisplayLoginPage() {
+        console.log("Called DisplayLoginPage...");
+    }
+
+    /**
+     *
+     */
+    function DisplayRegisterPage() {
+        console.log("Called DisplayRegisterPage...");
+    }
+
+    /**
      * Called when the website is launched to create the header and footer to display on the page. A switch statement
      * is used to detect which page has been loaded based on the Document Title.
      */
     function Start(){
-        // Page title prefix
-        const titlePrefix = "Harmony Hub - "
 
         console.log("App Started");
 
         // Generate the header and footer
-        CreateHeader();
-        CreateFooter();
+        LoadHeader();
+        LoaderFooter();
 
         // Switch function depending on page
         switch (document.title) {
@@ -521,6 +420,18 @@ const projects = [
                 break;
             case `${titlePrefix}Contact Us`:
                 DisplayContactPage();
+                break;
+            case `${titlePrefix}Events`:
+                DisplayEventsPage();
+                break;
+            case `${titlePrefix}Gallery`:
+                DisplayGalleryPage();
+                break;
+            case `${titlePrefix}Login`:
+                DisplayLoginPage();
+                break;
+            case `${titlePrefix}Register`:
+                DisplayRegisterPage();
                 break;
         }
     }

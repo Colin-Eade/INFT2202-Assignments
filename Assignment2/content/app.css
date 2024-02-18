@@ -92,7 +92,7 @@ header {
 
 /* Animation Keyframes */
 
-/* Defines a 'slideDown' animation for elements */
+/* Defines a 'slideDown' animation for elements */ /*
 @keyframes slideDown {
     from {
         transform: translateY(-100%);
@@ -104,7 +104,7 @@ header {
     }
 }
 
-/* Defines a 'slideDown' animation for elements */
+/* Defines a 'slideDown' animation for elements */ /*
 @keyframes slideRight {
     from {
         transform: translateX(-100%);
@@ -116,7 +116,7 @@ header {
     }
 }
 
-/* Defines a 'fadeIn' animation for elements */
+/* Defines a 'fadeIn' animation for elements */ /*
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -125,3 +125,4 @@ header {
         opacity: 1;
     }
 }
+*/
