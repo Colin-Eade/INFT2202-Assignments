@@ -79,30 +79,34 @@ const projects = [
                                      "lowercase letter, a number, and a special character.";
         let confirmPasswordError = "The password confirmation does not match the password entered.";
 
-        ValidateField("#firstName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
-        ValidateField("#lastName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
-        ValidateField("#emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
-        ValidateField("#phone", /^\+?1?\d{10}$/, phoneError);
-        ValidateField("#userName", /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
-        ValidateField("#password", /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
+        ValidateOnBlur("#firstName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
+        ValidateOnBlur("#lastName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
+        ValidateOnBlur("#emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
+        ValidateOnBlur("#phone", /^\+?1?\d{10}$/, phoneError);
+        ValidateOnBlur("#userName", /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
+        ValidateOnBlur("#password", /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
 
-        ConfirmPassword("#password", "#confirmPassword", confirmPasswordError);
+        ConfirmPwOnBlur("#password", "#confirmPassword", confirmPasswordError);
+    }
+
+    function ValidateField(inputFieldId, regEx) {
+        return regEx.test($(inputFieldId).val());
+    }
+
+    function ConfirmPassword (passwordFieldId, confirmPasswordFieldId) {
+        return ($(passwordFieldId).val() === $(confirmPasswordFieldId).val());
     }
 
     /**
      *
      * @param inputFieldId
-     * @param regularExpression
+     * @param regEx
      * @param errorMessage
      */
-    function ValidateField(inputFieldId, regularExpression, errorMessage) {
-
-        $(inputFieldId).on("blur", function () {
-            let inputFieldText = $(this).val();
-
+    function ValidateOnBlur(inputFieldId, regEx, errorMessage) {
+        $(inputFieldId).on("blur", () => {
             RemoveInvalidField(inputFieldId);
-
-            if (!regularExpression.test(inputFieldText)) {
+            if (!ValidateField(inputFieldId, regEx)) {
                 SetInvalidField(inputFieldId, errorMessage);
             }
         });
@@ -114,29 +118,32 @@ const projects = [
      * @param confirmPasswordFieldId
      * @param errorMessage
      */
-    function ConfirmPassword(passwordFieldId, confirmPasswordFieldId, errorMessage) {
-
-        $(confirmPasswordFieldId).on("blur", function () {
-
-            let passwordText = $(passwordFieldId).val();
-            let passwordConfirmText = $(confirmPasswordFieldId).val();
-
+    function ConfirmPwOnBlur(passwordFieldId, confirmPasswordFieldId, errorMessage) {
+        $(confirmPasswordFieldId).on("blur", () => {
             RemoveInvalidField(confirmPasswordFieldId);
-
-            if (passwordText !== passwordConfirmText) {
+            if (!ConfirmPassword(passwordFieldId, confirmPasswordFieldId)) {
                 SetInvalidField(confirmPasswordFieldId, errorMessage);
             }
         });
     }
 
+    /**
+     *
+     * @param inputFieldId
+     */
     function RemoveInvalidField(inputFieldId) {
-        $(inputFieldId).removeClass("form-control-invalid");
+        $(inputFieldId).removeClass("invalid-field");
         $(inputFieldId).popover("dispose");
         $(inputFieldId).next("span").remove();
     }
 
+    /**
+     *
+     * @param inputFieldId
+     * @param errorMessage
+     */
     function SetInvalidField(inputFieldId, errorMessage) {
-        $(inputFieldId).addClass("form-control-invalid")
+        $(inputFieldId).addClass("invalid-field")
         $(inputFieldId).popover({
             content: errorMessage,
             placement: "right",
@@ -473,6 +480,23 @@ const projects = [
         RegisterFormValidation();
 
         $("#registerButton").on("click", function () {
+            let success = false
+
+            $(".form-control").each(function () {
+                $(this).focus().blur();
+            })
+            .each(function () {
+                if (!$(this).hasClass("invalid-field")) {
+                    success = true;
+                } else {
+                    success = false;
+                    return false
+                }
+            });
+            // TODO: SUCCESS LOGIC AND UPLOAD TO JSON
+            if (success) {
+
+            }
 
         });
     }
