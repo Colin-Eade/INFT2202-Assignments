@@ -65,6 +65,94 @@ const projects = [
     /**
      *
      */
+    function RegisterFormValidation() {
+
+        let firstNameError = "First name should start with a capital letter and can include hyphens, " +
+                                       "apostrophes, or spaces for compound names.";
+        let lastNameError = "Last name should start with a capital letter and can include hyphens, " +
+                                      "apostrophes, or spaces for compound names.";
+        let emailAddressError = "Please enter a valid email address in the format: yourname@example.com.";
+        let phoneError = "Please enter a valid 10-digit phone number, with or without the country code.";
+        let userNameError = "Username should start with a letter and can include letters, numbers, " +
+                                     "underscores, or hyphens, 3 to 16 characters long.";
+        let passwordError = "Password must be at least 8 characters long, including an uppercase letter, a " +
+                                     "lowercase letter, a number, and a special character.";
+        let confirmPasswordError = "The password confirmation does not match the password entered.";
+
+        ValidateField("#firstName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
+        ValidateField("#lastName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
+        ValidateField("#emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
+        ValidateField("#phone", /^\+?1?\d{10}$/, phoneError);
+        ValidateField("#userName", /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
+        ValidateField("#password", /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
+
+        ConfirmPassword("#password", "#confirmPassword", confirmPasswordError);
+    }
+
+    /**
+     *
+     * @param inputFieldId
+     * @param regularExpression
+     * @param errorMessage
+     */
+    function ValidateField(inputFieldId, regularExpression, errorMessage) {
+
+        $(inputFieldId).on("blur", function () {
+            let inputFieldText = $(this).val();
+
+            RemoveInvalidField(inputFieldId);
+
+            if (!regularExpression.test(inputFieldText)) {
+                SetInvalidField(inputFieldId, errorMessage);
+            }
+        });
+    }
+
+    /**
+     *
+     * @param passwordFieldId
+     * @param confirmPasswordFieldId
+     * @param errorMessage
+     */
+    function ConfirmPassword(passwordFieldId, confirmPasswordFieldId, errorMessage) {
+
+        $(confirmPasswordFieldId).on("blur", function () {
+
+            let passwordText = $(passwordFieldId).val();
+            let passwordConfirmText = $(confirmPasswordFieldId).val();
+
+            RemoveInvalidField(confirmPasswordFieldId);
+
+            if (passwordText !== passwordConfirmText) {
+                SetInvalidField(confirmPasswordFieldId, errorMessage);
+            }
+        });
+    }
+
+    function RemoveInvalidField(inputFieldId) {
+        $(inputFieldId).removeClass("form-control-invalid");
+        $(inputFieldId).popover("dispose");
+        $(inputFieldId).next("span").remove();
+    }
+
+    function SetInvalidField(inputFieldId, errorMessage) {
+        $(inputFieldId).addClass("form-control-invalid")
+        $(inputFieldId).popover({
+            content: errorMessage,
+            placement: "right",
+            trigger: "hover",
+            template: '<div class="popover popover-invalid bs-popover-auto fade show">' +
+                '<div class="popover-body popover-body-invalid"></div>' +
+                '</div>'
+        })
+        $(inputFieldId).parent().append('<span class="input-group-text bg-danger text-white">' +
+            '<i class="fa-regular fa-circle-xmark"></i>' +
+            '</span>');
+    }
+
+    /**
+     *
+     */
     function LoadHeader() {
         $.get("./includes/header.html", (data) => {
             let noPrefixTitle =  document.title.replace(titlePrefix, "");
@@ -381,6 +469,12 @@ const projects = [
      */
     function DisplayRegisterPage() {
         console.log("Called DisplayRegisterPage...");
+
+        RegisterFormValidation();
+
+        $("#registerButton").on("click", function () {
+
+        });
     }
 
     /**
