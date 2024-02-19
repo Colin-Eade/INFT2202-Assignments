@@ -104,6 +104,20 @@
                 `Type: ${this._type}`;
         }
 
+        serialize() {
+            if (this._userName !== "" && this._emailAddress !== "") {
+                return `${this._userName},${this._emailAddress}`;
+            }
+            console.error("One or more properties of the User are empty or invalid");
+            return null;
+        }
+
+        deserialize(data) {
+            let propertyArray = data.split(",");
+            this._emailAddress = propertyArray[0];
+            this._userName = propertyArray[1];
+        }
+
         toJSON() {
             return {
                 firstName : this._firstName,

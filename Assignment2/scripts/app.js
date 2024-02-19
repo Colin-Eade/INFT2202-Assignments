@@ -62,6 +62,8 @@ const projects = [
 // IIFE - Immediately Invoked Functional Expression
 (function(){
 
+
+
     /**
      *
      */
@@ -90,7 +92,11 @@ const projects = [
     }
 
     function ValidateField(inputFieldId, regEx) {
-        return regEx.test($(inputFieldId).val());
+        if (regEx) {
+            return regEx.test($(inputFieldId).val());
+        } else {
+            return $(inputFieldId).val().trim() !== "";
+        }
     }
 
     function ConfirmPassword (passwordFieldId, confirmPasswordFieldId) {
@@ -186,7 +192,7 @@ const projects = [
     function ChangeNavBar() {
 
         // Get link list id
-        let navList = document.getElementById("navLinkList")
+        let navList = document.getElementById("navLinkListLeft")
 
         // Set new list item attributes
         let newItem = document.createElement("li");
@@ -469,6 +475,52 @@ const projects = [
      */
     function DisplayLoginPage() {
         console.log("Called DisplayLoginPage...");
+
+        $("#messageArea").hide();
+
+        $("#loginButton").on("click", function () {
+
+            let validInputs = false;
+
+            $("#messageArea").hide();
+            RemoveInvalidField($("#userName"))
+            RemoveInvalidField($("#password"));
+
+            if (ValidateField($("#userName")) && ValidateField($("#password"))) {
+                validInputs = true
+            } else {
+                if(!ValidateField($("#userName"))) {
+                    SetInvalidField($("#userName"), "Please enter your username.");
+                }
+                if(!ValidateField($("#password"))) {
+                    SetInvalidField($("#password"), "Please enter your password.");
+                }
+            }
+            if (validInputs) {
+
+                let success = false;
+                let newUser = new HarmonyHub.User();
+
+                $.get("./data/users.json", function(data) {
+                    for (const user of data.users) {
+                        console.log(user);
+                        if (userName.value === user.userName && password.value === user.password) {
+                            newUser.fromJSON(user);
+                            success = true;
+                            break;
+                        }
+                    }
+                    if (success) {
+                        sessionStorage.setItem("user", newUser.serialize());
+                        location.href = "index.html";
+                    } else {
+                        $("#loginForm")[0].reset();
+                        $("#messageArea").addClass("alert alert-danger")
+                            .text("Invalid credentials. Please try again.").show();
+                    }
+                });
+            }
+        });
     }
 
     /**

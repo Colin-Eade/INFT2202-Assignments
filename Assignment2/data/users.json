@@ -1,6 +1,16 @@
 {
   "users" :
-  [
-
-  ]
+          [
+            {
+              "firstName":"John",
+              "lastName":"Smith",
+              "emailAddress":"johnsmith@example.com",
+              "phone":"1234567890",
+              "userName":"John123",
+              "password":"Abc123!!",
+              "enrollDate":"2024-02-19T15:51:40.777Z",
+              "lastLogin":"",
+              "type":"s"
+            }
+          ]
 }

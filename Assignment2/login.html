@@ -29,6 +29,33 @@
     <main class="container flex-grow-1">
         <h1 class="mt-3 text-center">Login</h1>
 
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form id="loginForm">
+
+                    <div id="messageArea"></div>
+
+                    <div class="mb-3">
+                        <label for="userName" class="form-label">Username</label>
+                        <div class="input-group">
+                            <input id="userName" type="text" class="form-control" name="userName">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input id="password" type="password" class="form-control" name="password">
+                        </div>
+                    </div>
+
+                    <button id="loginButton" type="button" class="btn btn-primary">
+                        <i class="fa-solid fa-envelope" ></i> Login
+                    </button>
+
+                </form>
+            </div>
+        </div>
 
     </main>
 
@@ -36,7 +63,10 @@
 
     <!-- Scripting Section TODO: Add any other scripting dependencies-->
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./scripts/initializePopovers.js"></script>
+    <script src="./scripts/namespace.js"></script>
+    <script src="./scripts/user.js"></script>
     <script src="./scripts/app.js"></script>
 
 </body>
