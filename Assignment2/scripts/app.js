@@ -62,35 +62,15 @@ const projects = [
 // IIFE - Immediately Invoked Functional Expression
 (function(){
 
-
-
     /**
      *
+     * @returns {boolean}
      */
-    function RegisterFormValidation() {
-
-        let firstNameError = "First name should start with a capital letter and can include hyphens, " +
-                                       "apostrophes, or spaces for compound names.";
-        let lastNameError = "Last name should start with a capital letter and can include hyphens, " +
-                                      "apostrophes, or spaces for compound names.";
-        let emailAddressError = "Please enter a valid email address in the format: yourname@example.com.";
-        let phoneError = "Please enter a valid 10-digit phone number, with or without the country code.";
-        let userNameError = "Username should start with a letter and can include letters, numbers, " +
-                                     "underscores, or hyphens, 3 to 16 characters long.";
-        let passwordError = "Password must be at least 8 characters long, including an uppercase letter, a " +
-                                     "lowercase letter, a number, and a special character.";
-        let confirmPasswordError = "The password confirmation does not match the password entered.";
-
-        ValidateOnBlur("#firstName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
-        ValidateOnBlur("#lastName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
-        ValidateOnBlur("#emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
-        ValidateOnBlur("#phone", /^\+?1?\d{10}$/, phoneError);
-        ValidateOnBlur("#userName", /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
-        ValidateOnBlur("#password", /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
-
-        ConfirmPwOnBlur("#password", "#confirmPassword", confirmPasswordError);
+    function CheckLogin() {
+        return !!sessionStorage.getItem("user");
     }
 
+    //region Input Field Functions
     function ValidateField(inputFieldId, regEx) {
         if (regEx) {
             return regEx.test($(inputFieldId).val());
@@ -162,7 +142,9 @@ const projects = [
             '<i class="fa-regular fa-circle-xmark"></i>' +
             '</span>');
     }
+    //endregion
 
+    //region Header and Footer Functions
     /**
      *
      */
@@ -214,14 +196,18 @@ const projects = [
         blogLink.textContent = "News";
 
     }
+    //endregion
 
+    //region Home Page Functions
     /**
       Logs to the console when the home page is displayed
      */
     function DisplayHomePage(){
         console.log("Called DisplayHomePage...");
     }
+    //endregion
 
+    //region Portfolio Page Functions
     /**
         Called to display the portfolio page and dynamically create the project cards for display
      */
@@ -317,21 +303,27 @@ const projects = [
             }
         });
     }
+    //endregion
 
+    //region Services Page Functions
     /**
      * Called when the services page is displayed and logs to the console
      */
     function DisplayServicesPage(){
         console.log("Called DisplayServicesPage...");
     }
+    //endregion
 
+    //region Team Page Functions
     /**
      * Called when the Team page is displayed and logs to the console
      */
     function DisplayTeamPage(){
         console.log("Called DisplayTeamPage...")
     }
+    //endregion
 
+    //region Blog Page Functions
     /**
      * Called when the Blog page is displayed, logs to the console and updates the DOM to display "Community News"
      * instead of "Community Blog"
@@ -344,7 +336,9 @@ const projects = [
 
         document.title = "Harmony Hub - News"
     }
+    //endregion
 
+    //region Contact Page Functions
     /**
      * Displays the contact page and sets up event listeners for form submission and modal interactions.
      */
@@ -441,40 +435,53 @@ const projects = [
             window.location.href = "index.html";
         }
     }
+    //endregion
 
+    //region Privacy Policy Page Functions
     /**
      * Called when the Privacy Policy page is displayed, logs to the console
      */
     function DisplayPrivacyPolicyPage(){
         console.log("Called DisplayPrivacyPolicyPage...");
     }
+    //endregion
 
+    //region Terms of Service Page Functions
     /**
      * Called when the Display Terms Of Service Page is displayed, logs to the console
      */
     function DisplayTermsOfServicePage(){
         console.log("Called DisplayTermsOfServicePage...");
     }
+    //endregion
 
+    //region Events Page Functions
     /**
      *
      */
     function DisplayEventsPage() {
         console.log("Called DisplayEventsPage...");
     }
+    //endregion
 
+    //region Gallery Page Functions
     /**
      *
      */
     function DisplayGalleryPage() {
         console.log("Called DisplayGalleryPage...");
     }
+    //endregion
 
+    //region Login Page Functions
     /**
      *
      */
     function DisplayLoginPage() {
         console.log("Called DisplayLoginPage...");
+
+        let userNameField = $("#userName");
+        let passwordField = $("#password");
 
         $("#messageArea").hide();
 
@@ -483,17 +490,17 @@ const projects = [
             let validInputs = false;
 
             $("#messageArea").hide();
-            RemoveInvalidField($("#userName"))
-            RemoveInvalidField($("#password"));
+            RemoveInvalidField(userNameField)
+            RemoveInvalidField(passwordField);
 
-            if (ValidateField($("#userName")) && ValidateField($("#password"))) {
+            if (ValidateField(userNameField) && ValidateField(passwordField)) {
                 validInputs = true
             } else {
-                if(!ValidateField($("#userName"))) {
-                    SetInvalidField($("#userName"), "Please enter your username.");
+                if(!ValidateField(userNameField)) {
+                    SetInvalidField(userNameField, "Please enter your username.");
                 }
-                if(!ValidateField($("#password"))) {
-                    SetInvalidField($("#password"), "Please enter your password.");
+                if(!ValidateField(passwordField)) {
+                    SetInvalidField(passwordField, "Please enter your password.");
                 }
             }
             if (validInputs) {
@@ -522,7 +529,9 @@ const projects = [
             }
         });
     }
+    //endregion
 
+    //region Register Page Functions
     /**
      *
      */
@@ -552,6 +561,34 @@ const projects = [
 
         });
     }
+
+    /**
+     *
+     */
+    function RegisterFormValidation() {
+
+        let firstNameError = "First name should start with a capital letter and can include hyphens, " +
+            "apostrophes, or spaces for compound names.";
+        let lastNameError = "Last name should start with a capital letter and can include hyphens, " +
+            "apostrophes, or spaces for compound names.";
+        let emailAddressError = "Please enter a valid email address in the format: yourname@example.com.";
+        let phoneError = "Please enter a valid 10-digit phone number, with or without the country code.";
+        let userNameError = "Username should start with a letter and can include letters, numbers, " +
+            "underscores, or hyphens, 3 to 16 characters long.";
+        let passwordError = "Password must be at least 8 characters long, including an uppercase letter, a " +
+            "lowercase letter, a number, and a special character.";
+        let confirmPasswordError = "The password confirmation does not match the password entered.";
+
+        ValidateOnBlur("#firstName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
+        ValidateOnBlur("#lastName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
+        ValidateOnBlur("#emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
+        ValidateOnBlur("#phone", /^\+?1?\d{10}$/, phoneError);
+        ValidateOnBlur("#userName", /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
+        ValidateOnBlur("#password", /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
+
+        ConfirmPwOnBlur("#password", "#confirmPassword", confirmPasswordError);
+    }
+    //endregion
 
     /**
      * Called when the website is launched to create the header and footer to display on the page. A switch statement
