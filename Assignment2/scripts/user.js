@@ -5,8 +5,8 @@
     class User {
 
         constructor(firstName = "", lastName = "", emailAddress = "", phone = "",
-                    userName = "", password = "", enrollDate = new Date(), lastLogin = "",
-                    type = "s") {
+                    userName = "", password = "", enrollDate = "", lastLogin = "",
+                    type = "") {
             this._firstName = firstName;
             this._lastName = lastName;
             this._emailAddress = emailAddress;
@@ -105,8 +105,8 @@
         }
 
         serialize() {
-            if (this._userName !== "" && this._emailAddress !== "") {
-                return `${this._userName},${this._emailAddress}`;
+            if (this._firstName !== "" && this._lastName !== "" && this._userName !== "" && this._emailAddress !== "") {
+                return `${this._firstName},${this._lastName},${this._userName},${this._emailAddress}`;
             }
             console.error("One or more properties of the User are empty or invalid");
             return null;
@@ -114,9 +114,12 @@
 
         deserialize(data) {
             let propertyArray = data.split(",");
-            this._emailAddress = propertyArray[0];
-            this._userName = propertyArray[1];
+            this._firstName = propertyArray[0];
+            this._lastName = propertyArray[1];
+            this._userName = propertyArray[2];
+            this._emailAddress = propertyArray[3];
         }
+
 
         toJSON() {
             return {

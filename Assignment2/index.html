@@ -101,25 +101,104 @@
 
         <!-- container to contain rest of content -->
         <div class="container">
+            <div class="row">
             <!-- Quick Links -->
-            <div id="homeQuickLinks" class="list-group mt-3">
-                <div class="list-group-item bg-body-tertiary text-body-primary py-4"><strong>QUICK LINKS</strong></div>
-                <a href="portfolio.html" class="list-group-item list-group-item-action py-4">
-                    <h5>Portfolio</h5>
-                    <span>Learn about the projects we are currently working on.</span>
-                </a>
-                <a href="services.html" class="list-group-item list-group-item-action py-4">
-                    <h5>Services</h5>
-                    <span>Experience a world of services tailored just for you.</span>
-                </a>
-                <a href="team.html" class="list-group-item list-group-item-action py-4">
-                    <h5>Team</h5>
-                    <span>Meet the incredible individuals who make up our passionate team.</span>
-                </a>
-                <a href="blog.html" class="list-group-item list-group-item-action py-4">
-                    <h5>News</h5>
-                    <span>Stay updated with the latest news and insightful blog posts.</span>
-                </a>
+                <div id="homeQuickLinks" class="list-group mt-3 col-lg-6 col-md-12">
+                    <div class="list-group-item bg-body-tertiary text-body-primary"><strong>QUICK LINKS</strong></div>
+                    <div class="row g-1">
+                        <div class="col-6 col-md-4">
+                            <a class="card home-card" href="portfolio.html">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <h5 class="card-title">Portfolio</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a class="card home-card" href="services.html">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <h5 class="card-title">Services</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a class="card home-card" href="team.html">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <h5 class="card-title">Team</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a class="card home-card" href="blog.html">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <h5 class="card-title">News</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a class="card home-card" href="events.html">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <h5 class="card-title">Events</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a class="card home-card" href="gallery.html">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <h5 class="card-title">Gallery</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a class="card home-card" href="login.html">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <h5 class="card-title">Login</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a class="card home-card" href="register.html">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <h5 class="card-title">Register</h5>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div id="homeLocalNews" class="list-group mt-3 col-lg-6 col-md-12">
+                    <div class="list-group-item bg-body-tertiary text-body-primary"><strong>LOCAL NEWS</strong></div>
+                    <a href="portfolio.html" class="list-group-item list-group-item-action">
+                        <h5>Portfolio</h5>
+                        <span>Learn about the projects we are currently working on.</span>
+                    </a>
+                    <a href="services.html" class="list-group-item list-group-item-action">
+                        <h5>Services</h5>
+                        <span>Experience a world of services tailored just for you.</span>
+                    </a>
+                    <a href="team.html" class="list-group-item list-group-item-action">
+                        <h5>Team</h5>
+                        <span>Meet the incredible individuals who make up our passionate team.</span>
+                    </a>
+                    <a href="blog.html" class="list-group-item list-group-item-action">
+                        <h5>Harmony Hub News</h5>
+                        <span>Stay updated with the latest news and insightful blog posts.</span>
+                    </a>
+                    <a href="events.html" class="list-group-item list-group-item-action">
+                        <h5>Events</h5>
+                        <span>Discover upcoming events and gatherings.</span>
+                    </a>
+                    <a href="gallery.html" class="list-group-item list-group-item-action">
+                        <h5>Gallery</h5>
+                        <span>Explore our gallery to see moments captured from our events and activities.</span>
+                    </a>
+                    <a href="login.html" class="list-group-item list-group-item-action">
+                        <h5>Login</h5>
+                        <span>Have an account? Access it here.</span>
+                    </a>
+                    <a href="register.html" class="list-group-item list-group-item-action">
+                        <h5>Register</h5>
+                        <span>Join our community to stay engaged and receive updates.</span>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -129,7 +208,9 @@
 
     <!-- Scripting Section -->
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./scripts/namespace.js"></script>
+    <script src="./scripts/user.js"></script>
     <script src="./scripts/app.js"></script>
 
 </body>

@@ -9,7 +9,7 @@
 
 "use strict";
 
-// Page title prefix
+//region Globals
 const titlePrefix = "Harmony Hub - "
 const projects = [
     {
@@ -58,6 +58,7 @@ const projects = [
         imageSrc: "img/portfolio/seniorsCentre.png",
     },
 ];
+//endregion
 
 // IIFE - Immediately Invoked Functional Expression
 (function(){
@@ -153,6 +154,10 @@ const projects = [
             let noPrefixTitle =  document.title.replace(titlePrefix, "");
             $("header").html(data);
             ChangeNavBar();
+            if(CheckLogin()) {
+                SetLoggedInNavBar();
+                SetWelcomeMessage();
+            }
             $(`li>a:contains(${noPrefixTitle})`).addClass("active").attr("aria-current", "page");
         });
     }
@@ -195,6 +200,44 @@ const projects = [
         let blogLink = document.getElementById("navBlogLink");
         blogLink.textContent = "News";
 
+    }
+
+    function SetLoggedInNavBar() {
+        $("#navLoginLink").attr("id", "navUserButton").addClass("nav-link dropdown-toggle")
+            .attr("href", "#").attr("role", "button").attr("data-bs-toggle", "dropdown").attr("aria-expanded", "false")
+            .html('<i class="fa-solid fa-user"></i>').parent().addClass("dropdown");
+
+        $("#navUserButton").after(`<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
+                                    <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
+                                   </ul>`);
+
+        $("#navLogoutLink").on("click", () => {
+            sessionStorage.clear();
+            location.href = "login.html";
+        });
+    }
+
+    function SetWelcomeMessage() {
+        if(!sessionStorage.getItem("welcomed")) {
+
+            let user = new HarmonyHub.User();
+            let userData = sessionStorage.getItem("user");
+
+            if (userData) {
+                user.deserialize(userData);
+                $("#navUserButton").closest("li")
+                    .before(`<li class="nav-item" id="welcomeMessageWrapper">
+                                <span id="navWelcomeMessage" class="nav-link active">
+                                    <strong>Welcome back, ${user.firstName}!</strong>
+                                </span>
+                            </li>`);
+                sessionStorage.setItem("welcomed", "true");
+
+                setTimeout(() => {
+                    $("#welcomeMessageWrapper").remove();
+                }, 6000);
+            }
+        }
     }
     //endregion
 

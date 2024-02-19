@@ -24,10 +24,7 @@ main {
 
 /* Header Styles */
 
-/* Base style for header */
-header {
-    animation: slideDown 0.5s ease-out;
-}
+/* Home Page Style */
 
 /* Carousel Styles */
 
@@ -58,13 +55,17 @@ header {
     border-radius: 0;
 }
 
-#homeCarouselAndBG {
-    animation: slideDown 0.5s ease-out;
+/* Home Link Cards */
+
+.home-card {
+    text-decoration: none;
+    color: inherit;
+    aspect-ratio: 1 / 1;
+    border-radius: 0;
 }
 
-/* Quick Links Styles */
-#homeQuickLinks {
-    animation: slideRight 0.5s ease-out;
+.home-card:hover {
+    background-color: #f8f9fa;
 }
 
 /* Team Page Styles */
@@ -90,6 +91,20 @@ header {
     cursor: pointer;
 }
 
+/* Welcome Message Styles */
+
+#welcomeMessageWrapper {
+    overflow: hidden;
+}
+
+#navWelcomeMessage {
+    animation: slideInOut 5s forwards;
+}
+
+
+/* Form Field Styles */
+
+/* Red border for invalid field */
 .invalid-field{
     border-color: #dc3545;
     box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
@@ -100,6 +115,9 @@ header {
     box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
 }
 
+/* Popover Styles */
+
+/* Invalid field popover */
 .popover-invalid {
     background-color: #dc3545;
     border-color: #dc3545;
@@ -111,31 +129,7 @@ header {
 
 /* Animation Keyframes */
 
-/* Defines a 'slideDown' animation for elements */ /*
-@keyframes slideDown {
-    from {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Defines a 'slideDown' animation for elements */ /*
-@keyframes slideRight {
-    from {
-        transform: translateX(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Defines a 'fadeIn' animation for elements */ /*
+/* Defines a 'fadeIn' animation for elements */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -144,4 +138,18 @@ header {
         opacity: 1;
     }
 }
-*/
+
+@keyframes slideInOut {
+    0% {
+        transform: translateX(100%); /* Start off-screen to the right */
+    }
+    20% {
+        transform: translateX(0); /* Slide in within the first 20% of the animation (1s of 5s) */
+    }
+    80% {
+        transform: translateX(0); /* Stay in place for 60% of the animation time (3s of 5s) */
+    }
+    100% {
+        transform: translateX(100%); /* Slide out to the right in the last 20% (1s of 5s) */
+    }
+}
