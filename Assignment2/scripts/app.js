@@ -65,19 +65,6 @@ const projects = [
 
     /**
      *
-     */
-    function NewsAPIFetch() {
-        let key = "18c00679c61248edbdf53cfaeee600c0";
-        let keywords = "";
-        let url =  `https://newsapi.org/v2/top-headlines?q=${keywords}&pageSize=10&apiKey=${key}`;
-
-        $.get(url, function(data) {
-            console.log(data);
-        });
-    }
-
-    /**
-     *
      * @returns {boolean}
      */
     function CheckLogin() {
@@ -276,7 +263,137 @@ const projects = [
      */
     function DisplayHomePage(){
         console.log("Called DisplayHomePage...");
+        let page = 0;
+        let searchInput = "";
+
+        NewsAPIFetch("Durham Region Ontario", 1);
+
+
+        $("#newsSearchButton").on("click", () => {
+            searchInput = $("#newsSearchInput").val();
+            page = 1;
+
+            $("#homeArticleArea").empty();
+
+            NewsAPIFetch(searchInput, page);
+        });
+
+        $("#newsScrollDownButton").on("click", () => {
+            page ++;
+
+            $("#homeArticleArea").empty();
+
+            NewsAPIFetch(searchInput, page);
+        });
+
+        $("#newsScrollUpButton").on("click", () => {
+            page --;
+
+            $("#homeArticleArea").empty();
+
+            NewsAPIFetch(searchInput, page);
+        });
+
     }
+
+    /**
+     *
+     */
+    function NewsAPIFetch(keywords, page) {
+        const pageSize = 5
+        const key = "18c00679c61248edbdf53cfaeee600c0";
+        let url =  `https://newsapi.org/v2/everything?q=${keywords}&pageSize=${pageSize}&page=${page}&apiKey=${key}`;
+
+        $.get(url, function(data) {
+            NewsAPIFetchSuccess(data, page, pageSize);
+        }).fail(NewsAPIFail)
+    }
+
+    /**
+     *
+     * @param data
+     * @param page
+     * @param pageSize
+     */
+    function NewsAPIFetchSuccess(data, page, pageSize) {
+
+        let scrollDownButton = $("#newsScrollDownButton");
+        let scrollUpButton = $("#newsScrollUpButton");
+
+        if (data.status === "ok") {
+            console.log(data);
+            if (data.totalResults) {
+
+                scrollDownButton.removeClass("disabled");
+                scrollUpButton.removeClass("disabled");
+
+                let maxPages = Math.ceil(data.totalResults / pageSize);
+
+                if (page <= 1) {
+                    scrollUpButton.addClass("disabled");
+                }
+                if (page >= maxPages) {
+                    scrollDownButton.addClass("disabled");
+                }
+
+                for (const article of data.articles) {
+                    let articleHtml = `
+                        <a href="${article.url}" class="list-group-item list-group-item-action mt-1 border-top"
+                        target="_blank" rel="noopener noreferrer">
+                            <h5 class="mb-1">${article.title || "No title"}</h5>
+                            <p class="mb-1 text-muted" style="font-size: smaller;">
+                                ${new Date(article.publishedAt).toLocaleDateString() || "No date"}
+                                 | ${article.source.name || "No source name"} 
+                                 | ${article.author || "No author"}
+                            </p>
+                            <p class="mb-1">${article.description || "No description"}</p>
+                        </a>`;
+
+                    $('#homeArticleArea').append(articleHtml);
+
+                }
+            } else {
+
+                scrollDownButton.addClass("disabled");
+                scrollUpButton.addClass("disabled");
+
+                let articleHtml = `
+                        <div class="list-group-item">
+                            <p class="mb-1">No articles to display. Please try another search.</p>
+                        </div>`;
+
+                $('#homeArticleArea').append(articleHtml);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param data
+     */
+    function NewsAPIFail(data) {
+
+        $("#newsScrollDownButton").addClass("disabled");
+        $("#newsScrollUpButton").addClass("disabled");
+
+        console.log(data);
+        let errorHtml = `
+                        <div class="list-group-item mt-1 border-top">
+                            <div class="d-flex justify-content-center align-items-center text-center">
+                                <h3 class="mb-1" >
+                                    <i class="fas fa-exclamation-triangle"></i><br>
+                                    Error
+                                </h3>       
+                            </div>`;
+        if (data.responseJSON && data.responseJSON.message) {
+            errorHtml += `<p class="mb-1">${data.responseJSON.message}</p>`;
+        } else {
+            `<p class="mb-1">An unexpected error occurred. Please try again later.</p>`
+        }
+        errorHtml += `</div>`;
+        $('#homeArticleArea').append(errorHtml);
+    }
+
     //endregion
 
     //region Portfolio Page Functions
