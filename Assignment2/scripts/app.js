@@ -71,6 +71,10 @@ const projects = [
         return !!sessionStorage.getItem("user");
     }
 
+    function CheckLogout() {
+        return !!sessionStorage.getItem("logout");
+    }
+
     //region Input Field Functions
     /**
      *
@@ -163,6 +167,8 @@ const projects = [
             if(CheckLogin()) {
                 SetLoggedInNavBar();
                 SetWelcomeMessage();
+            } else if (CheckLogout()) {
+                SetLogoutMessage();
             }
             $(`li>a:contains(${noPrefixTitle})`).addClass("active").attr("aria-current", "page");
         });
@@ -225,6 +231,7 @@ const projects = [
         $("#navLogoutLink").on("click", () => {
             sessionStorage.clear();
             location.href = "login.html";
+            sessionStorage.setItem("logout", "true");
         });
     }
 
@@ -241,19 +248,38 @@ const projects = [
                 user.deserialize(userData);
 
                 $("#navUserButton").closest("li")
-                    .before(`<li class="nav-item" id="welcomeMessageWrapper">
-                                <span id="navWelcomeMessage" class="nav-link active">
-                                    <strong>Welcome back, ${user.firstName}!</strong>
+                    .before(`<li class="nav-item" id="navMessageWrapper">
+                                <span id="navMessage" class="nav-link">
+                                    Welcome back, ${user.firstName}!
                                 </span>
                             </li>`);
 
                 sessionStorage.setItem("welcomed", "true");
 
                 setTimeout(() => {
-                    $("#welcomeMessageWrapper").remove();
+                    $("#navMessageWrapper").remove();
                 }, 6000);
             }
         }
+    }
+
+    /**
+     *
+     */
+    function SetLogoutMessage() {
+        console.log("logout message")
+        $("#navLoginLink").closest("li")
+            .before(`<li class="nav-item" id="navMessageWrapper">
+                         <span id="navMessage" class="nav-link">
+                             Logout successful!
+                         </span>
+                     </li>`);
+        
+        sessionStorage.clear();
+
+        setTimeout(() => {
+            $("#navMessageWrapper").remove();
+        }, 6000);
     }
     //endregion
 
