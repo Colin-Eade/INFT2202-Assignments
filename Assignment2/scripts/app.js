@@ -263,11 +263,10 @@ const projects = [
      */
     function DisplayHomePage(){
         console.log("Called DisplayHomePage...");
-        let page = 0;
-        let searchInput = "";
+        let page = 1;
+        let searchInput = "Durham Region Ontario";
 
-        NewsAPIFetch("Durham Region Ontario", 1);
-
+        //NewsAPIFetch(searchInput, page);
 
         $("#newsSearchButton").on("click", () => {
             searchInput = $("#newsSearchInput").val();
