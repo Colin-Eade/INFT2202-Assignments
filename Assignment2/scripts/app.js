@@ -65,6 +65,19 @@ const projects = [
 
     /**
      *
+     */
+    function NewsAPIFetch() {
+        let key = "18c00679c61248edbdf53cfaeee600c0";
+        let keywords = "";
+        let url =  `https://newsapi.org/v2/top-headlines?q=${keywords}&pageSize=10&apiKey=${key}`;
+
+        $.get(url, function(data) {
+            console.log(data);
+        });
+    }
+
+    /**
+     *
      * @returns {boolean}
      */
     function CheckLogin() {
@@ -72,6 +85,12 @@ const projects = [
     }
 
     //region Input Field Functions
+    /**
+     *
+     * @param inputFieldId
+     * @param regEx
+     * @returns {boolean}
+     */
     function ValidateField(inputFieldId, regEx) {
         if (regEx) {
             return regEx.test($(inputFieldId).val());
@@ -136,12 +155,12 @@ const projects = [
             placement: "right",
             trigger: "hover",
             template: '<div class="popover popover-invalid bs-popover-auto fade show">' +
-                '<div class="popover-body popover-body-invalid"></div>' +
-                '</div>'
+                          '<div class="popover-body popover-body-invalid"></div>' +
+                      '</div>'
         })
-        $(inputFieldId).parent().append('<span class="input-group-text bg-danger text-white">' +
-            '<i class="fa-regular fa-circle-xmark"></i>' +
-            '</span>');
+        $(inputFieldId).after('<span class="input-group-text bg-danger text-white">' +
+                                            '<i class="fa-regular fa-circle-xmark"></i>' +
+                                        '</span>');
     }
     //endregion
 
@@ -203,12 +222,17 @@ const projects = [
     }
 
     function SetLoggedInNavBar() {
-        $("#navLoginLink").attr("id", "navUserButton").addClass("nav-link dropdown-toggle")
-            .attr("href", "#").attr("role", "button").attr("data-bs-toggle", "dropdown").attr("aria-expanded", "false")
-            .html('<i class="fa-solid fa-user"></i>').parent().addClass("dropdown");
+        $("#navLoginLink").html('<i class="fa-solid fa-user"></i>').attr({
+            "id": "navUserButton",
+            "class": "nav-link dropdown-toggle",
+            "href": "#",
+            "role": "button",
+            "data-bs-toggle": "dropdown",
+            "aria-expanded": "false"
+        }).parent().addClass("dropdown");
 
         $("#navUserButton").after(`<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
-                                    <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
+                                       <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
                                    </ul>`);
 
         $("#navLogoutLink").on("click", () => {
@@ -217,6 +241,9 @@ const projects = [
         });
     }
 
+    /**
+     *
+     */
     function SetWelcomeMessage() {
         if(!sessionStorage.getItem("welcomed")) {
 
@@ -225,12 +252,14 @@ const projects = [
 
             if (userData) {
                 user.deserialize(userData);
+
                 $("#navUserButton").closest("li")
                     .before(`<li class="nav-item" id="welcomeMessageWrapper">
                                 <span id="navWelcomeMessage" class="nav-link active">
                                     <strong>Welcome back, ${user.firstName}!</strong>
                                 </span>
                             </li>`);
+
                 sessionStorage.setItem("welcomed", "true");
 
                 setTimeout(() => {
