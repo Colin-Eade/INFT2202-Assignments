@@ -292,6 +292,13 @@ const projects = [
         let page = 1;
         let searchInput = "Durham Region Ontario";
 
+        $("#newsSearchInput").on('keydown', function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                $("#newsSearchButton").click();
+            }
+        });
+
         //NewsAPIFetch(searchInput, page);
 
         $("#newsSearchButton").on("click", () => {
@@ -346,7 +353,7 @@ const projects = [
         let scrollUpButton = $("#newsScrollUpButton");
 
         if (data.status === "ok") {
-            console.log(data);
+
             if (data.totalResults) {
 
                 scrollDownButton.removeClass("disabled");
@@ -401,7 +408,6 @@ const projects = [
         $("#newsScrollDownButton").addClass("disabled");
         $("#newsScrollUpButton").addClass("disabled");
 
-        console.log(data);
         let errorHtml = `
                         <div class="list-group-item mt-1 border-top">
                             <div class="d-flex justify-content-center align-items-center text-center">
@@ -410,7 +416,15 @@ const projects = [
                                     Error
                                 </h3>       
                             </div>`;
-        if (data.responseJSON && data.responseJSON.message) {
+
+        if (!$("#newsSearchInput").val()) {
+            errorHtml += `<p class="mb-1">
+                              Search field is empty. Please enter a topic to search. 
+                              For example, you can search for 'technology', 'politics', 
+                              'sports', or any specific event or topic you're interested in. 
+                              Make sure to use keywords that are likely to produce relevant results.
+                          </p>`;
+        } else if (data.responseJSON && data.responseJSON.message) {
             errorHtml += `<p class="mb-1">${data.responseJSON.message}</p>`;
         } else {
             `<p class="mb-1">An unexpected error occurred. Please try again later.</p>`
