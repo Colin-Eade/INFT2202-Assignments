@@ -366,7 +366,7 @@ const projects = [
                         <a href="${article.url}" class="list-group-item list-group-item-action mt-1 border-top"
                         target="_blank" rel="noopener noreferrer">
                             <h5 class="mb-1">${article.title || "No title"}</h5>
-                            <p class="mb-1 text-muted" style="font-size: smaller;">
+                            <p class="mb-1 text-muted small">
                                 ${new Date(article.publishedAt).toLocaleDateString() || "No date"}
                                  | ${article.source.name || "No source name"} 
                                  | ${article.author || "No author"}
@@ -383,7 +383,7 @@ const projects = [
                 scrollUpButton.addClass("disabled");
 
                 let articleHtml = `
-                        <div class="list-group-item">
+                        <div class="list-group-item mt-1">
                             <p class="mb-1">No articles to display. Please try another search.</p>
                         </div>`;
 

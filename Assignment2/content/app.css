@@ -106,7 +106,6 @@ main {
     border: 1px solid #badbcc;
 }
 
-
 /* Form Field Styles */
 
 /* Red border for invalid field */
@@ -164,15 +163,15 @@ main {
 
 @keyframes slideInOut {
     0% {
-        transform: translateX(100%); /* Start off-screen to the right */
+        transform: translateX(100%);
     }
     20% {
-        transform: translateX(0); /* Slide in within the first 20% of the animation (1s of 5s) */
+        transform: translateX(0);
     }
     80% {
-        transform: translateX(0); /* Stay in place for 60% of the animation time (3s of 5s) */
+        transform: translateX(0);
     }
     100% {
-        transform: translateX(100%); /* Slide out to the right in the last 20% (1s of 5s) */
+        transform: translateX(100%);
     }
 }
