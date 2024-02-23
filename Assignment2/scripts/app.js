@@ -525,53 +525,13 @@ function formatDate(dateString) {
         const projectContainer = document.getElementById("project-container");
         const loadMoreButton = document.getElementById("load-more-button");
 
-        function createProjectCard(project) {
-            const col = document.createElement("div");
-            col.classList.add("col", "d-flex", "justify-content-center");
 
-            const card = document.createElement("div");
-            card.classList.add("card");
-            // Set a maximum width for the card
-            card.style.maxWidth = "500px";
-
-            const image = document.createElement("img");
-            image.classList.add("card-img-top");
-            image.src = project.imageSrc;
-            image.alt = project.title;
-
-            // Set maximum width and height for the image
-            image.style.maxWidth = "500px"; // Adjust the value as needed
-            image.style.maxHeight = "200px"; // Adjust the value as needed
-
-            const cardBody = document.createElement("div");
-            cardBody.classList.add("card-body");
-
-            const title = document.createElement("h5");
-            title.classList.add("card-title");
-            title.textContent = project.title;
-
-            const description = document.createElement("p");
-            description.classList.add("card-text");
-
-            // Split the description by line breaks and create <br> elements
-            const descriptionLines = project.description.split('\n');
-            descriptionLines.forEach(line => {
-                const lineBreak = document.createElement("br");
-                description.appendChild(lineBreak);
-                description.appendChild(document.createTextNode(line));
-            });
-
-            cardBody.appendChild(title);
-            cardBody.appendChild(description);
-
-            card.appendChild(image);
-            card.appendChild(cardBody);
-
-            col.appendChild(card);
-
-            return col;
-        }
-
+        /**
+         * Checks if the project card has been displayed
+         * @param projects
+         * @param startIndex
+         * @param endIndex
+         */
         function displayProjects(projects, startIndex, endIndex) {
             for (let i = startIndex; i < endIndex && i < projects.length; i++) {
                 if (!projects[i].displayed) {
@@ -582,7 +542,9 @@ function formatDate(dateString) {
             }
         }
 
-        // Function to load projects using AJAX
+        /**
+         * Function to load projects to the page with Ajax
+         */
         function loadProjects() {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', 'data/projects.json', true);
@@ -628,6 +590,58 @@ function formatDate(dateString) {
 
         // Call loadProjects to initiate the AJAX request
         loadProjects();
+    }
+
+    /**
+     * Creates a project card with the project details and image
+     * @param project
+     * @returns {HTMLDivElement}
+     */
+    function createProjectCard(project) {
+        const col = document.createElement("div");
+        col.classList.add("col", "d-flex", "justify-content-center");
+
+        const card = document.createElement("div");
+        card.classList.add("card");
+        // Set a maximum width for the card
+        card.style.maxWidth = "500px";
+
+        const image = document.createElement("img");
+        image.classList.add("card-img-top");
+        image.src = project.imageSrc;
+        image.alt = project.title;
+
+        // Set maximum width and height for the image
+        image.style.maxWidth = "500px"; // Adjust the value as needed
+        image.style.maxHeight = "200px"; // Adjust the value as needed
+
+        const cardBody = document.createElement("div");
+        cardBody.classList.add("card-body");
+
+        const title = document.createElement("h5");
+        title.classList.add("card-title");
+        title.textContent = project.title;
+
+        const description = document.createElement("p");
+        description.classList.add("card-text");
+
+        // Split the description by line breaks and create <br> elements
+        const descriptionLines = project.description.split('\n');
+        descriptionLines.forEach(line => {
+            const lineBreak = document.createElement("br");
+            description.appendChild(lineBreak);
+            description.appendChild(document.createTextNode(line));
+        });
+
+        cardBody.appendChild(title);
+        cardBody.appendChild(description);
+
+        card.appendChild(image);
+        card.appendChild(cardBody);
+
+        col.appendChild(card);
+
+        return col;
     }
     //endregion
 
@@ -851,7 +865,7 @@ function formatDate(dateString) {
     //region Events Page Functions
 
     /**
-     *
+     * Function called to display the events page
      */
     function DisplayEventsPage() {
         console.log("Called DisplayEventsPage...");
@@ -869,6 +883,10 @@ function formatDate(dateString) {
 
     }
 
+    /**
+     * Function to filter the events by the selected filter option
+     * @param filterOption
+     */
     function displayEventCards(filterOption) {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', './data/events.json', true);
@@ -900,8 +918,17 @@ function formatDate(dateString) {
         xhr.send();
     }
 
+    /**
+     * Creates a card for an event with the event details and image
+     * @param event
+     * @returns card
+     */
     function createEventCard(event) {
         const card = $("<div>").addClass("card").css("margin", "5px");
+
+        // Create an image element for the event
+        const cardImage = $("<img>").addClass("card-img-top").attr("src", event.eventImage).attr("alt", event.eventName);
+
         const cardBody = $("<div>").addClass("card-body");
 
         const title = $("<h5>").addClass("card-title").text(event.eventName);
@@ -909,12 +936,21 @@ function formatDate(dateString) {
         const location = $("<p>").addClass("card-text").text("Location: " + event.eventLocation);
         const description = $("<p>").addClass("card-text").text(event.eventDescription);
 
+        // Append the image to the card before the card body
+        card.append(cardImage, cardBody);
+
         cardBody.append(title, date, location, description);
-        card.append(cardBody);
 
         return card;
     }
 
+    /**
+     * Receives an array of events to sort according to the filter option selected.
+     * Returns a sorted list based on date.
+     * @param events
+     * @param filterOption
+     * @returns events
+     */
     function filterEvents(events, filterOption) {
         if (filterOption === 'upcoming') {
             return events.filter(event => new Date(event.eventDate) > new Date());
@@ -928,7 +964,7 @@ function formatDate(dateString) {
 
     //region Gallery Page Functions
     /**
-     *
+     * Function called to display the Gallery Page
      */
     function DisplayGalleryPage() {
         console.log("Called DisplayGalleryPage...");
@@ -944,7 +980,10 @@ function formatDate(dateString) {
         });
     }
 
-    // Function to load thumbnails based on sorting option
+    /**
+     * Function to load thumbnails based on sorting option selected
+     * @param sortOption
+     */
     function loadGalleryThumbnails(sortOption) {
         // Fetch events data from JSON file
         let xhr = new XMLHttpRequest();
@@ -972,6 +1011,11 @@ function formatDate(dateString) {
         xhr.send();
     }
 
+    /**
+     * Receives the event data and creates an event card and calls the modal creator function to create
+     * the matching modal.
+     * @param eventsData
+     */
     function createGalleryThumbnails(eventsData) {
         const thumbnailsContainer = document.getElementById('thumbnails');
         thumbnailsContainer.innerHTML = ''; // Clear existing thumbnails
@@ -1016,7 +1060,11 @@ function formatDate(dateString) {
         });
     }
 
-    // Function to create modal for each event
+    /**
+     * Function to create modal for each event.
+     * @param event
+     * @param thumbnailCount
+     */
     function createGalleryModal(event, thumbnailCount) {
         const modalId = 'lightboxModal' + event.eventId;
         const modal = document.createElement('div');

@@ -83,6 +83,46 @@
       "eventDate": "2023-08-05",
       "eventImage": "img/eventPhotos/kidsCamp.png",
       "eventDescription": "Join us for a summer adventure at our exciting summer camp! Explore nature, make new friends, and create lasting memories."
+    },
+    {
+      "eventId": "000011",
+      "eventName": "Winter Wonderland Festival",
+      "eventLocation": "Central Park",
+      "eventDate": "2022-12-15",
+      "eventImage": "img/eventPhotos/winterFestival.png",
+      "eventDescription": "Experience the magic of winter with our Winter Wonderland Festival. Enjoy holiday lights, ice skating, and festive treats."
+    },
+    {
+      "eventId": "000012",
+      "eventName": "Annual Book Fair",
+      "eventLocation": "Library Hall",
+      "eventDate": "2023-09-10",
+      "eventImage": "img/eventPhotos/bookFair.png",
+      "eventDescription": "Discover new books and meet your favorite authors at our Annual Book Fair. A perfect event for book lovers of all ages."
+    },
+    {
+      "eventId": "000013",
+      "eventName": "Local Artist Showcase",
+      "eventLocation": "Arts Center",
+      "eventDate": "2024-07-22",
+      "eventImage": "img/eventPhotos/artistShowcase.png",
+      "eventDescription": "Join us for an exhibition featuring the work of local artists. Explore paintings, sculptures, and more in this celebration of creativity."
+    },
+    {
+      "eventId": "000014",
+      "eventName": "Outdoor Movie Night",
+      "eventLocation": "Community Park",
+      "eventDate": "2024-08-20",
+      "eventImage": "img/eventPhotos/movieNight.png",
+      "eventDescription": "Bring a blanket and enjoy an outdoor movie night under the stars. A family-friendly event featuring a popular film."
+    },
+    {
+      "eventId": "000015",
+      "eventName": "Health and Wellness Expo",
+      "eventLocation": "Expo Center",
+      "eventDate": "2024-10-05",
+      "eventImage": "img/eventPhotos/healthExpo.png",
+      "eventDescription": "Explore health and wellness at our expo. Attend workshops, try fitness classes, and learn from health experts."
     }
   ]
 }

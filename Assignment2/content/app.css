@@ -243,3 +243,9 @@ main {
 .thumbnail {
     padding: 10px;
 }
+
+.full-width-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
