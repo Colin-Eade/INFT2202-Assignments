@@ -1,5 +1,9 @@
 /* Text and Link Styling */
 
+.large-icon {
+    font-size: 2rem;
+}
+
 /* Styles for links with a dashed underline by default
    and changes to a solid underline on hover */
 .dashed-underline {
@@ -22,39 +26,37 @@
     position: relative;
 }
 
-#navSearchInput {
+#navSearchGroup {
     width: 0;
     transition: width 0.3s ease-out, opacity 0.3s ease-out;
-    border: 0;
     padding: 0;
     opacity: 0;
 }
 
-#navSearchForm:hover #navSearchInput,
-#navSearchForm:focus-within #navSearchInput {
+#navSearchDropdown {
+    position: absolute;
+}
+
+#navSearchForm:hover #navSearchGroup,
+#navSearchForm:focus-within #navSearchGroup {
     width: 200px;
-    padding: 5px 12px;
     opacity: 1;
-    border: 1px solid #ccc;
 }
 
 @media (max-width: 991.98px) {
     #navSearchForm {
-        width: 100%; /* Make the search form full width */
+        width: 100%;
     }
 
-    #navSearchInput {
+    #navSearchGroup {
         width: 100%;
         opacity: 1;
-        padding: 5px 12px;
-        border: 1px solid #ccc;
         transition: none
     }
 
-    #navSearchForm:hover #navSearchInput,
-    #navSearchForm:focus-within #navSearchInput {
-        width: 100%; /* Keep full width on hover/focus */
-        border: 1px solid #ccc; /* Optional: Adjust styles as needed */
+    #navSearchForm:hover #navSearchGroup,
+    #navSearchForm:focus-within #navSearchGroup {
+        width: 100%;
     }
 }
 
