@@ -519,60 +519,98 @@ function formatDate(dateString) {
     /**
         Called to display the portfolio page and dynamically create the project cards for display
      */
-    function DisplayPortfolioPage() {
+    function DisplayPortfolioPage(){
         console.log("Called DisplayPortfolioPage...");
 
         const projectContainer = document.getElementById("project-container");
         const loadMoreButton = document.getElementById("load-more-button");
 
-        let projectsToShow = 2; // Number of initially displayed projects
+        /**
+         Function to create a project card
+         */
+        function createProjectCard(project) {
+
+            const col = document.createElement("div");
+            col.classList.add("col", "d-flex", "justify-content-center");
+
+            const card = document.createElement("div");
+            card.classList.add("card");
+            // Set a maximum width for the card
+            card.style.maxWidth = "500px";
+
+            const image = document.createElement("img");
+            image.classList.add("card-img-top");
+            image.src = project.imageSrc;
+            image.alt = project.title;
+
+            // Set maximum width and height for the image
+            image.style.maxWidth = "500px"; // Adjust the value as needed
+            image.style.maxHeight = "200px"; // Adjust the value as needed
+
+            const cardBody = document.createElement("div");
+            cardBody.classList.add("card-body");
+
+            const title = document.createElement("h5");
+            title.classList.add("card-title");
+            title.textContent = project.title;
+
+            const description = document.createElement("p");
+            description.classList.add("card-text");
+
+            // Split the description by line breaks and create <br> elements
+            const descriptionLines = project.description.split('\n');
+            descriptionLines.forEach(line => {
+                const lineBreak = document.createElement("br");
+                description.appendChild(lineBreak);
+                description.appendChild(document.createTextNode(line));
+            });
+
+            cardBody.appendChild(title);
+            cardBody.appendChild(description);
+
+            card.appendChild(image);
+            card.appendChild(cardBody);
+
+            col.appendChild(card);
+
+            return col;
+        }
+
+        /**
+         * Function to display projects on the page
+         */
+        function displayProjects(startIndex, endIndex) {
+            for (let i = startIndex; i < endIndex && i < projects.length; i++) {
+                if (!projects[i].displayed) {
+                    const projectCard = createProjectCard(projects[i]);
+                    projectContainer.appendChild(projectCard);
+                    projects[i].displayed = true; // Mark the project as displayed
+                }
+            }
+        }
+
+        // Initialize the "displayed" property for all projects to false
+        for (let i = 0; i < projects.length; i++) {
+            projects[i].displayed = false;
+        }
+
+        let startIndex = 0;
+        const projectsPerPage = 2;
 
         // Initial display of projects
-        fetchProjectsData(displayProjects);
+        displayProjects(startIndex, startIndex + projectsPerPage);
+        startIndex += projectsPerPage;
 
         // Event listener for the "Load More" button
         loadMoreButton.addEventListener("click", () => {
-            projectsToShow += 2; // Increment the number of projects to display
-            displayProjects(projectsToShow); // Display the updated list of projects
-        });
-    }
-
-    function fetchProjectsData(callback) {
-        $.ajax({
-            url: "./data/projects.json",
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-                callback(data.projects);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching projects data:', error);
+            if (startIndex < projects.length) { // Check if there are more projects to display
+                displayProjects(startIndex, startIndex + projectsPerPage);
+                startIndex += projectsPerPage;
+            } else {
+                loadMoreButton.disabled = true; // Disable the button if there are no more projects
             }
         });
     }
-
-    function displayProjects(projectsToShow) {
-        // Clear existing projects
-        projectContainer.innerHTML = "";
-
-        // Iterate through each project and create a card
-        for (let i = 0; i < projectsToShow && i < projects.length; i++) {
-            const projectCard = createProjectCard(projects[i]);
-            projectContainer.appendChild(projectCard);
-        }
-
-        // Show the "Show More" button if there are more projects to display
-        if (projectsToShow < projects.length) {
-            loadMoreButton.style.display = "block";
-        } else {
-            loadMoreButton.style.display = "none"; // Hide the button if all projects are displayed
-        }
-    }
-
-    // Call DisplayPortfolioPage after the document is loaded
-    document.addEventListener("DOMContentLoaded", function() {
-        DisplayPortfolioPage();
-    });
     //endregion
 
     //region Services Page Functions
