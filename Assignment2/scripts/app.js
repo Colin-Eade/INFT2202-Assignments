@@ -86,6 +86,7 @@ function formatDate(dateString) {
 // IIFE - Immediately Invoked Functional Expression
 (function(){
 
+    //region Login Session Functions
     /**
      *
      * @returns {boolean}
@@ -97,8 +98,17 @@ function formatDate(dateString) {
     function CheckLogout() {
         return !!sessionStorage.getItem("logout");
     }
+    //endregion
 
     //region Input Field Functions
+    /**
+     *
+     * @returns {boolean}
+     */
+    function CheckSubmissionValidity() {
+        return $(".invalid-field").length <= 0;
+    }
+
     /**
      *
      * @param inputFieldId
@@ -120,12 +130,23 @@ function formatDate(dateString) {
     /**
      *
      * @param inputFieldId
+     * @param inputFieldEvent
+     * @param submitButtonId
      * @param regEx
      * @param errorMessage
      */
-    function ValidateOnBlur(inputFieldId, regEx, errorMessage) {
-        $(inputFieldId).on("blur", () => {
+    function ValidateOnEvent(inputFieldId, inputFieldEvent, submitButtonId, regEx, errorMessage) {
+
+        $(inputFieldId).on(inputFieldEvent, () => {
             RemoveInvalidField(inputFieldId);
+
+            if (!ValidateField(inputFieldId, regEx)) {
+                SetInvalidField(inputFieldId, errorMessage);
+            }
+        });
+        $(submitButtonId).on('click', () => {
+            RemoveInvalidField(inputFieldId);
+
             if (!ValidateField(inputFieldId, regEx)) {
                 SetInvalidField(inputFieldId, errorMessage);
             }
@@ -135,14 +156,24 @@ function formatDate(dateString) {
     /**
      *
      * @param passwordFieldId
+     * @param passwordFieldEvent
+     * @param submitButtonId
      * @param confirmPasswordFieldId
      * @param errorMessage
      */
-    function ConfirmPwOnBlur(passwordFieldId, confirmPasswordFieldId, errorMessage) {
-        $(confirmPasswordFieldId).on("blur", () => {
+    function ConfirmPwOnEvent(passwordFieldId, passwordFieldEvent, submitButtonId, confirmPasswordFieldId, errorMessage) {
+        $(confirmPasswordFieldId).on(passwordFieldEvent, () => {
             RemoveInvalidField(confirmPasswordFieldId);
+
             if (!ConfirmPassword(passwordFieldId, confirmPasswordFieldId)) {
                 SetInvalidField(confirmPasswordFieldId, errorMessage);
+            }
+        });
+        $(submitButtonId).on('click', () => {
+            RemoveInvalidField(passwordFieldId);
+
+            if (!ValidateField(passwordFieldId, regEx)) {
+                SetInvalidField(passwordFieldId, errorMessage);
             }
         });
     }
@@ -187,9 +218,11 @@ function formatDate(dateString) {
             let noPrefixTitle =  document.title.replace(titlePrefix, "");
             $("header").html(data);
             ChangeNavBar();
+
             if(CheckLogin()) {
                 SetLoggedInNavBar();
                 SetWelcomeMessage();
+
             } else if (CheckLogout()) {
                 SetLogoutMessage();
             }
@@ -213,27 +246,18 @@ function formatDate(dateString) {
      */
     function ChangeNavBar() {
 
-        // Get link list id
-        let navList = document.getElementById("navLinkListLeft")
+        // Create new list item and link
+        let $newItem = $('<li class="nav-item"></li>');
+        let $newLink = $('<a class="nav-link" href="#" id="navCareersLink">Careers</a>');
 
-        // Set new list item attributes
-        let newItem = document.createElement("li");
-        newItem.setAttribute("class", "nav-item");
+        // Append the new link to the new list item
+        $newItem.append($newLink);
 
-        // Set new link attributes
-        let newLink = document.createElement("a");
-        newLink.setAttribute("class", "nav-link");
-        newLink.setAttribute("href", "#");
-        newLink.setAttribute("id", "navCareersLink");
-        newLink.textContent = "Careers";
-
-        // Append the new items
-        newItem.appendChild(newLink);
-        navList.appendChild(newItem);
+        // Insert the new item after the gallery link
+        $('#navGalleryLink').closest('li').after($newItem);
 
         // Change Blog to News
-        let blogLink = document.getElementById("navBlogLink");
-        blogLink.textContent = "News";
+        $('#navBlogLink').text('News');
 
     }
 
@@ -315,6 +339,13 @@ function formatDate(dateString) {
         let page = 1;
         let searchInput = "Durham Region Ontario";
 
+        $("#newsSearchInput").on('keydown', function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                $("#newsSearchButton").click();
+            }
+        });
+
         //NewsAPIFetch(searchInput, page);
 
         $("#newsSearchButton").on("click", () => {
@@ -369,7 +400,7 @@ function formatDate(dateString) {
         let scrollUpButton = $("#newsScrollUpButton");
 
         if (data.status === "ok") {
-            console.log(data);
+
             if (data.totalResults) {
 
                 scrollDownButton.removeClass("disabled");
@@ -389,7 +420,7 @@ function formatDate(dateString) {
                         <a href="${article.url}" class="list-group-item list-group-item-action mt-1 border-top"
                         target="_blank" rel="noopener noreferrer">
                             <h5 class="mb-1">${article.title || "No title"}</h5>
-                            <p class="mb-1 text-muted" style="font-size: smaller;">
+                            <p class="mb-1 text-muted small">
                                 ${new Date(article.publishedAt).toLocaleDateString() || "No date"}
                                  | ${article.source.name || "No source name"} 
                                  | ${article.author || "No author"}
@@ -406,7 +437,7 @@ function formatDate(dateString) {
                 scrollUpButton.addClass("disabled");
 
                 let articleHtml = `
-                        <div class="list-group-item">
+                        <div class="list-group-item mt-1">
                             <p class="mb-1">No articles to display. Please try another search.</p>
                         </div>`;
 
@@ -424,7 +455,6 @@ function formatDate(dateString) {
         $("#newsScrollDownButton").addClass("disabled");
         $("#newsScrollUpButton").addClass("disabled");
 
-        console.log(data);
         let errorHtml = `
                         <div class="list-group-item mt-1 border-top">
                             <div class="d-flex justify-content-center align-items-center text-center">
@@ -433,7 +463,15 @@ function formatDate(dateString) {
                                     Error
                                 </h3>       
                             </div>`;
-        if (data.responseJSON && data.responseJSON.message) {
+
+        if (!$("#newsSearchInput").val()) {
+            errorHtml += `<p class="mb-1">
+                              Search field is empty. Please enter a topic to search. 
+                              For example, you can search for 'technology', 'politics', 
+                              'sports', or any specific event or topic you're interested in. 
+                              Make sure to use keywords that are likely to produce relevant results.
+                          </p>`;
+        } else if (data.responseJSON && data.responseJSON.message) {
             errorHtml += `<p class="mb-1">${data.responseJSON.message}</p>`;
         } else {
             `<p class="mb-1">An unexpected error occurred. Please try again later.</p>`
@@ -582,8 +620,10 @@ function formatDate(dateString) {
     function DisplayContactPage() {
         console.log("Called DisplayContactPage...");
 
+        ContactFormValidation();
+
         // Obtain references to form elements and modals
-        let contactForm = document.getElementById('contactForm');
+        let submitButton = document.getElementById('formSubmit');
         let modalSubmit = document.getElementById("modalSubmit");
 
         // Initialize Bootstrap modals
@@ -591,8 +631,13 @@ function formatDate(dateString) {
         let redirectModal = new bootstrap.Modal(document.getElementById('redirectModal'));
 
         // Set up event listeners
-        contactForm.addEventListener("submit", SubmitContactForm);
+        submitButton.addEventListener("click", (event) => {
+           if (CheckSubmissionValidity()) {
+               SubmitContactForm(event);
+           }
+        });
         modalSubmit.addEventListener("click", SubmitModalSubmitClick);
+
 
         /**
          * Handles the submission of the contact form.
@@ -600,9 +645,6 @@ function formatDate(dateString) {
          * @param {Event} event - The event for the form submission.
          */
         function SubmitContactForm(event) {
-            event.preventDefault();
-            if (!contactForm.checkValidity())
-                return;
             PopulateSubmitModal();
             contactModal.show();
         }
@@ -672,6 +714,25 @@ function formatDate(dateString) {
             window.location.href = "index.html";
         }
     }
+
+    /**
+     *
+     */
+    function ContactFormValidation() {
+        let fullNameError = "Please enter your full name, starting each part with a capital letter. " +
+            "You can include spaces, hyphens, and apostrophes if necessary.";
+        let emailAddressError = "Please enter a valid email address in the format: yourname@example.com.";
+        let messageError = "Your message cannot be empty. Please provide details so we can assist you better.";
+
+        ValidateOnEvent("#fullName", "blur", "#formSubmit",
+                            /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)+$/, fullNameError);
+        ValidateOnEvent("#emailAddress", "blur", "#formSubmit",
+                            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
+        ValidateOnEvent("#message", "blur", "#formSubmit",
+                            null, messageError);
+    }
+
+
     //endregion
 
     //region Privacy Policy Page Functions
@@ -876,10 +937,10 @@ function formatDate(dateString) {
             if (ValidateField(userNameField) && ValidateField(passwordField)) {
                 validInputs = true
             } else {
-                if(!ValidateField(userNameField)) {
+                if(!ValidateField(userNameField, null)) {
                     SetInvalidField(userNameField, "Please enter your username.");
                 }
-                if(!ValidateField(passwordField)) {
+                if(!ValidateField(passwordField, null)) {
                     SetInvalidField(passwordField, "Please enter your password.");
                 }
             }
@@ -920,25 +981,11 @@ function formatDate(dateString) {
 
         RegisterFormValidation();
 
-        $("#registerButton").on("click", function () {
-            let success = false
-
-            $(".form-control").each(function () {
-                $(this).focus().blur();
-            })
-            .each(function () {
-                if (!$(this).hasClass("invalid-field")) {
-                    success = true;
-                } else {
-                    success = false;
-                    return false
-                }
-            });
-            // TODO: SUCCESS LOGIC AND UPLOAD TO JSON
-            if (success) {
-
+        $("#registerButton").on("click", () => {
+            if (CheckSubmissionValidity()) {
+                // TODO: SUCCESS LOGIC AND UPLOAD TO JSON
+                console.log("Success!")
             }
-
         });
     }
 
@@ -959,14 +1006,20 @@ function formatDate(dateString) {
             "lowercase letter, a number, and a special character.";
         let confirmPasswordError = "The password confirmation does not match the password entered.";
 
-        ValidateOnBlur("#firstName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
-        ValidateOnBlur("#lastName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
-        ValidateOnBlur("#emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
-        ValidateOnBlur("#phone", /^\+?1?\d{10}$/, phoneError);
-        ValidateOnBlur("#userName", /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
-        ValidateOnBlur("#password", /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
-
-        ConfirmPwOnBlur("#password", "#confirmPassword", confirmPasswordError);
+        ValidateOnEvent("#firstName", "blur", "registerButton",
+                            /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
+        ValidateOnEvent("#lastName", "blur", "registerButton",
+                            /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
+        ValidateOnEvent("#emailAddress", "blur", "registerButton",
+                            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
+        ValidateOnEvent("#phone", "blur", "registerButton",
+                            /^\+?1?\d{10}$/, phoneError);
+        ValidateOnEvent("#userName", "blur", "registerButton",
+                            /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
+        ValidateOnEvent("#password", "blur", "registerButton",
+                            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
+        ConfirmPwOnEvent("#password", "blur", "registerButton",
+                    "#confirmPassword", confirmPasswordError);
     }
     //endregion
 
