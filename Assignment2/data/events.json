@@ -1,0 +1,78 @@
+{
+  "pages": {
+    "gallery": "/gallery.html",
+    "events": "/events.html"
+  },
+  "events": [
+    {
+      "eventId": "000001",
+      "eventName": "Clothing Drive",
+      "eventLocation": "Multi-Purpose Room",
+      "eventDate": "2022-01-22",
+      "eventImage": "img/eventPhotos/clothingDrive.png"
+    },
+    {
+      "eventId": "000002",
+      "eventName": "Kids in the Garden",
+      "eventLocation": "Community Garden",
+      "eventDate": "2024-06-13",
+      "eventImage": "img/eventPhotos/kidsGarden.png"
+    },
+    {
+      "eventId": "000003",
+      "eventName": "Thanksgiving Food Drive",
+      "eventLocation": "Multi-Purpose Room",
+      "eventDate": "2023-10-09",
+      "eventImage": "img/eventPhotos/foodDrive.png"
+    },
+    {
+      "eventId": "000004",
+      "eventName": "Community Garden Grand Opening",
+      "eventLocation": "Community Garden",
+      "eventDate": "2021-07-21",
+      "eventImage": "img/eventPhotos/communityGarden.png"
+    },
+    {
+      "eventId": "000005",
+      "eventName": "Kids in STEM",
+      "eventLocation": "STEM Room",
+      "eventDate": "2024-06-17",
+      "eventImage": "img/eventPhotos/kidsStem.png"
+    },
+    {
+      "eventId": "000006",
+      "eventName": "Youth Leadership Summit",
+      "eventLocation": "Multi-Purpose Room",
+      "eventDate": "2023-11-25",
+      "eventImage": "img/eventPhotos/leadership.png"
+    },
+    {
+      "eventId": "000007",
+      "eventName": "Father's Day Picnic 2023",
+      "eventLocation": "High Park Lawn",
+      "eventDate": "2023-06-18",
+      "eventImage": "img/eventPhotos/picnic.png"
+    },
+    {
+      "eventId": "000008",
+      "eventName": "Earth Day Recycling Drive",
+      "eventLocation": "Multi-Purpose Room",
+      "eventDate": "2023-04-22",
+      "eventImage": "img/eventPhotos/recyclingDay.png"
+    },
+    {
+      "eventId": "000009",
+      "eventName": "Splash Pad Grand Opening",
+      "eventLocation": "Community Splash Pad",
+      "eventDate": "2024-06-01",
+      "eventImage": "img/eventPhotos/splashPad.png"
+    },
+    {
+      "eventId": "000010",
+      "eventName": "Summer Camp",
+      "eventLocation": "Soccer Fields",
+      "eventDate": "2023-08-05",
+      "eventImage": "img/eventPhotos/kidsCamp.png"
+    }
+  ]
+}

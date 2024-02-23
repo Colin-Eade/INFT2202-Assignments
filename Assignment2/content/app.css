@@ -176,3 +176,13 @@ main {
         transform: translateX(100%); /* Slide out to the right in the last 20% (1s of 5s) */
     }
 }
+
+/* Image Thumbnail sizing and display */
+
+.thumbnail img {
+    max-width: 300px; /* Limit the maximum width of the image to its container */
+    max-height: 100%; /* Limit the maximum height of the image to 100 pixels */
+}
+.thumbnail {
+    padding: 10px;
+}

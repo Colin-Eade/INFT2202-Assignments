@@ -58,6 +58,29 @@ const projects = [
         imageSrc: "img/portfolio/seniorsCentre.png",
     },
 ];
+// end region
+
+// Format Functions
+function formatDate(dateString) {
+    const dateParts = dateString.split('-'); // Split the date string into parts
+    const year = dateParts[0];
+    const month = parseInt(dateParts[1], 10); // Parse month as integer (base 10)
+    const day = parseInt(dateParts[2], 10); // Parse day as integer (base 10)
+
+    // Create a Date object
+    const date = new Date(year, month - 1, day); // Note: Months are zero-based in JavaScript Date object
+
+    // Array of month names
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    // Get the month name from the array using the month index
+    const monthName = monthNames[date.getMonth()];
+
+    // Format the date as "Month Day, Year"
+    const formattedDate = monthName + ' ' + day + ', ' + year;
+
+    return formattedDate;
+}
 //endregion
 
 // IIFE - Immediately Invoked Functional Expression
@@ -670,6 +693,7 @@ const projects = [
     //endregion
 
     //region Events Page Functions
+
     /**
      *
      */
@@ -684,6 +708,148 @@ const projects = [
      */
     function DisplayGalleryPage() {
         console.log("Called DisplayGalleryPage...");
+
+        // Initial loading of thumbnails with default sorting option (newest)
+        loadGalleryThumbnails('newest first');
+        // Event listener for dropdown items
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function () {
+                const sortOption = this.textContent.toLowerCase().trim(); // Get the text content of the clicked item
+                loadGalleryThumbnails(sortOption);
+            });
+        });
+    }
+
+    // Function to load thumbnails based on sorting option
+    function loadGalleryThumbnails(sortOption) {
+        // Fetch events data from JSON file
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', './data/events.json', true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                let eventsData = JSON.parse(xhr.responseText).events;
+
+                // Sort events based on selected option
+                if (sortOption === 'newest first') {
+                    eventsData.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
+                } else if (sortOption === 'oldest first') {
+                    eventsData.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+                }
+
+                // Create thumbnails based on sorted events data
+                createGalleryThumbnails(eventsData);
+            } else {
+                console.error('Error fetching JSON data:', xhr.statusText);
+            }
+        };
+        xhr.onerror = function() {
+            console.error('Error fetching JSON data:', xhr.statusText);
+        };
+        xhr.send();
+    }
+
+    function createGalleryThumbnails(eventsData) {
+        const thumbnailsContainer = document.getElementById('thumbnails');
+        thumbnailsContainer.innerHTML = ''; // Clear existing thumbnails
+        let thumbnailCount = 0;
+        let currentRow;
+
+        const currentDate = new Date(); // Get current date
+
+        eventsData.forEach(event => {
+            // Parse event date from string to Date object
+            const eventDate = new Date(event.eventDate);
+
+            // Check if event date is before the current date
+            if (eventDate < currentDate) {
+
+                const thumbnailDiv = document.createElement('div');
+                thumbnailDiv.classList.add('col-3');
+                thumbnailDiv.style.padding = '10px';
+
+                const thumbnailLink = document.createElement('a');
+                thumbnailLink.href = "#";
+                thumbnailLink.classList.add('thumbnail');
+                thumbnailLink.setAttribute('data-bs-toggle', 'modal');
+                thumbnailLink.setAttribute('data-bs-target', '#lightboxModal' + event.eventId);
+
+                const thumbnailImg = document.createElement('img');
+                thumbnailImg.src = event.eventImage;
+                thumbnailImg.classList.add('img-fluid');
+                thumbnailImg.alt = event.eventName;
+
+                thumbnailLink.appendChild(thumbnailImg);
+                thumbnailDiv.appendChild(thumbnailLink);
+
+                // Append the thumbnail to the current row
+                thumbnailsContainer.appendChild(thumbnailDiv);
+
+                // Create modal for each event
+                createGalleryModal(event);
+
+                thumbnailCount++;
+            }
+        });
+    }
+
+    // Function to create modal for each event
+    function createGalleryModal(event, thumbnailCount) {
+        const modalId = 'lightboxModal' + event.eventId;
+        const modal = document.createElement('div');
+        modal.classList.add('modal', 'fade');
+        modal.id = modalId;
+        modal.tabIndex = '-1';
+        modal.role = 'dialog';
+        modal.setAttribute('aria-labelledby', 'lightboxModalLabel' + event.eventId);
+        modal.setAttribute('aria-hidden', 'true');
+
+        const modalDialog = document.createElement('div');
+        modalDialog.classList.add('modal-dialog', 'modal-dialog-centered', 'modal-lg');
+        modalDialog.role = 'document';
+
+        const modalContent = document.createElement('div');
+        modalContent.classList.add('modal-content');
+
+        // Modal Header
+        const modalHeader = document.createElement('div');
+        modalHeader.classList.add('modal-header');
+        const modalTitle = document.createElement('h5');
+        modalTitle.classList.add('modal-title');
+        modalTitle.textContent = event.eventName;
+        modalHeader.appendChild(modalTitle);
+        modalContent.appendChild(modalHeader);
+
+        // Modal Body
+        const modalBody = document.createElement('div');
+        modalBody.classList.add('modal-body');
+        const eventDate = document.createElement('p');
+        eventDate.textContent = 'Date: ' + formatDate(event.eventDate);
+        modalBody.appendChild(eventDate);
+        const modalImage = document.createElement('img');
+        modalImage.src = event.eventImage;
+        modalImage.classList.add('img-fluid');
+        modalImage.alt = 'Large Image';
+        modalBody.appendChild(modalImage);
+
+        modalContent.appendChild(modalBody);
+
+        // Modal Footer
+        const modalFooter = document.createElement('div');
+        modalFooter.classList.add('modal-footer');
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.classList.add('btn', 'btn-secondary');
+        closeButton.setAttribute('data-bs-dismiss', 'modal');
+        closeButton.textContent = 'Close';
+        modalFooter.appendChild(closeButton);
+        modalContent.appendChild(modalFooter);
+
+        modalDialog.appendChild(modalContent);
+        modal.appendChild(modalDialog);
+
+        // Append the modal to the modal container
+        const modalContainer = document.getElementById('modalContainer');
+        modalContainer.appendChild(modal);
     }
     //endregion
 
