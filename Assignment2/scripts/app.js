@@ -218,6 +218,7 @@ function formatDate(dateString) {
             let noPrefixTitle =  document.title.replace(titlePrefix, "");
             $("header").html(data);
             ChangeNavBar();
+            NavBarSearch();
 
             if(CheckLogin()) {
                 SetLoggedInNavBar();
@@ -259,6 +260,86 @@ function formatDate(dateString) {
         // Change Blog to News
         $('#navBlogLink').text('News');
 
+    }
+
+    /**
+     *
+     */
+    function NavBarSearch() {
+        let navSearchInput = $("#navSearchInput");
+        let navSearchDropdown = $("#navSearchDropdown");
+        let navSearchButton = ($("#navSearchButton"));
+        let firstResultUrl = null;
+
+        navSearchButton.on("click", () => {
+            if (firstResultUrl) {
+                window.location.href = firstResultUrl;
+            }
+        });
+
+        navSearchInput.on("keydown", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+            }
+        });
+
+        navSearchInput.on("keyup", function() {
+            let searchTerm = $(this).val().toLowerCase();
+            let urls = ["./team.html", "./services.html", "./portfolio.html", "./blog.html", "./events.html",
+                                "./gallery.html", "./register.html", "./login.html", "./contact.html", "./privacy_policy.html",
+                                "./terms_of_service.html"
+            ];
+
+            firstResultUrl = null;
+            navSearchDropdown.empty();
+
+            if (searchTerm.length <= 2) {
+                navSearchDropdown.hide();
+            } else {
+                let matchFound = false;
+                let count = 0;
+
+                navSearchDropdown.show();
+
+                for (const url of urls) {
+                    $.get(url, function(data) {
+                        let textContent = $(data).text().toLowerCase();
+
+                        let index = textContent.indexOf(searchTerm);
+
+                        if (index !== -1) {
+
+                            matchFound = true;
+
+                            if (firstResultUrl === null) {
+                                firstResultUrl = url;
+                            }
+
+                            let start = Math.max(index - 20, 0);
+                            let end = Math.min(index + searchTerm.length + 20, textContent.length);
+
+                            let snippetStart = start > 0 ? "..." : "";
+                            let snippetEnd = end < textContent.length ? "..." : "";
+                            let searchSnippet = snippetStart + textContent.substring(start, end).trim() + snippetEnd;
+
+                            if (navSearchDropdown.children().length < 5) {
+                                let filename = url.split('/').pop();
+                                let listItem = `<a class="dropdown-item d-flex justify-content-between align-items-center me-5" href="${url}">
+                                                           <span>${searchSnippet}</span>
+                                                           <span class="small text-secondary">${filename}</span>
+                                                        </a>`;
+                                navSearchDropdown.append(listItem).show();
+                            }
+                        }
+                        count++;
+
+                        if (count === urls.length && matchFound === false) {
+                            navSearchDropdown.append('<span class="dropdown-item">No results found</span>').show();
+                        }
+                    });
+                }
+            }
+        });
     }
 
     function SetLoggedInNavBar() {
@@ -342,7 +423,6 @@ function formatDate(dateString) {
         $("#newsSearchInput").on('keydown', function(e) {
             if (e.key === "Enter") {
                 e.preventDefault();
-                $("#newsSearchButton").click();
             }
         });
 
@@ -620,6 +700,7 @@ function formatDate(dateString) {
     function DisplayContactPage() {
         console.log("Called DisplayContactPage...");
 
+        FeedbackCard();
         ContactFormValidation();
 
         // Obtain references to form elements and modals
@@ -732,7 +813,50 @@ function formatDate(dateString) {
                             null, messageError);
     }
 
+    /**
+     *
+     */
+    function FeedbackCard() {
 
+        let feedbackMessage = $("#feedBackMessage");
+        let feedbackDropdown =  $("#feedBackDropdown");
+        let feedbackForm = $("#feedBackForm");
+        let feedbackBody = $("#feedBackBody");
+
+        feedbackForm.show();
+        feedbackMessage.hide();
+        feedbackDropdown.remove("invalid-field");
+
+        feedbackForm.on('keydown', function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+            }
+        });
+
+        $("#feedbackSubmit").on("click", ()=> {
+           if (feedbackDropdown.val() === "0") {
+               feedbackDropdown.addClass("invalid-field");
+               feedbackMessage.addClass("alert alert-danger")
+                   .text("Please select a rating before submitting your feedback.").show();
+           } else {
+
+               $.get("./data/feedback_responses.json", function(data) {
+                   let response = data[feedbackDropdown.val()];
+
+                   if($("#feedBackComment").val().trim() !== "") {
+                       response += " " + data.commentResponse;
+                   }
+
+                   feedbackBody.fadeOut("slow", function() {
+                       feedbackForm.hide();
+                       feedbackMessage.removeClass("alert-danger").addClass("alert alert-success")
+                           .text(response).show();
+                       feedbackBody.fadeIn("slow");
+                   });
+               });
+           }
+        });
+    }
     //endregion
 
     //region Privacy Policy Page Functions
