@@ -519,17 +519,13 @@ function formatDate(dateString) {
     /**
         Called to display the portfolio page and dynamically create the project cards for display
      */
-    function DisplayPortfolioPage(){
+    function DisplayPortfolioPage() {
         console.log("Called DisplayPortfolioPage...");
 
         const projectContainer = document.getElementById("project-container");
         const loadMoreButton = document.getElementById("load-more-button");
 
-        /**
-         Function to create a project card
-         */
         function createProjectCard(project) {
-
             const col = document.createElement("div");
             col.classList.add("col", "d-flex", "justify-content-center");
 
@@ -576,10 +572,7 @@ function formatDate(dateString) {
             return col;
         }
 
-        /**
-         * Function to display projects on the page
-         */
-        function displayProjects(startIndex, endIndex) {
+        function displayProjects(projects, startIndex, endIndex) {
             for (let i = startIndex; i < endIndex && i < projects.length; i++) {
                 if (!projects[i].displayed) {
                     const projectCard = createProjectCard(projects[i]);
@@ -589,27 +582,52 @@ function formatDate(dateString) {
             }
         }
 
-        // Initialize the "displayed" property for all projects to false
-        for (let i = 0; i < projects.length; i++) {
-            projects[i].displayed = false;
+        // Function to load projects using AJAX
+        function loadProjects() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'data/projects.json', true);
+
+            xhr.onload = function() {
+                if (this.status === 200) {
+                    // Parse the JSON response
+                    const response = JSON.parse(this.responseText);
+
+                    // Access the 'projects' array within the parsed object
+                    const projects = response.projects;
+
+                    // Proceed with the rest of your code, now that `projects` correctly references the array
+                    projects.forEach(project => project.displayed = false);
+
+                    let startIndex = 0;
+                    const projectsPerPage = 2;
+
+                    // Initial display of projects
+                    displayProjects(projects, startIndex, startIndex + projectsPerPage);
+                    startIndex += projectsPerPage;
+
+                    // Event listener for the "Load More" button
+                    loadMoreButton.addEventListener("click", function handleLoadMore() {
+                        if (startIndex < projects.length) {
+                            displayProjects(projects, startIndex, startIndex + projectsPerPage);
+                            startIndex += projectsPerPage;
+                        } else {
+                            loadMoreButton.disabled = true;
+                        }
+                    });
+                } else {
+                    console.error("Failed to load projects:", this.statusText);
+                }
+            };
+
+            xhr.onerror = function() {
+                console.error("Request failed");
+            };
+
+            xhr.send();
         }
 
-        let startIndex = 0;
-        const projectsPerPage = 2;
-
-        // Initial display of projects
-        displayProjects(startIndex, startIndex + projectsPerPage);
-        startIndex += projectsPerPage;
-
-        // Event listener for the "Load More" button
-        loadMoreButton.addEventListener("click", () => {
-            if (startIndex < projects.length) { // Check if there are more projects to display
-                displayProjects(startIndex, startIndex + projectsPerPage);
-                startIndex += projectsPerPage;
-            } else {
-                loadMoreButton.disabled = true; // Disable the button if there are no more projects
-            }
-        });
+        // Call loadProjects to initiate the AJAX request
+        loadProjects();
     }
     //endregion
 
