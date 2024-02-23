@@ -17,6 +17,47 @@
 
 /* Main Content */
 
+/* Nav Bar */
+#navSearchForm {
+    position: relative;
+}
+
+#navSearchInput {
+    width: 0;
+    transition: width 0.3s ease-out, opacity 0.3s ease-out;
+    border: 0;
+    padding: 0;
+    opacity: 0;
+}
+
+#navSearchForm:hover #navSearchInput,
+#navSearchForm:focus-within #navSearchInput {
+    width: 200px;
+    padding: 5px 12px;
+    opacity: 1;
+    border: 1px solid #ccc;
+}
+
+@media (max-width: 991.98px) {
+    #navSearchForm {
+        width: 100%; /* Make the search form full width */
+    }
+
+    #navSearchInput {
+        width: 100%;
+        opacity: 1;
+        padding: 5px 12px;
+        border: 1px solid #ccc;
+        transition: none
+    }
+
+    #navSearchForm:hover #navSearchInput,
+    #navSearchForm:focus-within #navSearchInput {
+        width: 100%; /* Keep full width on hover/focus */
+        border: 1px solid #ccc; /* Optional: Adjust styles as needed */
+    }
+}
+
 /* Base style for header */
 main {
     animation: fadeIn 0.5s ease-out;
@@ -158,6 +199,21 @@ main {
     }
     to {
         opacity: 1;
+    }
+}
+
+@keyframes slideInOut {
+    0% {
+        transform: translateX(100%);
+    }
+    20% {
+        transform: translateX(0);
+    }
+    80% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
     }
 }
 

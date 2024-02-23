@@ -63,6 +63,7 @@ const projects = [
 // IIFE - Immediately Invoked Functional Expression
 (function(){
 
+    //region Login Session Functions
     /**
      *
      * @returns {boolean}
@@ -74,8 +75,17 @@ const projects = [
     function CheckLogout() {
         return !!sessionStorage.getItem("logout");
     }
+    //endregion
 
     //region Input Field Functions
+    /**
+     *
+     * @returns {boolean}
+     */
+    function CheckSubmissionValidity() {
+        return $(".invalid-field").length <= 0;
+    }
+
     /**
      *
      * @param inputFieldId
@@ -97,12 +107,23 @@ const projects = [
     /**
      *
      * @param inputFieldId
+     * @param inputFieldEvent
+     * @param submitButtonId
      * @param regEx
      * @param errorMessage
      */
-    function ValidateOnBlur(inputFieldId, regEx, errorMessage) {
-        $(inputFieldId).on("blur", () => {
+    function ValidateOnEvent(inputFieldId, inputFieldEvent, submitButtonId, regEx, errorMessage) {
+
+        $(inputFieldId).on(inputFieldEvent, () => {
             RemoveInvalidField(inputFieldId);
+
+            if (!ValidateField(inputFieldId, regEx)) {
+                SetInvalidField(inputFieldId, errorMessage);
+            }
+        });
+        $(submitButtonId).on('click', () => {
+            RemoveInvalidField(inputFieldId);
+
             if (!ValidateField(inputFieldId, regEx)) {
                 SetInvalidField(inputFieldId, errorMessage);
             }
@@ -112,14 +133,24 @@ const projects = [
     /**
      *
      * @param passwordFieldId
+     * @param passwordFieldEvent
+     * @param submitButtonId
      * @param confirmPasswordFieldId
      * @param errorMessage
      */
-    function ConfirmPwOnBlur(passwordFieldId, confirmPasswordFieldId, errorMessage) {
-        $(confirmPasswordFieldId).on("blur", () => {
+    function ConfirmPwOnEvent(passwordFieldId, passwordFieldEvent, submitButtonId, confirmPasswordFieldId, errorMessage) {
+        $(confirmPasswordFieldId).on(passwordFieldEvent, () => {
             RemoveInvalidField(confirmPasswordFieldId);
+
             if (!ConfirmPassword(passwordFieldId, confirmPasswordFieldId)) {
                 SetInvalidField(confirmPasswordFieldId, errorMessage);
+            }
+        });
+        $(submitButtonId).on('click', () => {
+            RemoveInvalidField(passwordFieldId);
+
+            if (!ValidateField(passwordFieldId, regEx)) {
+                SetInvalidField(passwordFieldId, errorMessage);
             }
         });
     }
@@ -164,9 +195,11 @@ const projects = [
             let noPrefixTitle =  document.title.replace(titlePrefix, "");
             $("header").html(data);
             ChangeNavBar();
+
             if(CheckLogin()) {
                 SetLoggedInNavBar();
                 SetWelcomeMessage();
+
             } else if (CheckLogout()) {
                 SetLogoutMessage();
             }
@@ -190,27 +223,18 @@ const projects = [
      */
     function ChangeNavBar() {
 
-        // Get link list id
-        let navList = document.getElementById("navLinkListLeft")
+        // Create new list item and link
+        let $newItem = $('<li class="nav-item"></li>');
+        let $newLink = $('<a class="nav-link" href="#" id="navCareersLink">Careers</a>');
 
-        // Set new list item attributes
-        let newItem = document.createElement("li");
-        newItem.setAttribute("class", "nav-item");
+        // Append the new link to the new list item
+        $newItem.append($newLink);
 
-        // Set new link attributes
-        let newLink = document.createElement("a");
-        newLink.setAttribute("class", "nav-link");
-        newLink.setAttribute("href", "#");
-        newLink.setAttribute("id", "navCareersLink");
-        newLink.textContent = "Careers";
-
-        // Append the new items
-        newItem.appendChild(newLink);
-        navList.appendChild(newItem);
+        // Insert the new item after the gallery link
+        $('#navGalleryLink').closest('li').after($newItem);
 
         // Change Blog to News
-        let blogLink = document.getElementById("navBlogLink");
-        blogLink.textContent = "News";
+        $('#navBlogLink').text('News');
 
     }
 
@@ -573,8 +597,10 @@ const projects = [
     function DisplayContactPage() {
         console.log("Called DisplayContactPage...");
 
+        ContactFormValidation();
+
         // Obtain references to form elements and modals
-        let contactForm = document.getElementById('contactForm');
+        let submitButton = document.getElementById('formSubmit');
         let modalSubmit = document.getElementById("modalSubmit");
 
         // Initialize Bootstrap modals
@@ -582,8 +608,13 @@ const projects = [
         let redirectModal = new bootstrap.Modal(document.getElementById('redirectModal'));
 
         // Set up event listeners
-        contactForm.addEventListener("submit", SubmitContactForm);
+        submitButton.addEventListener("click", (event) => {
+           if (CheckSubmissionValidity()) {
+               SubmitContactForm(event);
+           }
+        });
         modalSubmit.addEventListener("click", SubmitModalSubmitClick);
+
 
         /**
          * Handles the submission of the contact form.
@@ -591,9 +622,6 @@ const projects = [
          * @param {Event} event - The event for the form submission.
          */
         function SubmitContactForm(event) {
-            event.preventDefault();
-            if (!contactForm.checkValidity())
-                return;
             PopulateSubmitModal();
             contactModal.show();
         }
@@ -663,6 +691,25 @@ const projects = [
             window.location.href = "index.html";
         }
     }
+
+    /**
+     *
+     */
+    function ContactFormValidation() {
+        let fullNameError = "Please enter your full name, starting each part with a capital letter. " +
+            "You can include spaces, hyphens, and apostrophes if necessary.";
+        let emailAddressError = "Please enter a valid email address in the format: yourname@example.com.";
+        let messageError = "Your message cannot be empty. Please provide details so we can assist you better.";
+
+        ValidateOnEvent("#fullName", "blur", "#formSubmit",
+                            /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)+$/, fullNameError);
+        ValidateOnEvent("#emailAddress", "blur", "#formSubmit",
+                            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
+        ValidateOnEvent("#message", "blur", "#formSubmit",
+                            null, messageError);
+    }
+
+
     //endregion
 
     //region Privacy Policy Page Functions
@@ -724,10 +771,10 @@ const projects = [
             if (ValidateField(userNameField) && ValidateField(passwordField)) {
                 validInputs = true
             } else {
-                if(!ValidateField(userNameField)) {
+                if(!ValidateField(userNameField, null)) {
                     SetInvalidField(userNameField, "Please enter your username.");
                 }
-                if(!ValidateField(passwordField)) {
+                if(!ValidateField(passwordField, null)) {
                     SetInvalidField(passwordField, "Please enter your password.");
                 }
             }
@@ -768,25 +815,11 @@ const projects = [
 
         RegisterFormValidation();
 
-        $("#registerButton").on("click", function () {
-            let success = false
-
-            $(".form-control").each(function () {
-                $(this).focus().blur();
-            })
-            .each(function () {
-                if (!$(this).hasClass("invalid-field")) {
-                    success = true;
-                } else {
-                    success = false;
-                    return false
-                }
-            });
-            // TODO: SUCCESS LOGIC AND UPLOAD TO JSON
-            if (success) {
-
+        $("#registerButton").on("click", () => {
+            if (CheckSubmissionValidity()) {
+                // TODO: SUCCESS LOGIC AND UPLOAD TO JSON
+                console.log("Success!")
             }
-
         });
     }
 
@@ -807,14 +840,20 @@ const projects = [
             "lowercase letter, a number, and a special character.";
         let confirmPasswordError = "The password confirmation does not match the password entered.";
 
-        ValidateOnBlur("#firstName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
-        ValidateOnBlur("#lastName", /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
-        ValidateOnBlur("#emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
-        ValidateOnBlur("#phone", /^\+?1?\d{10}$/, phoneError);
-        ValidateOnBlur("#userName", /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
-        ValidateOnBlur("#password", /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
-
-        ConfirmPwOnBlur("#password", "#confirmPassword", confirmPasswordError);
+        ValidateOnEvent("#firstName", "blur", "registerButton",
+                            /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
+        ValidateOnEvent("#lastName", "blur", "registerButton",
+                            /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
+        ValidateOnEvent("#emailAddress", "blur", "registerButton",
+                            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
+        ValidateOnEvent("#phone", "blur", "registerButton",
+                            /^\+?1?\d{10}$/, phoneError);
+        ValidateOnEvent("#userName", "blur", "registerButton",
+                            /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
+        ValidateOnEvent("#password", "blur", "registerButton",
+                            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
+        ConfirmPwOnEvent("#password", "blur", "registerButton",
+                    "#confirmPassword", confirmPasswordError);
     }
     //endregion
 

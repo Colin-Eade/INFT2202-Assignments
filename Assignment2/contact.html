@@ -39,37 +39,33 @@
                                 <form id="contactForm">
                                     <div class="mb-3">
                                         <label for="fullName" class="form-label">Full Name</label>
-                                        <input id="fullName" type="text" class="form-control" name="fullName">
+                                        <div class="input-group">
+                                            <input id="fullName" type="text" class="form-control" name="fullName">
+                                        </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="emailAddress" class="form-label">Email Address</label>
-                                        <input id="emailAddress" type="email" class="form-control" name="emailAddress">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="feedbackType" class="form-label">Feedback Type</label>
-                                        <select id="feedbackType"  type="d" class="form-control" name="feedbackType">
-                                            <option value="">Please choose an option</option>
-                                            <option value="general">General Feedback</option>
-                                            <option value="bug report">Bug Report</option>
-                                            <option value="feature request">Feature Request</option>
-                                            <option value="service inquiry">Service Inquiry</option>
-                                            <option value="other">Other</option>
-                                        </select>
+                                        <div class="input-group">
+                                            <input id="emailAddress" type="email" class="form-control" name="emailAddress">
+                                        </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="subject" class="form-label">Subject (optional)</label>
-                                        <input id="subject"  type="text" class="form-control" name="subject">
+                                        <div class="input-group">
+                                            <input id="subject"  type="text" class="form-control" name="subject">
+                                        </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="message" class="form-label">Message</label>
-                                        <textarea id="message" class="form-control" name="message" rows="4"></textarea>
+                                        <div class="input-group">
+                                            <textarea id="message" class="form-control" name="message" rows="4"></textarea>
+                                        </div>
                                     </div>
 
-                                    <button id="formSubmit" type="submit" class="col-12 btn btn-primary mb-3">
+                                    <button id="formSubmit" type="button" class="col-12 btn btn-primary mb-3">
                                         <i class="fa-solid fa-envelope" ></i> Submit
                                     </button>
 
