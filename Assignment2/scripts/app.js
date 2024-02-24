@@ -11,7 +11,7 @@
 
 //region Globals
 const titlePrefix = "Harmony Hub - "
-// end region
+//endregion
 
 //region Format Functions
 function formatDate(dateString) {
@@ -41,13 +41,19 @@ function formatDate(dateString) {
 
     //region Login Session Functions
     /**
+     * Checks if the user is currently logged in by looking for user data in sessionStorage.
      *
-     * @returns {boolean}
+     * @returns {boolean} True if user data is found, otherwise, false.
      */
     function CheckLogin() {
         return !!sessionStorage.getItem("user");
     }
 
+    /**
+     * Checks if the logout action has been triggered by looking for a logout flag in sessionStorage.
+     *
+     * @returns {boolean} True if the logout flag is found, otherwise, false.
+     */
     function CheckLogout() {
         return !!sessionStorage.getItem("logout");
     }
@@ -55,31 +61,44 @@ function formatDate(dateString) {
 
     //region Input Field Functions
     /**
+     * Checks if there are any input fields currently marked as invalid within the form.
+     * This is determined by checking if there are any elements with the class 'invalid-field'.
+     * A return value of true indicates that no invalid fields are present, and the form can be submitted.
      *
-     * @returns {boolean}
+     * @returns {boolean} Returns true if no elements have the 'invalid-field' class, and false otherwise.
      */
     function CheckSubmissionValidity() {
         return $(".invalid-field").length <= 0;
     }
 
     /**
+     * Validates the value of an input field against a provided regular expression. If no regular expression is provided,
+     * it checks if the input field value is not empty after trimming whitespace.
      *
-     * @param inputFieldId
-     * @param regEx
-     * @returns {boolean}
+     * @param inputFieldId The ID of the input field to be validated.
+     * @param regEx Optional. The regular expression to test against the input field value.
+     * @returns {boolean} True if the input field value passes the regex test or is not empty; otherwise, false.
      */
     function ValidateField(inputFieldId, regEx) {
         return regEx ? regEx.test($(inputFieldId).val()) : $(inputFieldId).val().trim() !== "";
     }
 
+    /**
+     * Checks if the values of the password and confirm password fields match.
+     *
+     * @param passwordFieldId The ID of the password input field.
+     * @param confirmPasswordFieldId The ID of the confirm password input field.
+     * @returns {boolean} True if the values of both fields match; otherwise, false.
+     */
     function ConfirmPassword (passwordFieldId, confirmPasswordFieldId) {
         return $(passwordFieldId).val() === $(confirmPasswordFieldId).val();
     }
 
     /**
+     * Validates if the input date from a given field is a valid date and not in the future compared to today's date.
      *
-     * @param dateFieldId
-     * @returns {boolean}
+     * @param dateFieldId The ID of the input field containing the date.
+     * @returns {boolean} Returns true if the date is valid and not in the future; otherwise, returns false.
      */
     function ValidateDate(dateFieldId) {
         let date = new Date($(dateFieldId).val());
@@ -90,12 +109,15 @@ function formatDate(dateString) {
     }
 
     /**
+     * Attaches validation logic to both an input field event and the click event of a submit button.
+     * It removes any existing validation feedback, then validates the input field's value against a regular expression.
+     * If validation fails, it sets an invalid field and an error message.
      *
-     * @param inputFieldId
-     * @param inputFieldEvent
-     * @param submitButtonId
-     * @param regEx
-     * @param errorMessage
+     * @param inputFieldId The ID of the input field to validate.
+     * @param inputFieldEvent The event type to listen for on the input field.
+     * @param submitButtonId The ID of the submit button.
+     * @param regEx The regular expression to test against the input field value.
+     * @param errorMessage The error message to display if validation fails.
      */
     function ValidateOnEvent(inputFieldId, inputFieldEvent, submitButtonId, regEx, errorMessage) {
 
@@ -116,12 +138,15 @@ function formatDate(dateString) {
     }
 
     /**
+     * Validates that two password fields match both on a specific event of the confirmation password field
+     * and on the click event of a submit button. It sets an invalid field and shows an error message if the
+     * passwords do not match.
      *
-     * @param passwordFieldId
-     * @param passwordFieldEvent
-     * @param submitButtonId
-     * @param confirmPasswordFieldId
-     * @param errorMessage
+     * @param passwordFieldId The ID of the password field.
+     * @param passwordFieldEvent The event type to listen for on the password field.
+     * @param submitButtonId The ID of the submit button.
+     * @param confirmPasswordFieldId The ID of the confirmation password field.
+     * @param errorMessage The error message to display if the passwords do not match.
      */
     function ConfirmPwOnEvent(passwordFieldId, passwordFieldEvent, submitButtonId, confirmPasswordFieldId, errorMessage) {
         $(confirmPasswordFieldId).on(passwordFieldEvent, () => {
@@ -141,11 +166,14 @@ function formatDate(dateString) {
     }
 
     /**
+     * Attaches validation logic to both a date input field event and the click event of a submit button.
+     * It checks if the date is valid and not in the future. If validation fails, it sets and invalid field
+     * and an error message.
      *
-     * @param dateFieldId
-     * @param dateFieldEvent
-     * @param submitButtonId
-     * @param errorMessage
+     * @param dateFieldId The ID of the date input field to validate.
+     * @param dateFieldEvent The event type to listen for on the date input field.
+     * @param submitButtonId The ID of the submit button.
+     * @param errorMessage The error message to display if the date validation fails.
      */
     function ValidateDateOnEvent(dateFieldId, dateFieldEvent, submitButtonId, errorMessage) {
         $(dateFieldId).on(dateFieldEvent, () => {
@@ -165,8 +193,9 @@ function formatDate(dateString) {
     }
 
     /**
+     * Removes visual indicators of validation error from the specified input field.
      *
-     * @param inputFieldId
+     * @param inputFieldId The ID of the input field from which to remove validation error indicators.
      */
     function RemoveInvalidField(inputFieldId) {
         $(inputFieldId).removeClass("invalid-field");
@@ -175,9 +204,10 @@ function formatDate(dateString) {
     }
 
     /**
+     * Adds visual indicators of validation error to the specified input field.
      *
-     * @param inputFieldId
-     * @param errorMessage
+     * @param inputFieldId The ID of the input field to mark as invalid.
+     * @param errorMessage The error message to display within the popover when the user hovers over the input field.
      */
     function SetInvalidField(inputFieldId, errorMessage) {
         $(inputFieldId).addClass("invalid-field")
@@ -197,7 +227,8 @@ function formatDate(dateString) {
 
     //region Header and Footer Functions
     /**
-     *
+     * Loads the website's header from an HTML file and performs various initializations.
+     * It updates the header based on the user's login status and adjusts navigation links to reflect the current page.
      */
     function LoadHeader() {
         $.get("./includes/header.html", (data) => {
@@ -218,7 +249,8 @@ function formatDate(dateString) {
     }
 
     /**
-     *
+     * Dynamically loads the footer content into the page.
+     * This function makes an AJAX GET request to retrieve the contents of the 'footer.html' file.
      */
     function LoaderFooter() {
         $.get("./includes/footer.html", (data) => {
@@ -235,7 +267,7 @@ function formatDate(dateString) {
 
         // Create new list item and link
         let $newItem = $('<li class="nav-item"></li>');
-        let $newLink = $('<a class="nav-link" href="#" id="navCareersLink">Careers</a>');
+        let $newLink = $('<a class="nav-link" href="careers.html" id="navCareersLink">Careers</a>');
 
         // Append the new link to the new list item
         $newItem.append($newLink);
@@ -249,7 +281,9 @@ function formatDate(dateString) {
     }
 
     /**
-     *
+     * Implements a search feature in the navigation bar.
+     * This function listens for key events on the search input and dynamically populates a dropdown with search results.
+     * It fetches search data from a local JSON file and filters results based on the user's input.
      */
     function NavBarSearch() {
         let navSearchInput = $("#navSearchInput");
@@ -257,42 +291,56 @@ function formatDate(dateString) {
         let navSearchButton = ($("#navSearchButton"));
         let firstResultUrl = null;
 
+        // Navigate to the first search result when the search button is clicked
         navSearchButton.on("click", () => {
             if (firstResultUrl) {
                 window.location.href = firstResultUrl;
             }
         });
 
+        // Prevent form submission on 'Enter' key
         navSearchInput.on("keydown", function(e) {
             if (e.key === "Enter") {
                 e.preventDefault();
             }
         });
 
+        // Search on keystrokes
         navSearchInput.on("keyup", function() {
+
             let searchTerm = $(this).val().toLowerCase();
             navSearchDropdown.empty();
 
+            // Show dropdown only if search term is longer than 2 characters
             if (searchTerm.length <= 2) {
                 navSearchDropdown.hide();
+
             } else {
                 navSearchDropdown.show();
-                $.get('./data/data_dump.json', function(data) {
-                    let matchFound = false;
-                    let firstResultUrl = null;
 
+                // Fetch search data from JSON file
+                $.get('./data/data_dump.json', function(data) {
+
+                    let matchFound = false;
+
+                    // Iterate through each object in JSON
                     for (const page of data.pages) {
+
+                        // Store text data
                         let textContent = page.content
                         let lowerCaseContent = textContent.toLowerCase();
                         let index = lowerCaseContent.indexOf(searchTerm);
 
+                        // Check if the search term is found in the page content
                         if (index !== -1) {
                             matchFound = true;
 
+                            // Set the URL for search button click
                             if (firstResultUrl === null) {
                                 firstResultUrl = page.URL;
                             }
 
+                            // Create a string snippet to display in the search dropdown
                             let start = Math.max(index - 20, 0);
                             let end = Math.min(index + searchTerm.length + 20, textContent.length);
 
@@ -300,6 +348,7 @@ function formatDate(dateString) {
                             let snippetEnd = end < textContent.length ? "..." : "";
                             let searchSnippet = snippetStart + textContent.substring(start, end).trim() + snippetEnd;
 
+                            // Make a dropdown list of the search snippets and URL links they are from
                             if (navSearchDropdown.children().length < 5) {
                                 let filename = page.URL.split('/').pop();
                                 let listItem = `<a class="dropdown-item d-flex justify-content-between align-items-center me-5" href="${page.URL}">
@@ -310,6 +359,7 @@ function formatDate(dateString) {
                             }
                         }
                     }
+                    // Display "No results found" in dropdown if there are no matches to user input
                     if (!matchFound) {
                         navSearchDropdown.append('<span class="dropdown-item">No results found</span>').show();
                     }
@@ -318,8 +368,15 @@ function formatDate(dateString) {
         });
     }
 
+    /**
+     * Updates the navigation bar to reflect the user's logged-in state.
+     * This function modifies the login link and transforms it into a dropdown toggle.
+     * The dropdown toggle contains the user's name, email, and a link to logout.
+     * The logout action clears the session storage, redirects to the login page, and sets a 'logout' flag to indicate
+     * a successful logout.
+     */
     function SetLoggedInNavBar() {
-        $("#navLoginLink").html('<i class="fa-solid fa-user"></i>').attr({
+        $("#navLoginLink").html('<i class="fa-solid fa-user"></i> Account').attr({
             "id": "navUserButton",
             "class": "nav-link dropdown-toggle",
             "href": "#",
@@ -353,15 +410,18 @@ function formatDate(dateString) {
     }
 
     /**
-     *
+     * Displays a temporary welcome message to the user if they haven't been welcomed already.
+     * This function checks the session storage for a 'welcomed' flag to avoid repeating the welcome message.
+     * If the user data is found in the session storage, it deserializes this data to greet the user by name.
      */
     function SetWelcomeMessage() {
         if(!sessionStorage.getItem("welcomed")) {
 
-            let user = new HarmonyHub.User();
             let userData = sessionStorage.getItem("user");
 
             if (userData) {
+
+                let user = new HarmonyHub.User();
                 user.deserialize(userData);
 
                 $("#navUserButton").closest("li")
@@ -381,10 +441,11 @@ function formatDate(dateString) {
     }
 
     /**
-     *
+     * Displays a temporary logout message upon user logout.
+     * It confirms to the user that they have successfully logged out.
+     * Additionally, this function handles the cleanup of the 'logout' flag from the session storage.
      */
     function SetLogoutMessage() {
-        console.log("logout message")
         $("#navLoginLink").closest("li")
             .before(`<li class="nav-item" id="navMessageWrapper">
                          <span id="navMessage" class="nav-link">
@@ -392,7 +453,7 @@ function formatDate(dateString) {
                          </span>
                      </li>`);
         
-        sessionStorage.clear();
+        sessionStorage.removeItem("logout");
 
         setTimeout(() => {
             $("#navMessageWrapper").remove();
@@ -402,7 +463,9 @@ function formatDate(dateString) {
 
     //region Home Page Functions
     /**
-      Logs to the console when the home page is displayed
+     * Initializes the home page by setting up event listeners for search and scrolling actions.
+     * This function sets up the behavior for the search input, search button, and scroll buttons
+     * for navigating through news articles fetched from NewsAPI
      */
     function DisplayHomePage(){
         console.log("Called DisplayHomePage...");
@@ -441,49 +504,59 @@ function formatDate(dateString) {
 
             NewsAPIFetch(searchInput, page);
         });
-
     }
 
     /**
-     *
+     * Fetches news articles based on the specified keywords and page number using the NewsAPI.
+     * @param keywords The search keywords used to fetch relevant news articles.
+     * @param page The current page number of the API fetch.
      */
     function NewsAPIFetch(keywords, page) {
         const pageSize = 5
         const key = "18c00679c61248edbdf53cfaeee600c0";
         let url =  `https://newsapi.org/v2/everything?q=${keywords}&pageSize=${pageSize}&page=${page}&apiKey=${key}`;
 
+        // Performs the GET request to the NewsAPI
         $.get(url, function(data) {
             NewsAPIFetchSuccess(data, page, pageSize);
         }).fail(NewsAPIFail)
     }
 
     /**
-     *
-     * @param data
-     * @param page
-     * @param pageSize
+     * Handles the successful fetch of news articles from the NewsAPI, and populates the UI with articles.
+     * @param data The JSON response from NewsAPI containing the articles and metadata.
+     * @param page The current page number of the API fetch.
+     * @param pageSize The number of articles per API fetch.
      */
     function NewsAPIFetchSuccess(data, page, pageSize) {
 
         let scrollDownButton = $("#newsScrollDownButton");
         let scrollUpButton = $("#newsScrollUpButton");
 
+        // Check is NewsAPI JSON returned "ok" status
         if (data.status === "ok") {
 
+            // Check if any results returned
             if (data.totalResults) {
 
+                // Enable scroll buttons
                 scrollDownButton.removeClass("disabled");
                 scrollUpButton.removeClass("disabled");
 
+                // Calculate the max amount of pages based on total results
                 let maxPages = Math.ceil(data.totalResults / pageSize);
 
+                // Disable scroll up on first page
                 if (page <= 1) {
                     scrollUpButton.addClass("disabled");
                 }
+
+                // Disable scroll down on last page
                 if (page >= maxPages) {
                     scrollDownButton.addClass("disabled");
                 }
 
+                // Iterate through each article in the response and construct an HTML display
                 for (const article of data.articles) {
                     let articleHtml = `
                         <a href="${article.url}" class="list-group-item list-group-item-action mt-1 border-top"
@@ -497,14 +570,17 @@ function formatDate(dateString) {
                             <p class="mb-1">${article.description || "No description"}</p>
                         </a>`;
 
+                    // Add the article data to the home page article area
                     $('#homeArticleArea').append(articleHtml);
 
                 }
             } else {
 
+                // Disable scroll buttons if no results are found
                 scrollDownButton.addClass("disabled");
                 scrollUpButton.addClass("disabled");
 
+                // Display a message to the user in the articles area
                 let articleHtml = `
                         <div class="list-group-item mt-1">
                             <p class="mb-1">No articles to display. Please try another search.</p>
@@ -516,14 +592,16 @@ function formatDate(dateString) {
     }
 
     /**
-     *
-     * @param data
+     * Handles failures when fetching news articles from the NewsAPI.
+     * @param data The error response from the News API containing the error details or status.
      */
     function NewsAPIFail(data) {
 
+        // Disable scroll buttons
         $("#newsScrollDownButton").addClass("disabled");
         $("#newsScrollUpButton").addClass("disabled");
 
+        // Construct error message
         let errorHtml = `
                         <div class="list-group-item mt-1 border-top">
                             <div class="d-flex justify-content-center align-items-center text-center">
@@ -533,6 +611,7 @@ function formatDate(dateString) {
                                 </h3>       
                             </div>`;
 
+        // Error message for empty search
         if (!$("#newsSearchInput").val()) {
             errorHtml += `<p class="mb-1">
                               Search field is empty. Please enter a topic to search. 
@@ -540,8 +619,12 @@ function formatDate(dateString) {
                               'sports', or any specific event or topic you're interested in. 
                               Make sure to use keywords that are likely to produce relevant results.
                           </p>`;
+
+            // Error message if the API returned a specific one
         } else if (data.responseJSON && data.responseJSON.message) {
             errorHtml += `<p class="mb-1">${data.responseJSON.message}</p>`;
+
+            // Error message for any other error
         } else {
             `<p class="mb-1">An unexpected error occurred. Please try again later.</p>`
         }
@@ -553,7 +636,7 @@ function formatDate(dateString) {
 
     //region Portfolio Page Functions
     /**
-        Called to display the portfolio page and dynamically create the project cards for display
+     * Called to display the portfolio page and dynamically create the project cards for display
      */
     function DisplayPortfolioPage() {
         console.log("Called DisplayPortfolioPage...");
@@ -747,6 +830,7 @@ function formatDate(dateString) {
          * @param {Event} event - The event for the form submission.
          */
         function SubmitContactForm(event) {
+            event.preventDefault();
             PopulateSubmitModal();
             contactModal.show();
         }
@@ -818,7 +902,7 @@ function formatDate(dateString) {
     }
 
     /**
-     *
+     * Validates the contact form input fields on blur and submission events.
      */
     function ContactFormValidation() {
         let fullNameError = "Please enter your full name, starting each part with a capital letter. " +
@@ -835,7 +919,10 @@ function formatDate(dateString) {
     }
 
     /**
+     * Initializes and manages the feedback card UI.
      *
+     * This function sets up the behavior for a feedback card component, including event listeners for form submission
+     * and input validation.
      */
     function FeedbackCard() {
 
@@ -844,34 +931,61 @@ function formatDate(dateString) {
         let feedbackForm = $("#feedBackForm");
         let feedbackBody = $("#feedBackBody");
 
+        // Show the feedback form and hide the message element initially
         feedbackForm.show();
         feedbackMessage.hide();
         feedbackDropdown.remove("invalid-field");
 
+        // Prevent form submission with the Enter key
         feedbackForm.on('keydown', function(e) {
             if (e.key === "Enter") {
                 e.preventDefault();
             }
         });
 
+        // Submit Button Click
         $("#feedbackSubmit").on("click", ()=> {
+
+            // Make sure a valid rating was selected
            if (feedbackDropdown.val() === "0") {
+
+               // Return an invalid field on the rating if invalid
                feedbackDropdown.addClass("invalid-field");
                feedbackMessage.addClass("alert alert-danger")
                    .text("Please select a rating before submitting your feedback.").show();
+
            } else {
 
+               // On valid submission Grab a response from JSON
                $.get("./data/feedback_responses.json", function(data) {
+
+                   // Get specific response based user rating
                    let response = data[feedbackDropdown.val()];
 
+                   // Add to response if user left a comment
                    if($("#feedBackComment").val().trim() !== "") {
                        response += " " + data.commentResponse;
                    }
 
+                   // Fade out and fade back in the feedback card to display "Thank you" response
                    feedbackBody.fadeOut("slow", function() {
+
                        feedbackForm.hide();
                        feedbackMessage.removeClass("alert-danger").addClass("alert alert-success")
                            .text(response).show();
+
+                       feedbackBody.fadeIn("slow");
+                   });
+               }).fail(()=> {
+                   // Generic response if JSON fetch fails
+                   let genericResponse = "Thank you for your feedback.";
+
+                   feedbackBody.fadeOut("slow", function() {
+
+                       feedbackForm.hide();
+                       feedbackMessage.removeClass("alert-danger").addClass("alert alert-success")
+                           .text(genericResponse).show();
+
                        feedbackBody.fadeIn("slow");
                    });
                });
@@ -933,7 +1047,7 @@ function formatDate(dateString) {
                 let filteredEvents = filterEvents(eventsData, filterOption);
 
                 // Sort filtered events by event date
-                filteredEvents.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+                filteredEvents.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
 
                 const eventsContainer = $("#events-container");
                 eventsContainer.empty(); // Clear existing events before adding filtered events
@@ -941,7 +1055,9 @@ function formatDate(dateString) {
                 // Create cards for filtered events
                 filteredEvents.forEach(event => {
                     const eventCard = createEventCard(event);
+                    eventCard.hide();
                     eventsContainer.append(eventCard);
+                    eventCard.fadeIn('slow');
                 });
             } else {
                 console.error('Error fetching JSON data:', xhr.statusText);
@@ -959,6 +1075,8 @@ function formatDate(dateString) {
      * @returns card
      */
     function createEventCard(event) {
+        const colDiv = $("<div>").addClass("col-xl-3 col-lg-4 col-md-6 col-sm-12 d-flex");
+
         const card = $("<div>").addClass("card").css("margin", "5px");
 
         // Create an image element for the event
@@ -971,12 +1089,14 @@ function formatDate(dateString) {
         const location = $("<p>").addClass("card-text").text("Location: " + event.eventLocation);
         const description = $("<p>").addClass("card-text").text(event.eventDescription);
 
-        // Append the image to the card before the card body
+        // Append the image and body to the card
         card.append(cardImage, cardBody);
-
         cardBody.append(title, date, location, description);
 
-        return card;
+        // Append the card to the column div
+        colDiv.append(card);
+
+        return colDiv;
     }
 
     /**
@@ -1006,6 +1126,7 @@ function formatDate(dateString) {
 
         // Initial loading of thumbnails with default sorting option (newest)
         loadGalleryThumbnails('newest first');
+
         // Event listener for dropdown items
         document.querySelectorAll('.dropdown-item').forEach(item => {
             item.addEventListener('click', function () {
@@ -1052,45 +1173,35 @@ function formatDate(dateString) {
      * @param eventsData
      */
     function createGalleryThumbnails(eventsData) {
-        const thumbnailsContainer = document.getElementById('thumbnails');
-        thumbnailsContainer.innerHTML = ''; // Clear existing thumbnails
-        let thumbnailCount = 0;
-        let currentRow;
+        const thumbnailsContainer = $('#thumbnails');
+        thumbnailsContainer.empty(); // Clear existing thumbnails
 
         const currentDate = new Date(); // Get current date
 
         eventsData.forEach(event => {
+
             // Parse event date from string to Date object
             const eventDate = new Date(event.eventDate);
 
             // Check if event date is before the current date
             if (eventDate < currentDate) {
 
-                const thumbnailDiv = document.createElement('div');
-                thumbnailDiv.classList.add('col-3');
-                thumbnailDiv.style.padding = '10px';
+                const colDiv = $("<div>").addClass("col-xl-3 col-lg-4 col-md-6 col-sm-12");
+                const thumbnailDiv = $('<div>').addClass('thumbnail-container').css('padding', '10px');
+                const thumbnailLink = $('<a>').attr('href', '#').addClass('thumbnail')
+                    .attr('data-bs-toggle', 'modal')
+                    .attr('data-bs-target', `#lightboxModal${event.eventId}`);
+                const thumbnailImg = $('<img>').attr('src', event.eventImage)
+                    .addClass('img-fluid')
+                    .attr('alt', event.eventName);
 
-                const thumbnailLink = document.createElement('a');
-                thumbnailLink.href = "#";
-                thumbnailLink.classList.add('thumbnail');
-                thumbnailLink.setAttribute('data-bs-toggle', 'modal');
-                thumbnailLink.setAttribute('data-bs-target', '#lightboxModal' + event.eventId);
+                thumbnailLink.append(thumbnailImg);
+                thumbnailDiv.append(thumbnailLink);
+                colDiv.append(thumbnailDiv);
 
-                const thumbnailImg = document.createElement('img');
-                thumbnailImg.src = event.eventImage;
-                thumbnailImg.classList.add('img-fluid');
-                thumbnailImg.alt = event.eventName;
+                colDiv.hide().appendTo(thumbnailsContainer).fadeIn('slow');
 
-                thumbnailLink.appendChild(thumbnailImg);
-                thumbnailDiv.appendChild(thumbnailLink);
-
-                // Append the thumbnail to the current row
-                thumbnailsContainer.appendChild(thumbnailDiv);
-
-                // Create modal for each event
                 createGalleryModal(event);
-
-                thumbnailCount++;
             }
         });
     }
@@ -1098,9 +1209,8 @@ function formatDate(dateString) {
     /**
      * Function to create modal for each event.
      * @param event
-     * @param thumbnailCount
      */
-    function createGalleryModal(event, thumbnailCount) {
+    function createGalleryModal(event) {
         const modalId = 'lightboxModal' + event.eventId;
         const modal = document.createElement('div');
         modal.classList.add('modal', 'fade');
@@ -1162,7 +1272,10 @@ function formatDate(dateString) {
 
     //region Login Page Functions
     /**
-     *
+     * Initializes and manages the login page functionality.
+     * This function sets up event listeners for the login form, validates user input,
+     * and handles the login process by checking against a list of registered users.
+     * It displays messages for successful registration, input errors, or invalid credentials.
      */
     function DisplayLoginPage() {
         console.log("Called DisplayLoginPage...");
@@ -1170,6 +1283,7 @@ function formatDate(dateString) {
         let userNameField = $("#userName");
         let passwordField = $("#password");
 
+        // Display a success message if coming from a successful registration
         if(sessionStorage.getItem("registered")) {
             $("#messageArea").addClass("alert alert-success").text("Registration successful!").show();
             sessionStorage.removeItem("registered");
@@ -1177,17 +1291,23 @@ function formatDate(dateString) {
             $("#messageArea").hide();
         }
 
+        // Login Button Click
         $("#loginButton").on("click", function () {
 
             let validInputs = false;
 
+            // Reset fields and remove any messages initially
             $("#messageArea").hide();
             RemoveInvalidField(userNameField)
             RemoveInvalidField(passwordField);
 
+            // Validate input fields
             if (ValidateField(userNameField) && ValidateField(passwordField)) {
                 validInputs = true
+
             } else {
+
+                // Display errors for invalid inputs
                 if(!ValidateField(userNameField, null)) {
                     SetInvalidField(userNameField, "Please enter your username.");
                 }
@@ -1195,24 +1315,30 @@ function formatDate(dateString) {
                     SetInvalidField(passwordField, "Please enter your password.");
                 }
             }
+            // Proceed if inputs are valid
             if (validInputs) {
 
                 let success = false;
                 let newUser = new HarmonyHub.User();
 
+                // Attempt to find the user in the registered users list
                 $.get("./data/users.json", function(data) {
+
                     for (const user of data.users) {
-                        console.log(user);
+
                         if (userName.value === user.userName && password.value === user.password) {
+
                             newUser.fromJSON(user);
                             success = true;
                             break;
                         }
                     }
+                    // If credentials are valid, log the user in and redirect
                     if (success) {
                         sessionStorage.setItem("user", newUser.serialize());
                         location.href = "index.html";
                     } else {
+                        // Reset form and display error message if credentials are invalid
                         $("#loginForm")[0].reset();
                         $("#messageArea").addClass("alert alert-danger")
                             .text("Invalid credentials. Please try again.").show();
@@ -1225,7 +1351,10 @@ function formatDate(dateString) {
 
     //region Register Page Functions
     /**
-     *
+     * Initializes and manages the behavior of the Register Page.
+     * It sets up the form validation for the registration process and handles the registration button click event.
+     * Upon successful form validation, it stores a registration flag in the sessionStorage and redirects the user
+     * to the login page.
      */
     function DisplayRegisterPage() {
         console.log("Called DisplayRegisterPage...");
@@ -1241,7 +1370,7 @@ function formatDate(dateString) {
     }
 
     /**
-     *
+     * Validates the register form input fields on blur and submission events.
      */
     function RegisterFormValidation() {
 
@@ -1281,6 +1410,16 @@ function formatDate(dateString) {
     }
     //endregion
 
+    //region Careers Page Functions
+    /**
+     * Called when the Careers page is displayed.
+     */
+    function DisplayCareersPage() {
+        console.log("Called DisplayCareersPage...");
+    }
+    //endregion
+
+    //region Start Function
     /**
      * Called when the website is launched to create the header and footer to display on the page. A switch statement
      * is used to detect which page has been loaded based on the Document Title.
@@ -1331,8 +1470,13 @@ function formatDate(dateString) {
             case `${titlePrefix}Register`:
                 DisplayRegisterPage();
                 break;
+            case `${titlePrefix}Careers`:
+                DisplayCareersPage();
+                break;
         }
     }
+    //endregion
+
     window.addEventListener("load", Start);
 
 })();

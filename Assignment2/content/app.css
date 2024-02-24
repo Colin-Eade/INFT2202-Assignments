@@ -1,7 +1,7 @@
 /* Text and Link Styling */
 
 .large-icon {
-    font-size: 2rem;
+    font-size: 6rem;
 }
 
 /* Styles for links with a dashed underline by default
@@ -237,8 +237,8 @@ main {
 /* Image Thumbnail sizing and display */
 
 .thumbnail img {
-    max-width: 300px; /* Limit the maximum width of the image to its container */
-    max-height: 100%; /* Limit the maximum height of the image to 100 pixels */
+    max-width: 100%;
+    max-height: 100%;
 }
 .thumbnail {
     padding: 10px;
