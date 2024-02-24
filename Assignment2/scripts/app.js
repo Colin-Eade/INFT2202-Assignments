@@ -69,15 +69,24 @@ function formatDate(dateString) {
      * @returns {boolean}
      */
     function ValidateField(inputFieldId, regEx) {
-        if (regEx) {
-            return regEx.test($(inputFieldId).val());
-        } else {
-            return $(inputFieldId).val().trim() !== "";
-        }
+        return regEx ? regEx.test($(inputFieldId).val()) : $(inputFieldId).val().trim() !== "";
     }
 
     function ConfirmPassword (passwordFieldId, confirmPasswordFieldId) {
-        return ($(passwordFieldId).val() === $(confirmPasswordFieldId).val());
+        return $(passwordFieldId).val() === $(confirmPasswordFieldId).val();
+    }
+
+    /**
+     *
+     * @param dateFieldId
+     * @returns {boolean}
+     */
+    function ValidateDate(dateFieldId) {
+        let date = new Date($(dateFieldId).val());
+        let today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        return !(isNaN(date.getTime()) || date > today);
     }
 
     /**
@@ -123,10 +132,34 @@ function formatDate(dateString) {
             }
         });
         $(submitButtonId).on('click', () => {
-            RemoveInvalidField(passwordFieldId);
+            RemoveInvalidField(confirmPasswordFieldId);
 
-            if (!ValidateField(passwordFieldId, regEx)) {
-                SetInvalidField(passwordFieldId, errorMessage);
+            if (!ConfirmPassword(passwordFieldId, confirmPasswordFieldId)) {
+                SetInvalidField(confirmPasswordFieldId, errorMessage);
+            }
+        });
+    }
+
+    /**
+     *
+     * @param dateFieldId
+     * @param dateFieldEvent
+     * @param submitButtonId
+     * @param errorMessage
+     */
+    function ValidateDateOnEvent(dateFieldId, dateFieldEvent, submitButtonId, errorMessage) {
+        $(dateFieldId).on(dateFieldEvent, () => {
+            RemoveInvalidField(dateFieldId);
+
+            if (!ValidateDate(dateFieldId)) {
+                SetInvalidField(dateFieldId, errorMessage);
+            }
+        });
+        $(submitButtonId).on('click', () => {
+            RemoveInvalidField(dateFieldId);
+
+            if (!ValidateDate(dateFieldId)) {
+                SetInvalidField(dateFieldId, errorMessage);
             }
         });
     }
@@ -238,34 +271,26 @@ function formatDate(dateString) {
 
         navSearchInput.on("keyup", function() {
             let searchTerm = $(this).val().toLowerCase();
-            let urls = ["./team.html", "./services.html", "./portfolio.html", "./blog.html", "./events.html",
-                                "./gallery.html", "./register.html", "./login.html", "./contact.html", "./privacy_policy.html",
-                                "./terms_of_service.html"
-            ];
-
-            firstResultUrl = null;
             navSearchDropdown.empty();
 
             if (searchTerm.length <= 2) {
                 navSearchDropdown.hide();
             } else {
-                let matchFound = false;
-                let count = 0;
-
                 navSearchDropdown.show();
+                $.get('./data/data_dump.json', function(data) {
+                    let matchFound = false;
+                    let firstResultUrl = null;
 
-                for (const url of urls) {
-                    $.get(url, function(data) {
-                        let textContent = $(data).text().toLowerCase();
-
-                        let index = textContent.indexOf(searchTerm);
+                    for (const page of data.pages) {
+                        let textContent = page.content
+                        let lowerCaseContent = textContent.toLowerCase();
+                        let index = lowerCaseContent.indexOf(searchTerm);
 
                         if (index !== -1) {
-
                             matchFound = true;
 
                             if (firstResultUrl === null) {
-                                firstResultUrl = url;
+                                firstResultUrl = page.URL;
                             }
 
                             let start = Math.max(index - 20, 0);
@@ -276,21 +301,19 @@ function formatDate(dateString) {
                             let searchSnippet = snippetStart + textContent.substring(start, end).trim() + snippetEnd;
 
                             if (navSearchDropdown.children().length < 5) {
-                                let filename = url.split('/').pop();
-                                let listItem = `<a class="dropdown-item d-flex justify-content-between align-items-center me-5" href="${url}">
-                                                           <span>${searchSnippet}</span>
-                                                           <span class="small text-secondary">${filename}</span>
-                                                        </a>`;
+                                let filename = page.URL.split('/').pop();
+                                let listItem = `<a class="dropdown-item d-flex justify-content-between align-items-center me-5" href="${page.URL}">
+                                                <span>${searchSnippet}</span>
+                                                <span class="small text-secondary">${filename}</span>
+                                            </a>`;
                                 navSearchDropdown.append(listItem).show();
                             }
                         }
-                        count++;
-
-                        if (count === urls.length && matchFound === false) {
-                            navSearchDropdown.append('<span class="dropdown-item">No results found</span>').show();
-                        }
-                    });
-                }
+                    }
+                    if (!matchFound) {
+                        navSearchDropdown.append('<span class="dropdown-item">No results found</span>').show();
+                    }
+                });
             }
         });
     }
@@ -305,9 +328,22 @@ function formatDate(dateString) {
             "aria-expanded": "false"
         }).parent().addClass("dropdown");
 
-        $("#navUserButton").after(`<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
+        let userData = sessionStorage.getItem("user");
+
+        if (userData) {
+            let user = new HarmonyHub.User();
+            user.deserialize(userData);
+            $("#navUserButton").after(`<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
+                                           <li class="px-3 py-1">${user.firstName} ${user.lastName}</li>
+                                           <li class="px-3 py-1">${user.emailAddress}</li>
+                                           <div class="dropdown-divider"></div>
+                                           <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
+                                       </ul>`);
+        } else {
+            $("#navUserButton").after(`<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
                                        <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
                                    </ul>`);
+        }
 
         $("#navLogoutLink").on("click", () => {
             sessionStorage.clear();
@@ -863,7 +899,6 @@ function formatDate(dateString) {
     //endregion
 
     //region Events Page Functions
-
     /**
      * Function called to display the events page
      */
@@ -1135,7 +1170,12 @@ function formatDate(dateString) {
         let userNameField = $("#userName");
         let passwordField = $("#password");
 
-        $("#messageArea").hide();
+        if(sessionStorage.getItem("registered")) {
+            $("#messageArea").addClass("alert alert-success").text("Registration successful!").show();
+            sessionStorage.removeItem("registered");
+        } else {
+            $("#messageArea").hide();
+        }
 
         $("#loginButton").on("click", function () {
 
@@ -1194,8 +1234,8 @@ function formatDate(dateString) {
 
         $("#registerButton").on("click", () => {
             if (CheckSubmissionValidity()) {
-                // TODO: SUCCESS LOGIC AND UPLOAD TO JSON
-                console.log("Success!")
+                sessionStorage.setItem("registered", "true");
+                location.href = "login.html";
             }
         });
     }
@@ -1211,25 +1251,32 @@ function formatDate(dateString) {
             "apostrophes, or spaces for compound names.";
         let emailAddressError = "Please enter a valid email address in the format: yourname@example.com.";
         let phoneError = "Please enter a valid 10-digit phone number, with or without the country code.";
+        let addressError = "Please enter a valid address in the format: street number, street name, and " +
+            "optional unit number (e.g., Apt, Suite, Unit). Include only letters, numbers, spaces, hyphens, or periods.";
+        let birthdayError = "Please enter a valid birth date in the format: YYYY-MM-DD. The date must be a " +
+            "past date.";
         let userNameError = "Username should start with a letter and can include letters, numbers, " +
             "underscores, or hyphens, 3 to 16 characters long.";
         let passwordError = "Password must be at least 8 characters long, including an uppercase letter, a " +
             "lowercase letter, a number, and a special character.";
         let confirmPasswordError = "The password confirmation does not match the password entered.";
 
-        ValidateOnEvent("#firstName", "blur", "registerButton",
+        ValidateOnEvent("#firstName", "blur", "#registerButton",
                             /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
-        ValidateOnEvent("#lastName", "blur", "registerButton",
+        ValidateOnEvent("#lastName", "blur", "#registerButton",
                             /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
-        ValidateOnEvent("#emailAddress", "blur", "registerButton",
+        ValidateOnEvent("#emailAddress", "blur", "#registerButton",
                             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
-        ValidateOnEvent("#phone", "blur", "registerButton",
+        ValidateOnEvent("#phone", "blur", "#registerButton",
                             /^\+?1?\d{10}$/, phoneError);
-        ValidateOnEvent("#userName", "blur", "registerButton",
+        ValidateOnEvent("#address", "blur", "#registerButton",
+                            /^\d+\s[\w\s.-]+(?:\s?(Apt|Suite|Unit)\s?\d+)?$/, addressError);
+        ValidateDateOnEvent("#birthday", "blur", "#registerButton", birthdayError);
+        ValidateOnEvent("#userName", "blur", "#registerButton",
                             /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
-        ValidateOnEvent("#password", "blur", "registerButton",
+        ValidateOnEvent("#password", "blur", "#registerButton",
                             /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
-        ConfirmPwOnEvent("#password", "blur", "registerButton",
+        ConfirmPwOnEvent("#password", "blur", "#registerButton",
                     "#confirmPassword", confirmPasswordError);
     }
     //endregion

@@ -5,17 +5,15 @@
     class User {
 
         constructor(firstName = "", lastName = "", emailAddress = "", phone = "",
-                    userName = "", password = "", enrollDate = "", lastLogin = "",
-                    type = "") {
+                    address = "", birthday = "", userName = "", password = "") {
             this._firstName = firstName;
             this._lastName = lastName;
             this._emailAddress = emailAddress;
             this._phone = phone;
+            this._address = address;
+            this._birthday = birthday;
             this._userName = userName;
             this._password = password;
-            this._enrollDate = enrollDate;
-            this._lastLogin = lastLogin;
-            this._type = type;
         }
 
         //region Setters and Getters
@@ -51,6 +49,22 @@
             this._phone = value;
         }
 
+        get address() {
+            return this._address;
+        }
+
+        set address(value) {
+            this._address = value;
+        }
+
+        get birthday() {
+            return this._birthday;
+        }
+
+        set birthday(value) {
+            this._birthday = value;
+        }
+
         get userName() {
             return this._userName;
         }
@@ -66,30 +80,6 @@
         set password(value) {
             this._password = value;
         }
-
-        get enrollDate() {
-            return this._enrollDate;
-        }
-
-        set enrollDate(value) {
-            this._enrollDate = value;
-        }
-
-        get lastLogin() {
-            return this._lastLogin;
-        }
-
-        set lastLogin(value) {
-            this._lastLogin = value;
-        }
-
-        get type() {
-            return this._type;
-        }
-
-        set type(value) {
-            this._type = value;
-        }
         //endregion
 
         toString() {
@@ -97,11 +87,10 @@
                 `Last Name: ${this._lastName}\n` +
                 `Email Address: ${this._emailAddress}\n` +
                 `Phone: ${this._phone}\n` +
+                `Address: ${this._address}\n` +
+                `Birthday: ${this._birthday}\n` +
                 `Username: ${this._userName}\n` +
-                `Password: ${this._password}\n` +
-                `Enroll Date: ${this._enrollDate}\n` +
-                `Last Login: ${this._lastLogin}\n` +
-                `Type: ${this._type}`;
+                `Password: ${this._password}`;
         }
 
         serialize() {
@@ -127,11 +116,10 @@
                 lastName : this._lastName,
                 emailAddress : this._emailAddress,
                 phone : this._phone,
+                address : this._address,
+                birthday : this._birthday,
                 userName : this._userName,
-                password : this._password,
-                enrollDate : this._enrollDate,
-                lastLogin : this._lastLogin,
-                type : this._type,
+                password : this._password
             }
         }
 
@@ -140,11 +128,10 @@
             this._lastName = data.lastName;
             this._emailAddress = data.emailAddress;
             this._phone = data.phone;
+            this._address = data.address;
+            this._birthday = data.birthday;
             this._userName = data.userName;
             this._password = data.password;
-            this._enrollDate = data.enrollDate;
-            this._lastLogin = data.lastLogin;
-            this._type = data.type;
         }
 
     }

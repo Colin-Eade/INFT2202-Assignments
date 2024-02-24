@@ -1,7 +1,5 @@
 {
-  "pages": {
-    "projects": "/projects.html"
-  },
+  "url" : "/portfolio.html",
   "projects": [
     {
       "title": "Accessible Playground",
