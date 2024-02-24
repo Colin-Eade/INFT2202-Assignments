@@ -478,7 +478,7 @@ function formatDate(dateString) {
             }
         });
 
-        //NewsAPIFetch(searchInput, page);
+        NewsAPIFetch(searchInput, page);
 
         $("#newsSearchButton").on("click", () => {
             searchInput = $("#newsSearchInput").val();
@@ -1047,7 +1047,7 @@ function formatDate(dateString) {
                 let filteredEvents = filterEvents(eventsData, filterOption);
 
                 // Sort filtered events by event date
-                filteredEvents.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
+                filteredEvents.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
 
                 const eventsContainer = $("#events-container");
                 eventsContainer.empty(); // Clear existing events before adding filtered events
