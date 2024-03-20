@@ -1,7 +1,7 @@
 /**
  *  @Authors Colin Eade (ID:100329105) and Megan Clarke (ID:100881229).
  *  @Date January 26, 2024.
- *  @File app.js
+ *  @File app.ts
  *  @Description This is the JavaScript file that contains all the functions to run the Harmony Hub Website. We utilize
  *  an IIFE to immediately invoke the site when it is launched and dynamically select which page functions to load
  *  based on the title of the page that was loaded.

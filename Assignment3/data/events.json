@@ -1,8 +1,4 @@
 {
-  "pages": {
-    "gallery": "/gallery.html",
-    "events": "/events.html"
-  },
   "events": [
     {
       "eventId": "000001",

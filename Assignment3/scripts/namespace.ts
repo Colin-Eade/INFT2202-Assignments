@@ -3,4 +3,6 @@
 /**
  * Harmony Hub namespace
  */
-let HarmonyHub;
+namespace HarmonyHub {
+
+}
