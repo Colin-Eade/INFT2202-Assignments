@@ -29,8 +29,8 @@ namespace HarmonyHub {
          * @param userName User's username.
          * @param password User's password.
          */
-        constructor(firstName = "", lastName = "", emailAddress = "", phone = "",
-                    address = "", birthday = "", userName = "", password = "") {
+        constructor(firstName: string = "", lastName: string = "", emailAddress: string = "", phone: string = "",
+                    address: string = "", birthday: string = "", userName: string = "", password: string = "") {
             this._firstName = firstName;
             this._lastName = lastName;
             this._emailAddress = emailAddress;
@@ -40,7 +40,6 @@ namespace HarmonyHub {
             this._userName = userName;
             this._password = password;
         }
-
         //endregion
 
         //region Setters and Getters
