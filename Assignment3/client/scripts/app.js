@@ -16,6 +16,14 @@ function formatDate(dateString) {
     function CheckLogout() {
         return !!sessionStorage.getItem("logout");
     }
+    function AuthGuard() {
+        let protected_routes = ["/event_planning", "/statistics"];
+        if (protected_routes.indexOf(location.pathname) > -1) {
+            if (!sessionStorage.getItem("user")) {
+                location.href = "/login";
+            }
+        }
+    }
     function CheckSubmissionValidity() {
         return $(".invalid-field").length <= 0;
     }
@@ -184,6 +192,8 @@ function formatDate(dateString) {
                     <li class="px-3 py-1">${user.firstName} ${user.lastName}</li>
                     <li class="px-3 py-1">${user.emailAddress}</li>
                     <div class="dropdown-divider"></div>
+                    <li><a id="navEventPlanningLink" class="dropdown-item" href="/event_planning">Plan an Event</a></li>
+                    <li><a id="navStatisticsLink" class="dropdown-item" href="/statistics">Statistics</a></li>
                     <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
                 </ul>`);
         }
@@ -823,6 +833,10 @@ function formatDate(dateString) {
     function DisplayCareersPage() {
         console.log("Called DisplayCareersPage...");
     }
+    function DisplayEventPlanningPage() {
+    }
+    function DisplayStatisticsPage() {
+    }
     function Start() {
         console.log("App Started");
         let page_id = $("body")[0].getAttribute("id");
@@ -866,6 +880,14 @@ function formatDate(dateString) {
                 break;
             case "terms_of_service":
                 DisplayTermsOfServicePage();
+                break;
+            case "event_planning":
+                AuthGuard();
+                DisplayEventPlanningPage();
+                break;
+            case "statistics":
+                AuthGuard();
+                DisplayStatisticsPage();
                 break;
         }
     }

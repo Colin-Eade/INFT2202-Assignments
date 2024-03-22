@@ -44,5 +44,11 @@ router.get('/team', function(req, res, next): void {
 router.get('/terms_of_service', function(req, res, next): void {
   res.render('index', { title: `${titlePrefix} Terms of Service`, page: "terms_of_service", displayName: '' });
 });
+router.get('/event_planning', function(req, res, next): void {
+  res.render('index', { title: `${titlePrefix} Plan an Event`, page: "event_planning", displayName: '' });
+});
+router.get('/statistics', function(req, res, next): void {
+  res.render('index', { title: `${titlePrefix} Statistics`, page: "statistics", displayName: '' });
+});
 
 export default router;
