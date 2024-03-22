@@ -1,7 +1,7 @@
 /**
  *  @Authors Colin Eade (ID:100329105) and Megan Clarke (ID:100881229).
  *  @Date January 26, 2024.
- *  @File app.ts
+ *  @File app.js
  *  @Description This is the JavaScript file that contains all the functions to run the Harmony Hub Website. We utilize
  *  an IIFE to immediately invoke the site when it is launched and dynamically select which page functions to load
  *  based on the title of the page that was loaded.
@@ -10,29 +10,64 @@
 "use strict";
 
 //region Globals
-const titlePrefix = "Harmony Hub - "
+interface GNewsAPIResponse {
+    totalArticles: number;
+    articles: Array<{
+        title: string;
+        description: string;
+        url: string;
+        publishedAt: string;
+        source: {
+            name: string;
+            url: string;
+        };
+    }>;
+}
+
+interface ProjectData {
+    title: string;
+    description: string;
+    imageSrc: string;
+    displayed: boolean;
+}
+
+interface EventData {
+    eventId: string;
+    eventName: string;
+    eventLocation: string;
+    eventDate: string;
+    eventImage: string;
+    eventDescription: string;
+}
+
+interface FeedbackResponses {
+    "1": string;
+    "2": string;
+    "3": string;
+    "4": string;
+    "5": string;
+    commentResponse: string;
+}
 //endregion
 
 //region Format Functions
-function formatDate(dateString) {
-    const dateParts = dateString.split('-'); // Split the date string into parts
-    const year = dateParts[0];
-    const month = parseInt(dateParts[1], 10); // Parse month as integer (base 10)
-    const day = parseInt(dateParts[2], 10); // Parse day as integer (base 10)
+function formatDate(dateString: string): string {
+    const dateParts: string[] = dateString.split('-'); // Split the date string into parts
+    const year: number = parseInt(dateParts[0], 10);
+    const month: number = parseInt(dateParts[1], 10); // Parse month as integer (base 10)
+    const day: number = parseInt(dateParts[2], 10); // Parse day as integer (base 10)
 
     // Create a Date object
-    const date = new Date(year, month - 1, day); // Note: Months are zero-based in JavaScript Date object
+    const date: Date = new Date(year, month - 1, day); // Note: Months are zero-based in JavaScript Date object
 
     // Array of month names
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     // Get the month name from the array using the month index
-    const monthName = monthNames[date.getMonth()];
+    const monthName: string = monthNames[date.getMonth()];
 
     // Format the date as "Month Day, Year"
-    const formattedDate = monthName + ' ' + day + ', ' + year;
-
-    return formattedDate;
+    return monthName + ' ' + day + ', ' + year;
 }
 //endregion
 
@@ -45,7 +80,7 @@ function formatDate(dateString) {
      *
      * @returns {boolean} True if user data is found, otherwise, false.
      */
-    function CheckLogin() {
+    function CheckLogin(): boolean {
         return !!sessionStorage.getItem("user");
     }
 
@@ -54,7 +89,7 @@ function formatDate(dateString) {
      *
      * @returns {boolean} True if the logout flag is found, otherwise, false.
      */
-    function CheckLogout() {
+    function CheckLogout(): boolean {
         return !!sessionStorage.getItem("logout");
     }
     //endregion
@@ -67,7 +102,7 @@ function formatDate(dateString) {
      *
      * @returns {boolean} Returns true if no elements have the 'invalid-field' class, and false otherwise.
      */
-    function CheckSubmissionValidity() {
+    function CheckSubmissionValidity(): boolean {
         return $(".invalid-field").length <= 0;
     }
 
@@ -79,8 +114,8 @@ function formatDate(dateString) {
      * @param regEx Optional. The regular expression to test against the input field value.
      * @returns {boolean} True if the input field value passes the regex test or is not empty; otherwise, false.
      */
-    function ValidateField(inputFieldId, regEx) {
-        return regEx ? regEx.test($(inputFieldId).val()) : $(inputFieldId).val().trim() !== "";
+    function ValidateField(inputFieldId: JQuery<HTMLElement>, regEx: RegExp|null): boolean {
+        return regEx ? regEx.test($(inputFieldId).val() as string) : ($(inputFieldId).val() as string).trim() !== "";
     }
 
     /**
@@ -90,8 +125,8 @@ function formatDate(dateString) {
      * @param confirmPasswordFieldId The ID of the confirm password input field.
      * @returns {boolean} True if the values of both fields match; otherwise, false.
      */
-    function ConfirmPassword (passwordFieldId, confirmPasswordFieldId) {
-        return $(passwordFieldId).val() === $(confirmPasswordFieldId).val();
+    function ConfirmPassword (passwordFieldId: JQuery<HTMLElement>, confirmPasswordFieldId: JQuery<HTMLElement>): boolean {
+        return ($(passwordFieldId).val() as string) === ($(confirmPasswordFieldId).val() as string);
     }
 
     /**
@@ -100,9 +135,9 @@ function formatDate(dateString) {
      * @param dateFieldId The ID of the input field containing the date.
      * @returns {boolean} Returns true if the date is valid and not in the future; otherwise, returns false.
      */
-    function ValidateDate(dateFieldId) {
-        let date = new Date($(dateFieldId).val());
-        let today = new Date();
+    function ValidateDate(dateFieldId: JQuery<HTMLElement>): boolean {
+        let date: Date = new Date($(dateFieldId).val() as string);
+        let today: Date = new Date();
         today.setHours(0, 0, 0, 0);
 
         return !(isNaN(date.getTime()) || date > today);
@@ -119,16 +154,17 @@ function formatDate(dateString) {
      * @param regEx The regular expression to test against the input field value.
      * @param errorMessage The error message to display if validation fails.
      */
-    function ValidateOnEvent(inputFieldId, inputFieldEvent, submitButtonId, regEx, errorMessage) {
+    function ValidateOnEvent(inputFieldId: JQuery<HTMLElement>, inputFieldEvent: string,
+                             submitButtonId: JQuery<HTMLElement>, regEx: RegExp|null, errorMessage: string): void {
 
-        $(inputFieldId).on(inputFieldEvent, () => {
+        $(inputFieldId).on(inputFieldEvent, (): void => {
             RemoveInvalidField(inputFieldId);
 
             if (!ValidateField(inputFieldId, regEx)) {
                 SetInvalidField(inputFieldId, errorMessage);
             }
         });
-        $(submitButtonId).on('click', () => {
+        $(submitButtonId).on('click', (): void => {
             RemoveInvalidField(inputFieldId);
 
             if (!ValidateField(inputFieldId, regEx)) {
@@ -148,15 +184,17 @@ function formatDate(dateString) {
      * @param confirmPasswordFieldId The ID of the confirmation password field.
      * @param errorMessage The error message to display if the passwords do not match.
      */
-    function ConfirmPwOnEvent(passwordFieldId, passwordFieldEvent, submitButtonId, confirmPasswordFieldId, errorMessage) {
-        $(confirmPasswordFieldId).on(passwordFieldEvent, () => {
+    function ConfirmPwOnEvent(passwordFieldId: JQuery<HTMLElement>, passwordFieldEvent: string, submitButtonId: JQuery<HTMLElement>,
+                              confirmPasswordFieldId: JQuery<HTMLElement>, errorMessage: string): void {
+
+        $(confirmPasswordFieldId).on(passwordFieldEvent, (): void => {
             RemoveInvalidField(confirmPasswordFieldId);
 
             if (!ConfirmPassword(passwordFieldId, confirmPasswordFieldId)) {
                 SetInvalidField(confirmPasswordFieldId, errorMessage);
             }
         });
-        $(submitButtonId).on('click', () => {
+        $(submitButtonId).on('click', (): void => {
             RemoveInvalidField(confirmPasswordFieldId);
 
             if (!ConfirmPassword(passwordFieldId, confirmPasswordFieldId)) {
@@ -175,7 +213,9 @@ function formatDate(dateString) {
      * @param submitButtonId The ID of the submit button.
      * @param errorMessage The error message to display if the date validation fails.
      */
-    function ValidateDateOnEvent(dateFieldId, dateFieldEvent, submitButtonId, errorMessage) {
+    function ValidateDateOnEvent(dateFieldId: JQuery<HTMLElement>, dateFieldEvent: string,
+                                 submitButtonId: JQuery<HTMLElement>, errorMessage: string): void {
+
         $(dateFieldId).on(dateFieldEvent, () => {
             RemoveInvalidField(dateFieldId);
 
@@ -197,9 +237,11 @@ function formatDate(dateString) {
      *
      * @param inputFieldId The ID of the input field from which to remove validation error indicators.
      */
-    function RemoveInvalidField(inputFieldId) {
+    function RemoveInvalidField(inputFieldId: JQuery<HTMLElement>): void {
+        if ($(inputFieldId).data('bs.popover')) {
+            $(inputFieldId).popover("dispose");
+        }
         $(inputFieldId).removeClass("invalid-field");
-        $(inputFieldId).popover("dispose");
         $(inputFieldId).next("span").remove();
     }
 
@@ -209,7 +251,7 @@ function formatDate(dateString) {
      * @param inputFieldId The ID of the input field to mark as invalid.
      * @param errorMessage The error message to display within the popover when the user hovers over the input field.
      */
-    function SetInvalidField(inputFieldId, errorMessage) {
+    function SetInvalidField(inputFieldId: JQuery<HTMLElement>, errorMessage: string): void {
         $(inputFieldId).addClass("invalid-field")
         $(inputFieldId).popover({
             content: errorMessage,
@@ -225,59 +267,20 @@ function formatDate(dateString) {
     }
     //endregion
 
-    //region Header and Footer Functions
+    //region Navbar Functions
     /**
      * Loads the website's header from an HTML file and performs various initializations.
      * It updates the header based on the user's login status and adjusts navigation links to reflect the current page.
      */
-    function LoadHeader() {
-        $.get("./includes/header.html", (data) => {
-            let noPrefixTitle =  document.title.replace(titlePrefix, "");
-            $("header").html(data);
-            ChangeNavBar();
-            NavBarSearch();
-
-            if(CheckLogin()) {
-                SetLoggedInNavBar();
-                SetWelcomeMessage();
-
-            } else if (CheckLogout()) {
-                SetLogoutMessage();
-            }
-            $(`li>a:contains(${noPrefixTitle})`).addClass("active").attr("aria-current", "page");
-        });
-    }
-
-    /**
-     * Dynamically loads the footer content into the page.
-     * This function makes an AJAX GET request to retrieve the contents of the 'footer.ejs' file.
-     */
-    function LoaderFooter() {
-        $.get("./includes/footer.html", (data) => {
-            $("footer").html(data);
-        });
-    }
-
-    /**
-     * Modifies the navigation bar in two ways:
-     * 1. Adds a new 'Careers' item to the navigation list.
-     * 2. Changes the text of the existing 'Blog' item to 'News'.
-     */
-    function ChangeNavBar() {
-
-        // Create new list item and link
-        let $newItem = $('<li class="nav-item"></li>');
-        let $newLink = $('<a class="nav-link" href="careers.ejs" id="navCareersLink">Careers</a>');
-
-        // Append the new link to the new list item
-        $newItem.append($newLink);
-
-        // Insert the new item after the gallery link
-        $('#navGalleryLink').closest('li').after($newItem);
-
-        // Change Blog to News
-        $('#navBlogLink').text('News');
-
+    function SetNavbar(): void {
+        SetActiveLink();
+        NavBarSearch();
+        if(CheckLogin()) {
+            SetLoggedInNavBar();
+            SetWelcomeMessage();
+        } else if (CheckLogout()) {
+            SetLogoutMessage();
+        }
     }
 
     /**
@@ -289,26 +292,26 @@ function formatDate(dateString) {
         let navSearchInput = $("#navSearchInput");
         let navSearchDropdown = $("#navSearchDropdown");
         let navSearchButton = ($("#navSearchButton"));
-        let firstResultUrl = null;
+        let firstResultUrl: string|null = null;
 
         // Navigate to the first search result when the search button is clicked
-        navSearchButton.on("click", () => {
+        navSearchButton.on("click", (): void => {
             if (firstResultUrl) {
                 window.location.href = firstResultUrl;
             }
         });
 
         // Prevent form submission on 'Enter' key
-        navSearchInput.on("keydown", function(e) {
+        navSearchInput.on("keydown", function(e): void {
             if (e.key === "Enter") {
                 e.preventDefault();
             }
         });
 
         // Search on keystrokes
-        navSearchInput.on("keyup", function() {
+        navSearchInput.on("keyup", function(): void {
 
-            let searchTerm = $(this).val().toLowerCase();
+            let searchTerm: string = ($(this).val() as string).toLowerCase();
             navSearchDropdown.empty();
 
             // Show dropdown only if search term is longer than 2 characters
@@ -319,9 +322,9 @@ function formatDate(dateString) {
                 navSearchDropdown.show();
 
                 // Fetch search data from JSON file
-                $.get('./data/data_dump.json', function(data) {
+                $.get('./data/data_dump.json', function(data): void {
 
-                    let matchFound = false;
+                    let matchFound: boolean = false;
 
                     // Iterate through each object in JSON
                     for (const page of data.pages) {
@@ -341,17 +344,18 @@ function formatDate(dateString) {
                             }
 
                             // Create a string snippet to display in the search dropdown
-                            let start = Math.max(index - 20, 0);
-                            let end = Math.min(index + searchTerm.length + 20, textContent.length);
+                            let start: number = Math.max(index - 20, 0);
+                            let end: number = Math.min(index + searchTerm.length + 20, textContent.length);
 
-                            let snippetStart = start > 0 ? "..." : "";
-                            let snippetEnd = end < textContent.length ? "..." : "";
-                            let searchSnippet = snippetStart + textContent.substring(start, end).trim() + snippetEnd;
+                            let snippetStart: string = start > 0 ? "..." : "";
+                            let snippetEnd: string = end < textContent.length ? "..." : "";
+                            let searchSnippet: string = snippetStart + textContent.substring(start, end).trim() + snippetEnd;
 
                             // Make a dropdown list of the search snippets and URL links they are from
                             if (navSearchDropdown.children().length < 5) {
                                 let filename = page.URL.split('/').pop();
-                                let listItem = `<a class="dropdown-item d-flex justify-content-between align-items-center me-5" href="${page.URL}">
+                                let listItem: string = `
+                                            <a class="dropdown-item d-flex justify-content-between align-items-center me-5" href="${page.URL}">
                                                 <span>${searchSnippet}</span>
                                                 <span class="small text-secondary">${filename}</span>
                                             </a>`;
@@ -369,42 +373,55 @@ function formatDate(dateString) {
     }
 
     /**
+     *
+     */
+    function SetActiveLink(): void {
+        let noPrefixTitle =  document.title.replace("Harmony Hub - ", "");
+        $(`li>a:contains(${noPrefixTitle})`).addClass("active");
+    }
+
+    /**
      * Updates the navigation bar to reflect the user's logged-in state.
      * This function modifies the login link and transforms it into a dropdown toggle.
      * The dropdown toggle contains the user's name, email, and a link to logout.
      * The logout action clears the session storage, redirects to the login page, and sets a 'logout' flag to indicate
      * a successful logout.
      */
-    function SetLoggedInNavBar() {
-        $("#navLoginLink").html('<i class="fa-solid fa-user"></i> Account').attr({
-            "id": "navUserButton",
-            "class": "nav-link dropdown-toggle",
-            "href": "#",
-            "role": "button",
-            "data-bs-toggle": "dropdown",
-            "aria-expanded": "false"
-        }).parent().addClass("dropdown");
+    function SetLoggedInNavBar(): void {
 
-        let userData = sessionStorage.getItem("user");
+        let userData: string|null = sessionStorage.getItem("user");
 
         if (userData) {
-            let user = new HarmonyHub.User();
+            let user: HarmonyHub.User = new HarmonyHub.User();
             user.deserialize(userData);
-            $("#navUserButton").after(`<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
-                                           <li class="px-3 py-1">${user.firstName} ${user.lastName}</li>
-                                           <li class="px-3 py-1">${user.emailAddress}</li>
-                                           <div class="dropdown-divider"></div>
-                                           <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
-                                       </ul>`);
+
+            // Now, set the link to display user.userName
+            $("#navLoginLink").html(`<i class="fa-solid fa-user"></i> ${user.userName}`).attr({
+                "id": "navUserButton",
+                "class": "nav-link dropdown-toggle",
+                "href": "#",
+                "role": "button",
+                "data-bs-toggle": "dropdown",
+                "aria-expanded": "false"
+            }).parent().addClass("dropdown");
+
+            $("#navUserButton").after(`
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
+                    <li class="px-3 py-1">${user.firstName} ${user.lastName}</li>
+                    <li class="px-3 py-1">${user.emailAddress}</li>
+                    <div class="dropdown-divider"></div>
+                    <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
+                </ul>`);
         } else {
-            $("#navUserButton").after(`<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
-                                       <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
-                                   </ul>`);
+            $("#navUserButton").after(`
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
+                    <li><a id="navLogoutLink" class="dropdown-item" href="#">Logout</a></li>
+                </ul>`);
         }
 
-        $("#navLogoutLink").on("click", () => {
+        $("#navLogoutLink").on("click", (): void => {
             sessionStorage.clear();
-            location.href = "login.ejs";
+            location.href = "/login";
             sessionStorage.setItem("logout", "true");
         });
     }
@@ -414,18 +431,19 @@ function formatDate(dateString) {
      * This function checks the session storage for a 'welcomed' flag to avoid repeating the welcome message.
      * If the user data is found in the session storage, it deserializes this data to greet the user by name.
      */
-    function SetWelcomeMessage() {
+    function SetWelcomeMessage(): void {
         if(!sessionStorage.getItem("welcomed")) {
 
-            let userData = sessionStorage.getItem("user");
+            let userData: string|null = sessionStorage.getItem("user");
 
             if (userData) {
 
-                let user = new HarmonyHub.User();
+                let user: HarmonyHub.User = new HarmonyHub.User();
                 user.deserialize(userData);
 
                 $("#navUserButton").closest("li")
-                    .before(`<li class="nav-item" id="navMessageWrapper">
+                    .before(`
+                            <li class="nav-item" id="navMessageWrapper">
                                 <span id="navMessage" class="nav-link">
                                     Welcome back, ${user.firstName}!
                                 </span>
@@ -433,7 +451,7 @@ function formatDate(dateString) {
 
                 sessionStorage.setItem("welcomed", "true");
 
-                setTimeout(() => {
+                setTimeout((): void => {
                     $("#navMessageWrapper").remove();
                 }, 6000);
             }
@@ -445,9 +463,10 @@ function formatDate(dateString) {
      * It confirms to the user that they have successfully logged out.
      * Additionally, this function handles the cleanup of the 'logout' flag from the session storage.
      */
-    function SetLogoutMessage() {
+    function SetLogoutMessage(): void {
         $("#navLoginLink").closest("li")
-            .before(`<li class="nav-item" id="navMessageWrapper">
+            .before(`
+                     <li class="nav-item" id="navMessageWrapper">
                          <span id="navMessage" class="nav-link">
                              Logout successful!
                          </span>
@@ -455,7 +474,7 @@ function formatDate(dateString) {
         
         sessionStorage.removeItem("logout");
 
-        setTimeout(() => {
+        setTimeout((): void => {
             $("#navMessageWrapper").remove();
         }, 6000);
     }
@@ -467,12 +486,12 @@ function formatDate(dateString) {
      * This function sets up the behavior for the search input, search button, and scroll buttons
      * for navigating through news articles fetched from GNews API.
      */
-    function DisplayHomePage(){
+    function DisplayHomePage(): void {
         console.log("Called DisplayHomePage...");
-        let page = 1;
-        let searchInput = "CBC News";
+        let page: number = 1;
+        let searchInput: string = "CBC News";
 
-        $("#newsSearchInput").on('keydown', function(e) {
+        $("#newsSearchInput").on('keydown', function(e): void {
             if (e.key === "Enter") {
                 e.preventDefault();
             }
@@ -480,16 +499,15 @@ function formatDate(dateString) {
 
         GNewsAPIFetch(searchInput, page);
 
-        $("#newsSearchButton").on("click", () => {
-            searchInput = $("#newsSearchInput").val();
+        $("#newsSearchButton").on("click", (): void => {
+            searchInput = $("#newsSearchInput").val() as string;
             page = 1;
 
             $("#homeArticleArea").empty();
-
             GNewsAPIFetch(searchInput, page);
         });
 
-        $("#newsScrollDownButton").on("click", () => {
+        $("#newsScrollDownButton").on("click", (): void => {
             page ++;
 
             $("#homeArticleArea").empty();
@@ -497,7 +515,7 @@ function formatDate(dateString) {
             GNewsAPIFetch(searchInput, page);
         });
 
-        $("#newsScrollUpButton").on("click", () => {
+        $("#newsScrollUpButton").on("click", (): void => {
             page --;
 
             $("#homeArticleArea").empty();
@@ -511,16 +529,41 @@ function formatDate(dateString) {
      * @param keywords The search keywords used to fetch relevant news articles.
      * @param page The current page number of the API fetch.
      */
-    function GNewsAPIFetch(keywords, page) {
-        const pageSize = 3
-        const language = "en";
-        const key = "ba7d1c40045850f7ee5b6113b2728729";
-        let url = `https://gnews.io/api/v4/search?q=${keywords}&max=${pageSize}&page=${page}&lang=${language}&apikey=${key}`;
+    function GNewsAPIFetch(keywords: string, page: number): void {
+        const pageSize: number = 3
+        const language: string = "en";
+        const key: string = "ba7d1c40045850f7ee5b6113b2728729";
+        let url: string = `https://gnews.io/api/v4/search?q=${keywords}&max=${pageSize}&page=${page}&lang=${language}&apikey=${key}`;
+
+        ShowPlaceholder();
 
         // Performs the GET request to the NewsAPI
-        $.get(url, function(data) {
+        $.get(url, function(data): void {
             GNewsAPIFetchSuccess(data, page, pageSize);
         }).fail(GNewsAPIFail)
+    }
+
+    /**
+     *
+     */
+    function ShowPlaceholder(): void {
+        let placeholdersHtml: string = '';
+        for (let i: number = 0; i < 3; i++) {
+            placeholdersHtml += `
+        <div class="list-group-item mt-1 border-top">
+            <div class="placeholder-glow">
+                <h5 class="placeholder col-12"></h5>
+                <h5 class="mb-1 placeholder col-6"></h5><br>
+                <p class="mb-2 placeholder col-5 text-muted small"></p><br>
+                <p class="mb-1 placeholder col-12"></p>
+                <p class="mb-1 placeholder col-12"></p>
+                <p class="mb-1 placeholder col-12"></p>
+                <p class="mb-1 placeholder col-6"></p>
+            </div>
+        </div>`;
+        }
+        let loadingHtml: string = `<div id="placeholder">${placeholdersHtml}</div>`;
+        $('#homeArticleArea').html(loadingHtml);
     }
 
     /**
@@ -529,7 +572,8 @@ function formatDate(dateString) {
      * @param page The current page number of the API fetch.
      * @param pageSize The number of articles per API fetch.
      */
-    function GNewsAPIFetchSuccess(data, page, pageSize) {
+    function GNewsAPIFetchSuccess(data: GNewsAPIResponse, page: number, pageSize: number) {
+        $("#placeholder").remove();
 
         let scrollDownButton = $("#newsScrollDownButton");
         let scrollUpButton = $("#newsScrollUpButton");
@@ -591,7 +635,8 @@ function formatDate(dateString) {
      * Handles failures when fetching news articles from the GNews API.
      * @param data The error response from the News API containing the error details or status.
      */
-    function GNewsAPIFail(data) {
+    function GNewsAPIFail(data: JQuery.jqXHR): void {
+        $("#placeholder").remove();
 
         console.log(data);
 
@@ -645,11 +690,11 @@ function formatDate(dateString) {
     /**
      * Called to display the portfolio page and dynamically create the project cards for display
      */
-    function DisplayPortfolioPage() {
+    function DisplayPortfolioPage(): void {
         console.log("Called DisplayPortfolioPage...");
 
-        const projectContainer = document.getElementById("project-container");
-        const loadMoreButton = document.getElementById("load-more-button");
+        const projectContainer = document.getElementById("project-container") as HTMLElement;
+        const loadMoreButton = document.getElementById("load-more-button") as HTMLInputElement;
 
 
         /**
@@ -658,8 +703,8 @@ function formatDate(dateString) {
          * @param startIndex
          * @param endIndex
          */
-        function displayProjects(projects, startIndex, endIndex) {
-            for (let i = startIndex; i < endIndex && i < projects.length; i++) {
+        function displayProjects(projects: ProjectData[], startIndex: number, endIndex: number): void {
+            for (let i: number = startIndex; i < endIndex && i < projects.length; i++) {
                 if (!projects[i].displayed) {
                     const projectCard = createProjectCard(projects[i]);
                     projectContainer.appendChild(projectCard);
@@ -671,30 +716,30 @@ function formatDate(dateString) {
         /**
          * Function to load projects to the page with Ajax
          */
-        function loadProjects() {
+        function loadProjects(): void {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', 'data/projects.json', true);
 
-            xhr.onload = function() {
+            xhr.onload = function(): void {
                 if (this.status === 200) {
                     // Parse the JSON response
                     const response = JSON.parse(this.responseText);
 
                     // Access the 'projects' array within the parsed object
-                    const projects = response.projects;
+                    const projects: ProjectData[] = response.projects;
 
                     // Proceed with the rest of your code, now that `projects` correctly references the array
                     projects.forEach(project => project.displayed = false);
 
-                    let startIndex = 0;
-                    const projectsPerPage = 2;
+                    let startIndex: number = 0;
+                    const projectsPerPage: number = 2;
 
                     // Initial display of projects
                     displayProjects(projects, startIndex, startIndex + projectsPerPage);
                     startIndex += projectsPerPage;
 
                     // Event listener for the "Load More" button
-                    loadMoreButton.addEventListener("click", function handleLoadMore() {
+                    loadMoreButton.addEventListener("click", function handleLoadMore(): void {
                         if (startIndex < projects.length) {
                             displayProjects(projects, startIndex, startIndex + projectsPerPage);
                             startIndex += projectsPerPage;
@@ -723,7 +768,7 @@ function formatDate(dateString) {
      * @param project
      * @returns {HTMLDivElement}
      */
-    function createProjectCard(project) {
+    function createProjectCard(project: ProjectData) : HTMLDivElement {
         const col = document.createElement("div");
         col.classList.add("col", "d-flex", "justify-content-center");
 
@@ -775,7 +820,7 @@ function formatDate(dateString) {
     /**
      * Called when the services page is displayed and logs to the console
      */
-    function DisplayServicesPage(){
+    function DisplayServicesPage(): void{
         console.log("Called DisplayServicesPage...");
     }
     //endregion
@@ -784,7 +829,7 @@ function formatDate(dateString) {
     /**
      * Called when the Team page is displayed and logs to the console
      */
-    function DisplayTeamPage(){
+    function DisplayTeamPage(): void{
         console.log("Called DisplayTeamPage...")
     }
     //endregion
@@ -794,7 +839,7 @@ function formatDate(dateString) {
      * Called when the Blog page is displayed, logs to the console and updates the DOM to display "Community News"
      * instead of "Community Blog"
      */
-    function DisplayBlogPage(){
+    function DisplayBlogPage(): void {
         console.log("Called DisplayContactListPage...");
 
         let blogPageHeading = document.getElementsByTagName("h1")[0]
@@ -808,22 +853,23 @@ function formatDate(dateString) {
     /**
      * Displays the contact page and sets up event listeners for form submission and modal interactions.
      */
-    function DisplayContactPage() {
+    function DisplayContactPage(): void {
         console.log("Called DisplayContactPage...");
 
         FeedbackCard();
         ContactFormValidation();
 
         // Obtain references to form elements and modals
-        let submitButton = document.getElementById('formSubmit');
-        let modalSubmit = document.getElementById("modalSubmit");
+        let submitButton = document.getElementById('formSubmit') as HTMLElement;
+        let modalSubmit = document.getElementById("modalSubmit") as HTMLElement;
+        let contactForm = document.getElementById("contactForm") as HTMLFormElement;
 
         // Initialize Bootstrap modals
-        let contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
-        let redirectModal = new bootstrap.Modal(document.getElementById('redirectModal'));
+        let contactModal = new bootstrap.Modal(document.getElementById('contactModal') as HTMLElement);
+        let redirectModal = new bootstrap.Modal(document.getElementById('redirectModal') as HTMLElement);
 
         // Set up event listeners
-        submitButton.addEventListener("click", (event) => {
+        submitButton.addEventListener("click", (event): void => {
            if (CheckSubmissionValidity()) {
                SubmitContactForm(event);
            }
@@ -836,7 +882,7 @@ function formatDate(dateString) {
          * Prevents default form submission, checks form validity, and shows the contact modal.
          * @param {Event} event - The event for the form submission.
          */
-        function SubmitContactForm(event) {
+        function SubmitContactForm(event: Event): void {
             event.preventDefault();
             PopulateSubmitModal();
             contactModal.show();
@@ -845,18 +891,18 @@ function formatDate(dateString) {
         /**
          * Populates the contact modal with data from the form.
          */
-        function PopulateSubmitModal() {
+        function PopulateSubmitModal(): void {
             // Retrieve form field elements
-            let formFullName = document.getElementById("fullName").value;
-            let formEmailAddress = document.getElementById("emailAddress").value;
-            let formSubject = document.getElementById("subject").value;
-            let formMessage = document.getElementById("message").value;
+            let formFullName: string = (document.getElementById("fullName") as HTMLInputElement).value;
+            let formEmailAddress: string= (document.getElementById("emailAddress") as HTMLInputElement).value;
+            let formSubject: string = (document.getElementById("subject") as HTMLInputElement).value;
+            let formMessage: string = (document.getElementById("message") as HTMLInputElement).value;
 
             // Retrieve modal elements
-            let modalFullName = document.getElementById("modalFullName");
-            let modalEmailAddress = document.getElementById("modalEmailAddress");
-            let modalSubject = document.getElementById("modalSubject");
-            let modalMessage = document.getElementById("modalMessage");
+            let modalFullName = document.getElementById("modalFullName") as HTMLElement;
+            let modalEmailAddress = document.getElementById("modalEmailAddress") as HTMLElement;
+            let modalSubject = document.getElementById("modalSubject") as HTMLElement;
+            let modalMessage = document.getElementById("modalMessage") as HTMLElement;
 
             // Update text content of modal elements
             modalFullName.textContent = formFullName;
@@ -869,7 +915,7 @@ function formatDate(dateString) {
          * Handles the click event on the modal submit button.
          * Hides the contact modal, resets the form, and displays a redirect modal with a countdown.
          */
-        function SubmitModalSubmitClick() {
+        function SubmitModalSubmitClick(): void {
             contactModal.hide();
             contactForm.reset();
             RedirectModalCountdown();
@@ -880,19 +926,19 @@ function formatDate(dateString) {
          * Initiates the countdown for the redirect modal and hides it when the countdown reaches zero.
          * Uses Lodash's delay function to schedule the redirection.
          */
-        function RedirectModalCountdown() {
+        function RedirectModalCountdown(): void {
             // Lodash delay for redirect
             _.delay(RedirectToHome, 5500);
 
             // Counter displayed on modal
-            let counter = 5;
-            let counterDisplay = document.getElementById("redirectCounter");
-            counterDisplay.textContent = counter;
+            let counter: number = 5;
+            let counterDisplay = document.getElementById("redirectCounter") as HTMLElement;
+            counterDisplay.textContent = counter.toString();
 
             // Update the countdown every second and hide the modal at the end
-            let interval = setInterval(function() {
+            let interval = setInterval(function(): void {
                 counter--;
-                counterDisplay.textContent = counter;
+                counterDisplay.textContent = counter.toString();
                 if (counter <= 0) {
                     clearInterval(interval);
                     redirectModal.hide();
@@ -903,25 +949,25 @@ function formatDate(dateString) {
         /**
          * Redirects the user to the home page.
          */
-        function RedirectToHome() {
-            window.location.href = "index.html";
+        function RedirectToHome(): void {
+            window.location.href = "/index";
         }
     }
 
     /**
      * Validates the contact form input fields on blur and submission events.
      */
-    function ContactFormValidation() {
-        let fullNameError = "Please enter your full name, starting each part with a capital letter. " +
+    function ContactFormValidation(): void {
+        let fullNameError: string = "Please enter your full name, starting each part with a capital letter. " +
             "You can include spaces, hyphens, and apostrophes if necessary.";
-        let emailAddressError = "Please enter a valid email address in the format: yourname@example.com.";
-        let messageError = "Your message cannot be empty. Please provide details so we can assist you better.";
+        let emailAddressError: string = "Please enter a valid email address in the format: yourname@example.com.";
+        let messageError: string = "Your message cannot be empty. Please provide details so we can assist you better.";
 
-        ValidateOnEvent("#fullName", "blur", "#formSubmit",
+        ValidateOnEvent($("#fullName"), "blur", $("#formSubmit"),
                             /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)+$/, fullNameError);
-        ValidateOnEvent("#emailAddress", "blur", "#formSubmit",
+        ValidateOnEvent($("#emailAddress"), "blur", $("#formSubmit"),
                             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
-        ValidateOnEvent("#message", "blur", "#formSubmit",
+        ValidateOnEvent($("#message"), "blur", $("#formSubmit"),
                             null, messageError);
     }
 
@@ -931,7 +977,7 @@ function formatDate(dateString) {
      * This function sets up the behavior for a feedback card component, including event listeners for form submission
      * and input validation.
      */
-    function FeedbackCard() {
+    function FeedbackCard(): void {
 
         let feedbackMessage = $("#feedBackMessage");
         let feedbackDropdown =  $("#feedBackDropdown");
@@ -944,14 +990,14 @@ function formatDate(dateString) {
         feedbackDropdown.remove("invalid-field");
 
         // Prevent form submission with the Enter key
-        feedbackForm.on('keydown', function(e) {
+        feedbackForm.on('keydown', function(e): void {
             if (e.key === "Enter") {
                 e.preventDefault();
             }
         });
 
         // Submit Button Click
-        $("#feedbackSubmit").on("click", ()=> {
+        $("#feedbackSubmit").on("click", (): void => {
 
             // Make sure a valid rating was selected
            if (feedbackDropdown.val() === "0") {
@@ -964,18 +1010,18 @@ function formatDate(dateString) {
            } else {
 
                // On valid submission Grab a response from JSON
-               $.get("./data/feedback_responses.json", function(data) {
+               $.get("./data/feedback_responses.json", function(data: FeedbackResponses): void {
 
                    // Get specific response based user rating
-                   let response = data[feedbackDropdown.val()];
+                   let response: string = data[feedbackDropdown.val() as keyof FeedbackResponses];
 
                    // Add to response if user left a comment
-                   if($("#feedBackComment").val().trim() !== "") {
+                   if(($("#feedBackComment").val() as string).trim() !== "") {
                        response += " " + data.commentResponse;
                    }
 
                    // Fade out and fade back in the feedback card to display "Thank you" response
-                   feedbackBody.fadeOut("slow", function() {
+                   feedbackBody.fadeOut("slow", function(): void {
 
                        feedbackForm.hide();
                        feedbackMessage.removeClass("alert-danger").addClass("alert alert-success")
@@ -983,11 +1029,11 @@ function formatDate(dateString) {
 
                        feedbackBody.fadeIn("slow");
                    });
-               }).fail(()=> {
+               }).fail((): void => {
                    // Generic response if JSON fetch fails
-                   let genericResponse = "Thank you for your feedback.";
+                   let genericResponse: string = "Thank you for your feedback.";
 
-                   feedbackBody.fadeOut("slow", function() {
+                   feedbackBody.fadeOut("slow", function(): void {
 
                        feedbackForm.hide();
                        feedbackMessage.removeClass("alert-danger").addClass("alert alert-success")
@@ -1005,7 +1051,7 @@ function formatDate(dateString) {
     /**
      * Called when the Privacy Policy page is displayed, logs to the console
      */
-    function DisplayPrivacyPolicyPage(){
+    function DisplayPrivacyPolicyPage(): void {
         console.log("Called DisplayPrivacyPolicyPage...");
     }
     //endregion
@@ -1014,7 +1060,7 @@ function formatDate(dateString) {
     /**
      * Called when the Display Terms Of Service Page is displayed, logs to the console
      */
-    function DisplayTermsOfServicePage(){
+    function DisplayTermsOfServicePage(): void {
         console.log("Called DisplayTermsOfServicePage...");
     }
     //endregion
@@ -1023,38 +1069,37 @@ function formatDate(dateString) {
     /**
      * Function called to display the events page
      */
-    function DisplayEventsPage() {
+    function DisplayEventsPage(): void {
         console.log("Called DisplayEventsPage...");
 
-        $(document).ready(function() {
+        $(function(): void {
             // Event listener for dropdown items
-            $('.dropdown-item').on('click', function() {
-                let filterOption = $(this).text().toLowerCase().trim();
+            $('.dropdown-item').on('click', function(): void {
+                let filterOption: string = $(this).text().toLowerCase().trim();
                 displayEventCards(filterOption);
             });
 
             // Initial display of events with default filter option
             displayEventCards('upcoming');
         });
-
     }
 
     /**
      * Function to filter the events by the selected filter option
      * @param filterOption
      */
-    function displayEventCards(filterOption) {
+    function displayEventCards(filterOption: string): void {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', './data/events.json', true);
         xhr.onload = function() {
             if (xhr.status === 200) {
-                let eventsData = JSON.parse(xhr.responseText).events;
+                let eventsData: EventData[] = JSON.parse(xhr.responseText).events;
 
                 // Filter events based on the selected option
                 let filteredEvents = filterEvents(eventsData, filterOption);
 
                 // Sort filtered events by event date
-                filteredEvents.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+                filteredEvents.sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
 
                 const eventsContainer = $("#events-container");
                 eventsContainer.empty(); // Clear existing events before adding filtered events
@@ -1081,7 +1126,7 @@ function formatDate(dateString) {
      * @param event
      * @returns card
      */
-    function createEventCard(event) {
+    function createEventCard(event: EventData) {
         const colDiv = $("<div>").addClass("col-xl-3 col-lg-4 col-md-6 col-sm-12 d-flex");
 
         const card = $("<div>").addClass("card").css("margin", "5px");
@@ -1113,7 +1158,7 @@ function formatDate(dateString) {
      * @param filterOption
      * @returns events
      */
-    function filterEvents(events, filterOption) {
+    function filterEvents(events: EventData[], filterOption: string): EventData[] {
         if (filterOption === 'upcoming') {
             return events.filter(event => new Date(event.eventDate) > new Date());
         } else if (filterOption === 'past') {
@@ -1128,18 +1173,17 @@ function formatDate(dateString) {
     /**
      * Function called to display the Gallery Page
      */
-    function DisplayGalleryPage() {
+    function DisplayGalleryPage(): void {
         console.log("Called DisplayGalleryPage...");
 
         // Initial loading of thumbnails with default sorting option (newest)
         loadGalleryThumbnails('newest first');
 
         // Event listener for dropdown items
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', function () {
-                const sortOption = this.textContent.toLowerCase().trim(); // Get the text content of the clicked item
-                loadGalleryThumbnails(sortOption);
-            });
+        $('.dropdown-item').on('click', function (): void {
+            // Using jQuery $(this) to get the clicked item and its text
+            const sortOption: string = $(this).text().toLowerCase().trim();
+            loadGalleryThumbnails(sortOption);
         });
     }
 
@@ -1147,19 +1191,19 @@ function formatDate(dateString) {
      * Function to load thumbnails based on sorting option selected
      * @param sortOption
      */
-    function loadGalleryThumbnails(sortOption) {
+    function loadGalleryThumbnails(sortOption: string): void {
         // Fetch events data from JSON file
         let xhr = new XMLHttpRequest();
         xhr.open('GET', './data/events.json', true);
         xhr.onload = function() {
             if (xhr.status === 200) {
-                let eventsData = JSON.parse(xhr.responseText).events;
+                let eventsData: EventData[] = JSON.parse(xhr.responseText).events;
 
                 // Sort events based on selected option
                 if (sortOption === 'newest first') {
-                    eventsData.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
+                    eventsData.sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
                 } else if (sortOption === 'oldest first') {
-                    eventsData.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+                    eventsData.sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
                 }
 
                 // Create thumbnails based on sorted events data
@@ -1179,7 +1223,7 @@ function formatDate(dateString) {
      * the matching modal.
      * @param eventsData
      */
-    function createGalleryThumbnails(eventsData) {
+    function createGalleryThumbnails(eventsData: EventData[]): void {
         const thumbnailsContainer = $('#thumbnails');
         thumbnailsContainer.empty(); // Clear existing thumbnails
 
@@ -1188,7 +1232,7 @@ function formatDate(dateString) {
         eventsData.forEach(event => {
 
             // Parse event date from string to Date object
-            const eventDate = new Date(event.eventDate);
+            const eventDate: Date = new Date(event.eventDate);
 
             // Check if event date is before the current date
             if (eventDate < currentDate) {
@@ -1217,12 +1261,12 @@ function formatDate(dateString) {
      * Function to create modal for each event.
      * @param event
      */
-    function createGalleryModal(event) {
-        const modalId = 'lightboxModal' + event.eventId;
+    function createGalleryModal(event: EventData): void {
+        const modalId: string = 'lightboxModal' + event.eventId;
         const modal = document.createElement('div');
         modal.classList.add('modal', 'fade');
         modal.id = modalId;
-        modal.tabIndex = '-1';
+        modal.tabIndex = -1;
         modal.role = 'dialog';
         modal.setAttribute('aria-labelledby', 'lightboxModalLabel' + event.eventId);
         modal.setAttribute('aria-hidden', 'true');
@@ -1272,7 +1316,7 @@ function formatDate(dateString) {
         modal.appendChild(modalDialog);
 
         // Append the modal to the modal container
-        const modalContainer = document.getElementById('modalContainer');
+        const modalContainer = document.getElementById('modalContainer') as HTMLElement;
         modalContainer.appendChild(modal);
     }
     //endregion
@@ -1284,7 +1328,7 @@ function formatDate(dateString) {
      * and handles the login process by checking against a list of registered users.
      * It displays messages for successful registration, input errors, or invalid credentials.
      */
-    function DisplayLoginPage() {
+    function DisplayLoginPage(): void {
         console.log("Called DisplayLoginPage...");
 
         let userNameField = $("#userName");
@@ -1299,17 +1343,17 @@ function formatDate(dateString) {
         }
 
         // Login Button Click
-        $("#loginButton").on("click", function () {
+        $("#loginButton").on("click", function (): void {
 
-            let validInputs = false;
+            let validInputs: boolean = false;
 
             // Reset fields and remove any messages initially
             $("#messageArea").hide();
-            RemoveInvalidField(userNameField)
+            RemoveInvalidField(userNameField);
             RemoveInvalidField(passwordField);
 
             // Validate input fields
-            if (ValidateField(userNameField) && ValidateField(passwordField)) {
+            if (ValidateField(userNameField, null) && ValidateField(passwordField, null)) {
                 validInputs = true
 
             } else {
@@ -1325,15 +1369,17 @@ function formatDate(dateString) {
             // Proceed if inputs are valid
             if (validInputs) {
 
-                let success = false;
-                let newUser = new HarmonyHub.User();
+                let success: boolean = false;
+                let newUser: HarmonyHub.User = new HarmonyHub.User();
+                let userName: string = $("#userName").val() as string;
+                let password: string = $("#password").val() as string;
 
                 // Attempt to find the user in the registered users list
-                $.get("./data/users.json", function(data) {
+                $.get("./data/users.json", function(data): void {
 
                     for (const user of data.users) {
 
-                        if (userName.value === user.userName && password.value === user.password) {
+                        if (userName === user.userName && password === user.password) {
 
                             newUser.fromJSON(user);
                             success = true;
@@ -1342,11 +1388,11 @@ function formatDate(dateString) {
                     }
                     // If credentials are valid, log the user in and redirect
                     if (success) {
-                        sessionStorage.setItem("user", newUser.serialize());
-                        location.href = "index.html";
+                        sessionStorage.setItem("user", newUser.serialize() as string);
+                        location.href = "/home";
                     } else {
                         // Reset form and display error message if credentials are invalid
-                        $("#loginForm")[0].reset();
+                        ($("#loginForm")[0] as HTMLFormElement).reset();
                         $("#messageArea").addClass("alert alert-danger")
                             .text("Invalid credentials. Please try again.").show();
                     }
@@ -1363,15 +1409,15 @@ function formatDate(dateString) {
      * Upon successful form validation, it stores a registration flag in the sessionStorage and redirects the user
      * to the login page.
      */
-    function DisplayRegisterPage() {
+    function DisplayRegisterPage(): void {
         console.log("Called DisplayRegisterPage...");
 
         RegisterFormValidation();
 
-        $("#registerButton").on("click", () => {
+        $("#registerButton").on("click", (): void => {
             if (CheckSubmissionValidity()) {
                 sessionStorage.setItem("registered", "true");
-                location.href = "login.ejs";
+                location.href = "/login";
             }
         });
     }
@@ -1379,41 +1425,41 @@ function formatDate(dateString) {
     /**
      * Validates the register form input fields on blur and submission events.
      */
-    function RegisterFormValidation() {
+    function RegisterFormValidation(): void {
 
-        let firstNameError = "First name should start with a capital letter and can include hyphens, " +
+        let firstNameError: string = "First name should start with a capital letter and can include hyphens, " +
             "apostrophes, or spaces for compound names.";
-        let lastNameError = "Last name should start with a capital letter and can include hyphens, " +
+        let lastNameError: string = "Last name should start with a capital letter and can include hyphens, " +
             "apostrophes, or spaces for compound names.";
-        let emailAddressError = "Please enter a valid email address in the format: yourname@example.com.";
-        let phoneError = "Please enter a valid 10-digit phone number, with or without the country code.";
-        let addressError = "Please enter a valid address in the format: street number, street name, and " +
+        let emailAddressError: string = "Please enter a valid email address in the format: yourname@example.com.";
+        let phoneError: string = "Please enter a valid 10-digit phone number, with or without the country code.";
+        let addressError: string = "Please enter a valid address in the format: street number, street name, and " +
             "optional unit number (e.g., Apt, Suite, Unit). Include only letters, numbers, spaces, hyphens, or periods.";
-        let birthdayError = "Please enter a valid birth date in the format: YYYY-MM-DD. The date must be a " +
+        let birthdayError: string = "Please enter a valid birth date in the format: YYYY-MM-DD. The date must be a " +
             "past date.";
-        let userNameError = "Username should start with a letter and can include letters, numbers, " +
+        let userNameError: string = "Username should start with a letter and can include letters, numbers, " +
             "underscores, or hyphens, 3 to 16 characters long.";
-        let passwordError = "Password must be at least 8 characters long, including an uppercase letter, a " +
+        let passwordError: string = "Password must be at least 8 characters long, including an uppercase letter, a " +
             "lowercase letter, a number, and a special character.";
-        let confirmPasswordError = "The password confirmation does not match the password entered.";
+        let confirmPasswordError: string = "The password confirmation does not match the password entered.";
 
-        ValidateOnEvent("#firstName", "blur", "#registerButton",
+        ValidateOnEvent($("#firstName"), "blur", $("#registerButton"),
                             /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, firstNameError);
-        ValidateOnEvent("#lastName", "blur", "#registerButton",
+        ValidateOnEvent($("#lastName"), "blur", $("#registerButton"),
                             /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, lastNameError);
-        ValidateOnEvent("#emailAddress", "blur", "#registerButton",
+        ValidateOnEvent($("#emailAddress"), "blur", $("#registerButton"),
                             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, emailAddressError);
-        ValidateOnEvent("#phone", "blur", "#registerButton",
+        ValidateOnEvent($("#phone"), "blur", $("#registerButton"),
                             /^\+?1?\d{10}$/, phoneError);
-        ValidateOnEvent("#address", "blur", "#registerButton",
+        ValidateOnEvent($("#address"), "blur", $("#registerButton"),
                             /^\d+\s[\w\s.-]+(?:\s?(Apt|Suite|Unit)\s?\d+)?$/, addressError);
-        ValidateDateOnEvent("#birthday", "blur", "#registerButton", birthdayError);
-        ValidateOnEvent("#userName", "blur", "#registerButton",
+        ValidateDateOnEvent($("#birthday"), "blur", $("#registerButton"), birthdayError);
+        ValidateOnEvent($("#userName"), "blur", $("#registerButton"),
                             /^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, userNameError);
-        ValidateOnEvent("#password", "blur", "#registerButton",
+        ValidateOnEvent($("#password"), "blur", $("#registerButton"),
                             /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, passwordError);
-        ConfirmPwOnEvent("#password", "blur", "#registerButton",
-                    "#confirmPassword", confirmPasswordError);
+        ConfirmPwOnEvent($("#password"), "blur", $("#registerButton"),
+            $("#confirmPassword"), confirmPasswordError);
     }
     //endregion
 
@@ -1421,7 +1467,7 @@ function formatDate(dateString) {
     /**
      * Called when the Careers page is displayed.
      */
-    function DisplayCareersPage() {
+    function DisplayCareersPage(): void {
         console.log("Called DisplayCareersPage...");
     }
     //endregion
@@ -1431,55 +1477,54 @@ function formatDate(dateString) {
      * Called when the website is launched to create the header and footer to display on the page. A switch statement
      * is used to detect which page has been loaded based on the Document Title.
      */
-    function Start(){
-
+    function Start(): void {
         console.log("App Started");
 
-        // Generate the header and footer
-        LoadHeader();
-        LoaderFooter();
+        let page_id = $("body")[0].getAttribute("id");
 
-        // Switch function depending on page
-        switch (document.title) {
-            case `${titlePrefix}Home`:
+        SetNavbar();
+
+        switch(page_id) {
+            case "home":
                 DisplayHomePage();
                 break;
-            case `${titlePrefix}Portfolio`:
-                DisplayPortfolioPage();
-                break;
-            case `${titlePrefix}Services`:
-                DisplayServicesPage();
-                break;
-            case `${titlePrefix}Team`:
-                DisplayTeamPage();
-                break;
-            case `${titlePrefix}Blog`:
-                DisplayBlogPage();
-                break;
-            case `${titlePrefix}Privacy Policy`:
-                DisplayPrivacyPolicyPage();
-                break;
-            case `${titlePrefix}Terms Of Service`:
-                DisplayTermsOfServicePage();
-                break;
-            case `${titlePrefix}Contact Us`:
-                DisplayContactPage();
-                break;
-            case `${titlePrefix}Events`:
-                DisplayEventsPage();
-                break;
-            case `${titlePrefix}Gallery`:
-                DisplayGalleryPage();
-                break;
-            case `${titlePrefix}Login`:
-                DisplayLoginPage();
-                break;
-            case `${titlePrefix}Register`:
-                DisplayRegisterPage();
-                break;
-            case `${titlePrefix}Careers`:
+            case "careers":
                 DisplayCareersPage();
                 break;
+            case "contact":
+                DisplayContactPage();
+                break;
+            case "events":
+                DisplayEventsPage();
+                break;
+            case "gallery":
+                DisplayGalleryPage();
+                break;
+            case "login":
+                DisplayLoginPage();
+                break;
+            case "news":
+                DisplayBlogPage();
+                break;
+            case "portfolio":
+                DisplayPortfolioPage();
+                break;
+            case "privacy_policy":
+                DisplayPrivacyPolicyPage();
+                break;
+            case "register":
+                DisplayRegisterPage();
+                break;
+            case "services":
+                DisplayServicesPage();
+                break;
+            case "team":
+                DisplayTeamPage();
+                break;
+            case "terms_of_service":
+                DisplayTermsOfServicePage();
+                break;
+
         }
     }
     //endregion

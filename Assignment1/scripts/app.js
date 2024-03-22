@@ -295,10 +295,10 @@ const projects = [
         // menu items for the navigation bar
         const menuItems = [
             { id: "navHomeLink", text: "Home", href: "index.html" },
-            { id: "navPortfolioLink", text: "Portfolio", href: "portfolio.html" },
-            { id: "navServicesLink", text: "Services", href: "services.html" },
-            { id: "navTeamLink", text: "Team", href: "team.html" },
-            { id: "navBlogLink", text: "Blog", href: "blog.html" }
+            { id: "navPortfolioLink", text: "Portfolio", href: "portfolio.ejs" },
+            { id: "navServicesLink", text: "Services", href: "services.ejs" },
+            { id: "navTeamLink", text: "Team", href: "team.ejs" },
+            { id: "navBlogLink", text: "Blog", href: "news.ejs" }
         ];
 
         // HTML elements for header
@@ -389,9 +389,9 @@ const projects = [
 
         // Array of footer links with titles
         const footerItems = [
-            { text: "Privacy Policy", href: "privacy_policy.html" },
-            { text: "Terms of Service", href: "terms_of_service.html" },
-            { text: "Contact Us", href: "contact.html"}
+            { text: "Privacy Policy", href: "privacy_policy.ejs" },
+            { text: "Terms of Service", href: "terms_of_service.ejs" },
+            { text: "Contact Us", href: "contact.ejs"}
         ];
 
         // HTML elements for the footer
