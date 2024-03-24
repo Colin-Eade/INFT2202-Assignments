@@ -6,7 +6,8 @@
       "eventLocation": "Multi-Purpose Room",
       "eventDate": "2022-01-22",
       "eventImage": "assets/img/eventPhotos/clothingDrive.png",
-      "eventDescription": "Join us for a clothing drive to support those in need in our community. Please bring gently used clothing items to donate."
+      "eventDescription": "Join us for a clothing drive to support those in need in our community. Please bring gently used clothing items to donate.",
+      "eventLikeCount": 7
     },
     {
       "eventId": "000002",
@@ -14,7 +15,8 @@
       "eventLocation": "Community Garden",
       "eventDate": "2024-06-13",
       "eventImage": "assets/img/eventPhotos/kidsGarden.png",
-      "eventDescription": "Kids are invited to explore the wonders of gardening in our community garden. Learn about plants, insects, and more!"
+      "eventDescription": "Kids are invited to explore the wonders of gardening in our community garden. Learn about plants, insects, and more!",
+      "eventLikeCount": 45
     },
     {
       "eventId": "000003",
@@ -22,7 +24,8 @@
       "eventLocation": "Multi-Purpose Room",
       "eventDate": "2023-10-09",
       "eventImage": "assets/img/eventPhotos/foodDrive.png",
-      "eventDescription": "Help us collect food items to make Thanksgiving special for families in need. Every donation counts!"
+      "eventDescription": "Help us collect food items to make Thanksgiving special for families in need. Every donation counts!",
+      "eventLikeCount": 34
     },
     {
       "eventId": "000004",
@@ -30,7 +33,8 @@
       "eventLocation": "Community Garden",
       "eventDate": "2021-07-21",
       "eventImage": "assets/img/eventPhotos/communityGarden.png",
-      "eventDescription": "Join us as we celebrate the grand opening of our community garden. Discover the beauty of nature and sustainable living."
+      "eventDescription": "Join us as we celebrate the grand opening of our community garden. Discover the beauty of nature and sustainable living.",
+      "eventLikeCount": 105
     },
     {
       "eventId": "000005",
@@ -38,7 +42,8 @@
       "eventLocation": "STEM Room",
       "eventDate": "2024-06-17",
       "eventImage": "assets/img/eventPhotos/kidsStem.png",
-      "eventDescription": "Kids will engage in exciting STEM activities, exploring science, technology, engineering, and mathematics in a fun and interactive way."
+      "eventDescription": "Kids will engage in exciting STEM activities, exploring science, technology, engineering, and mathematics in a fun and interactive way.",
+      "eventLikeCount": 235
     },
     {
       "eventId": "000006",
@@ -46,7 +51,8 @@
       "eventLocation": "Multi-Purpose Room",
       "eventDate": "2023-11-25",
       "eventImage": "assets/img/eventPhotos/leadership.png",
-      "eventDescription": "Empowering youth to become leaders in their community. Join us for a day of inspiration, networking, and skill-building."
+      "eventDescription": "Empowering youth to become leaders in their community. Join us for a day of inspiration, networking, and skill-building.",
+      "eventLikeCount": 7345
     },
     {
       "eventId": "000007",
@@ -54,7 +60,8 @@
       "eventLocation": "High Park Lawn",
       "eventDate": "2023-06-18",
       "eventImage": "assets/img/eventPhotos/picnic.png",
-      "eventDescription": "Celebrate Father's Day with a picnic in the park! Enjoy games, food, and quality time with family and friends."
+      "eventDescription": "Celebrate Father's Day with a picnic in the park! Enjoy games, food, and quality time with family and friends.",
+      "eventLikeCount": 562
     },
     {
       "eventId": "000008",
@@ -62,7 +69,8 @@
       "eventLocation": "Multi-Purpose Room",
       "eventDate": "2023-04-22",
       "eventImage": "assets/img/eventPhotos/recyclingDay.png",
-      "eventDescription": "Help us protect our planet by participating in our Earth Day recycling drive. Bring your recyclables and join the green movement!"
+      "eventDescription": "Help us protect our planet by participating in our Earth Day recycling drive. Bring your recyclables and join the green movement!",
+      "eventLikeCount": 7234
     },
     {
       "eventId": "000009",
@@ -70,7 +78,8 @@
       "eventLocation": "Community Splash Pad",
       "eventDate": "2024-06-01",
       "eventImage": "assets/img/eventPhotos/splashPad.png",
-      "eventDescription": "Cool off at the grand opening of our new splash pad! Bring the family for a day of water fun and excitement."
+      "eventDescription": "Cool off at the grand opening of our new splash pad! Bring the family for a day of water fun and excitement.",
+      "eventLikeCount": 406
     },
     {
       "eventId": "000010",
@@ -78,7 +87,8 @@
       "eventLocation": "Soccer Fields",
       "eventDate": "2023-08-05",
       "eventImage": "assets/img/eventPhotos/kidsCamp.png",
-      "eventDescription": "Join us for a summer adventure at our exciting summer camp! Explore nature, make new friends, and create lasting memories."
+      "eventDescription": "Join us for a summer adventure at our exciting summer camp! Explore nature, make new friends, and create lasting memories.",
+      "eventLikeCount": 865
     },
     {
       "eventId": "000011",
@@ -86,7 +96,8 @@
       "eventLocation": "Central Park",
       "eventDate": "2022-12-15",
       "eventImage": "assets/img/eventPhotos/winterFestival.png",
-      "eventDescription": "Experience the magic of winter with our Winter Wonderland Festival. Enjoy holiday lights, ice skating, and festive treats."
+      "eventDescription": "Experience the magic of winter with our Winter Wonderland Festival. Enjoy holiday lights, ice skating, and festive treats.",
+      "eventLikeCount": 946
     },
     {
       "eventId": "000012",
@@ -94,7 +105,8 @@
       "eventLocation": "Library Hall",
       "eventDate": "2023-09-10",
       "eventImage": "assets/img/eventPhotos/bookFair.png",
-      "eventDescription": "Discover new books and meet your favorite authors at our Annual Book Fair. A perfect event for book lovers of all ages."
+      "eventDescription": "Discover new books and meet your favorite authors at our Annual Book Fair. A perfect event for book lovers of all ages.",
+      "eventLikeCount": 7543
     },
     {
       "eventId": "000013",
@@ -102,7 +114,8 @@
       "eventLocation": "Arts Center",
       "eventDate": "2024-07-22",
       "eventImage": "assets/img/eventPhotos/artistShowcase.png",
-      "eventDescription": "Join us for an exhibition featuring the work of local artists. Explore paintings, sculptures, and more in this celebration of creativity."
+      "eventDescription": "Join us for an exhibition featuring the work of local artists. Explore paintings, sculptures, and more in this celebration of creativity.",
+      "eventLikeCount": 7866
     },
     {
       "eventId": "000014",
@@ -110,7 +123,8 @@
       "eventLocation": "Community Park",
       "eventDate": "2024-08-20",
       "eventImage": "assets/img/eventPhotos/movieNight.png",
-      "eventDescription": "Bring a blanket and enjoy an outdoor movie night under the stars. A family-friendly event featuring a popular film."
+      "eventDescription": "Bring a blanket and enjoy an outdoor movie night under the stars. A family-friendly event featuring a popular film.",
+      "eventLikeCount": 234
     },
     {
       "eventId": "000015",
@@ -118,7 +132,8 @@
       "eventLocation": "Expo Center",
       "eventDate": "2024-10-05",
       "eventImage": "assets/img/eventPhotos/healthExpo.png",
-      "eventDescription": "Explore health and wellness at our expo. Attend workshops, try fitness classes, and learn from health experts."
+      "eventDescription": "Explore health and wellness at our expo. Attend workshops, try fitness classes, and learn from health experts.",
+      "eventLikeCount": 2345
     }
   ]
 }

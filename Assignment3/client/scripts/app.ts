@@ -32,12 +32,14 @@ interface ProjectData {
 }
 
 interface EventData {
+
     eventId: string;
     eventName: string;
     eventLocation: string;
     eventDate: string;
     eventImage: string;
     eventDescription: string;
+    eventLikeCount: string;
 }
 
 interface FeedbackResponses {
@@ -1141,9 +1143,11 @@ function formatDate(dateString: string): string {
      * @returns card
      */
     function createEventCard(event: EventData) {
+
         const colDiv = $("<div>").addClass("col-xl-3 col-lg-4 col-md-6 col-sm-12 d-flex");
 
-        const card = $("<div>").addClass("card").css("margin", "5px");
+        const card = $("<div>").addClass("card")
+            .css({ "margin": "5px", "width": "18rem", "position": "relative"});
 
         // Create an image element for the event
         const cardImage = $("<img>").addClass("card-img-top").attr("src", event.eventImage).attr("alt", event.eventName);
@@ -1155,9 +1159,65 @@ function formatDate(dateString: string): string {
         const location = $("<p>").addClass("card-text").text("Location: " + event.eventLocation);
         const description = $("<p>").addClass("card-text").text(event.eventDescription);
 
+        const heartIcon = $("<i>")
+            .addClass("far fa-heart")
+            .css({"cursor": "pointer", "position": "absolute", "bottom": "8px", "right": "10px", "color": "red"});
+        // Set the initial like count from localStorage or default to 0 if not found
+        const initialLikeCount: number = parseInt(localStorage.getItem(`likeCount-${event.eventId}`) || '0');
+
+
+        // Create like counter
+        const likeCounter: JQuery<HTMLElement> = $("<span>")
+            .addClass("like-counter")
+            .text(event.eventLikeCount)
+            .css({"position": "absolute", "bottom": "5px", "right": "30px", "color": "black"
+            });
+
+        likeCounter.text(initialLikeCount.toString());
+
+        // Initial state of the heart icon based on sessionStorage
+        if (sessionStorage.getItem(`liked-${event.eventId}`) === 'true') {
+            heartIcon.removeClass("far fa-heart").addClass("fas fa-heart");
+        } else {
+            heartIcon.addClass("far fa-heart");
+        }
+
+        // Toggle heart fill on click
+        heartIcon.on("click", function() {
+            const eventIdKey = `liked-${event.eventId}`;
+            const likeCountKey = `likeCount-${event.eventId}`;
+
+            // Check if the event is already liked in this session
+            if (sessionStorage.getItem(eventIdKey) === 'true') {
+                // If yes, the user is unliking the event.
+                $(this).removeClass("fas fa-heart").addClass("far fa-heart");
+
+                // Decrement the like counter in localStorage
+                let currentCount: number = parseInt(localStorage.getItem(likeCountKey) || '0');
+                let newLikeCount: number = Math.max(currentCount - 1, 0); // Prevent negative counts
+                localStorage.setItem(likeCountKey, newLikeCount.toString());
+                likeCounter.text(newLikeCount.toString());
+
+                // Update sessionStorage to reflect the event is no longer liked
+                sessionStorage.removeItem(eventIdKey);
+            } else {
+                // If not, the user is liking the event.
+                $(this).removeClass("far fa-heart").addClass("fas fa-heart");
+
+                // Increment the like counter in localStorage
+                let currentCount: number = parseInt(localStorage.getItem(likeCountKey) || '0');
+                let newLikeCount: number = currentCount + 1;
+                localStorage.setItem(likeCountKey, newLikeCount.toString());
+                likeCounter.text(newLikeCount.toString());
+
+                // Mark the event as liked in this session
+                sessionStorage.setItem(eventIdKey, 'true');
+            }
+        });
+
         // Append the image and body to the card
         card.append(cardImage, cardBody);
-        cardBody.append(title, date, location, description);
+        cardBody.append(title, date, location, description, heartIcon, likeCounter);
 
         // Append the card to the column div
         colDiv.append(card);

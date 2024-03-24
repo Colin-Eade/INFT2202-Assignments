@@ -618,15 +618,52 @@ function formatDate(dateString) {
     }
     function createEventCard(event) {
         const colDiv = $("<div>").addClass("col-xl-3 col-lg-4 col-md-6 col-sm-12 d-flex");
-        const card = $("<div>").addClass("card").css("margin", "5px");
+        const card = $("<div>").addClass("card")
+            .css({ "margin": "5px", "width": "18rem", "position": "relative" });
         const cardImage = $("<img>").addClass("card-img-top").attr("src", event.eventImage).attr("alt", event.eventName);
         const cardBody = $("<div>").addClass("card-body");
         const title = $("<h5>").addClass("card-title").text(event.eventName);
         const date = $("<p>").addClass("card-text").text("Date: " + formatDate(event.eventDate));
         const location = $("<p>").addClass("card-text").text("Location: " + event.eventLocation);
         const description = $("<p>").addClass("card-text").text(event.eventDescription);
+        const heartIcon = $("<i>")
+            .addClass("far fa-heart")
+            .css({ "cursor": "pointer", "position": "absolute", "bottom": "8px", "right": "10px", "color": "red" });
+        const initialLikeCount = parseInt(localStorage.getItem(`likeCount-${event.eventId}`) || '0');
+        const likeCounter = $("<span>")
+            .addClass("like-counter")
+            .text(event.eventLikeCount)
+            .css({ "position": "absolute", "bottom": "5px", "right": "30px", "color": "black"
+        });
+        likeCounter.text(initialLikeCount.toString());
+        if (sessionStorage.getItem(`liked-${event.eventId}`) === 'true') {
+            heartIcon.removeClass("far fa-heart").addClass("fas fa-heart");
+        }
+        else {
+            heartIcon.addClass("far fa-heart");
+        }
+        heartIcon.on("click", function () {
+            const eventIdKey = `liked-${event.eventId}`;
+            const likeCountKey = `likeCount-${event.eventId}`;
+            if (sessionStorage.getItem(eventIdKey) === 'true') {
+                $(this).removeClass("fas fa-heart").addClass("far fa-heart");
+                let currentCount = parseInt(localStorage.getItem(likeCountKey) || '0');
+                let newLikeCount = Math.max(currentCount - 1, 0);
+                localStorage.setItem(likeCountKey, newLikeCount.toString());
+                likeCounter.text(newLikeCount.toString());
+                sessionStorage.removeItem(eventIdKey);
+            }
+            else {
+                $(this).removeClass("far fa-heart").addClass("fas fa-heart");
+                let currentCount = parseInt(localStorage.getItem(likeCountKey) || '0');
+                let newLikeCount = currentCount + 1;
+                localStorage.setItem(likeCountKey, newLikeCount.toString());
+                likeCounter.text(newLikeCount.toString());
+                sessionStorage.setItem(eventIdKey, 'true');
+            }
+        });
         card.append(cardImage, cardBody);
-        cardBody.append(title, date, location, description);
+        cardBody.append(title, date, location, description, heartIcon, likeCounter);
         colDiv.append(card);
         return colDiv;
     }
