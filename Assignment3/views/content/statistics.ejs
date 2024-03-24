@@ -1,1 +1,29 @@
 <h1 class="mt-3 text-center">Statistics</h1>
+
+<div class="row justify-content-center mt-3">
+    <div class="col-12">
+        <div class="card bg-body-tertiary border-0">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active text-secondary" id="monthlyData" data-bs-toggle="tab" data-bs-target="#chartPanel"
+                            type="button" role="tab">Monthly Data</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-secondary" id="totalVisitorsData" data-bs-toggle="tab" data-bs-target="#chartPanel"
+                            type="button" role="tab">Total Visitors Data</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-secondary" id="visitorLocationData" data-bs-toggle="tab" data-bs-target="#chartPanel"
+                            type="button" role="tab">Visitor Location Data</button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="chartPanel" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="card-body">
+                        <canvas id="chart" height="600"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

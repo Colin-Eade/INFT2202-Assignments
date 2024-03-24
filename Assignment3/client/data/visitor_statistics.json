@@ -1,0 +1,1504 @@
+{
+    "visitors": [
+        {
+            "visitDate": "2023-01-29T18:20:45",
+            "deviceType": "desktop",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-13T06:41:26",
+            "deviceType": "mobile",
+            "location": "British Columbia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-08-29T20:53:56",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-01-22T01:36:11",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-03-01T22:21:35",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-12T03:19:06",
+            "deviceType": "mobile",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-03-11T05:54:18",
+            "deviceType": "mobile",
+            "location": "Quebec",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-25T17:21:12",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-03T21:05:53",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-23T04:59:08",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-09-30T00:14:35",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-03-01T04:52:28",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-03-19T08:46:11",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-04T21:03:48",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-18T06:08:14",
+            "deviceType": "mobile",
+            "location": "British Columbia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-08-14T21:26:45",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-10-16T14:30:00",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-05-06T20:47:43",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-07-10T18:23:47",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-01-27T11:53:01",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-11-15T08:05:48",
+            "deviceType": "mobile",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-12T08:02:55",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-30T19:27:50",
+            "deviceType": "mobile",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-03-29T22:30:15",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-15T01:34:22",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-20T21:41:36",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-01-18T07:08:21",
+            "deviceType": "desktop",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-17T07:25:11",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-06-07T23:37:05",
+            "deviceType": "mobile",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-15T07:46:18",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-27T03:34:02",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-11T04:15:23",
+            "deviceType": "desktop",
+            "location": "British Columbia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-02-11T16:47:58",
+            "deviceType": "mobile",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-08-20T01:24:54",
+            "deviceType": "desktop",
+            "location": "Nova Scotia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-27T04:48:46",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-05-20T04:42:39",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-03-05T07:16:27",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-20T08:00:55",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-08-11T21:58:54",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-08-04T01:05:09",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-13T19:17:13",
+            "deviceType": "mobile",
+            "location": "New Brunswick",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-18T23:28:53",
+            "deviceType": "mobile",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-08-16T23:40:39",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-03-17T09:14:12",
+            "deviceType": "mobile",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-01-23T00:20:03",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-15T14:34:04",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-07-04T19:28:10",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-02-23T09:49:49",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-03-11T06:21:31",
+            "deviceType": "mobile",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-29T06:48:13",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-01-09T17:22:43",
+            "deviceType": "desktop",
+            "location": "Yukon",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-03T01:50:24",
+            "deviceType": "desktop",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-06-25T05:30:06",
+            "deviceType": "mobile",
+            "location": "British Columbia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-11-03T03:04:19",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-05-25T10:29:35",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-03-17T19:48:24",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-02T21:28:59",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-11-07T01:41:46",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-02-26T09:18:39",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-03-20T17:31:50",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-27T00:54:14",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-03-09T01:08:30",
+            "deviceType": "mobile",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-07T12:03:54",
+            "deviceType": "desktop",
+            "location": "Yukon",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-01-10T21:26:42",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-26T21:01:25",
+            "deviceType": "desktop",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-07-16T19:07:04",
+            "deviceType": "desktop",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-26T09:28:00",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-12T03:47:16",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-30T18:31:55",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-07-17T21:42:00",
+            "deviceType": "mobile",
+            "location": "British Columbia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-16T03:14:29",
+            "deviceType": "desktop",
+            "location": "New Brunswick",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-25T04:19:39",
+            "deviceType": "mobile",
+            "location": "Manitoba",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-06-17T18:40:30",
+            "deviceType": "desktop",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-08T06:04:44",
+            "deviceType": "mobile",
+            "location": "Manitoba",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-09-25T20:49:00",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-03-01T00:03:13",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-06-28T00:46:50",
+            "deviceType": "mobile",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-17T04:20:10",
+            "deviceType": "mobile",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-06T15:58:37",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-03-12T04:20:01",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-12T19:12:20",
+            "deviceType": "desktop",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-03T14:40:24",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-07-22T00:02:56",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-30T23:36:54",
+            "deviceType": "mobile",
+            "location": "British Columbia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-15T13:46:40",
+            "deviceType": "mobile",
+            "location": "Prince Edward Island",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-14T12:44:43",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-06-14T16:24:03",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-08-05T22:20:18",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-24T00:43:05",
+            "deviceType": "desktop",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-03-06T14:21:22",
+            "deviceType": "mobile",
+            "location": "Manitoba",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-06-09T22:05:57",
+            "deviceType": "mobile",
+            "location": "Nova Scotia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-02-26T18:06:39",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-03-10T11:13:19",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-08T14:57:02",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-03-08T01:14:10",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-16T02:33:22",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-03T19:48:07",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-07-27T10:25:55",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-12-20T00:36:19",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-01T14:29:09",
+            "deviceType": "desktop",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-01-02T05:20:05",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-06-07T01:36:18",
+            "deviceType": "desktop",
+            "location": "Alberta",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-07-20T06:22:32",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-20T10:57:17",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-03-26T18:47:33",
+            "deviceType": "mobile",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-12-19T13:48:15",
+            "deviceType": "desktop",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-02-03T22:06:06",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-08-23T19:08:19",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-03-31T18:31:55",
+            "deviceType": "desktop",
+            "location": "Alberta",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-03-15T01:38:50",
+            "deviceType": "desktop",
+            "location": "Manitoba",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-07-21T18:37:01",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-01-20T22:25:59",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-26T12:10:03",
+            "deviceType": "desktop",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-02T10:09:25",
+            "deviceType": "desktop",
+            "location": "British Columbia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-10-31T23:59:51",
+            "deviceType": "mobile",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-16T13:24:06",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-10-16T01:00:21",
+            "deviceType": "desktop",
+            "location": "Nova Scotia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-03-03T15:10:05",
+            "deviceType": "mobile",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-07T05:57:45",
+            "deviceType": "desktop",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-01-11T22:02:04",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-07T23:50:34",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-08-30T13:37:06",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-02-14T14:47:44",
+            "deviceType": "mobile",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-03T17:39:21",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-14T01:30:41",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-01-17T13:51:02",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-03-11T09:01:32",
+            "deviceType": "desktop",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-06-29T01:08:19",
+            "deviceType": "mobile",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-29T08:52:44",
+            "deviceType": "mobile",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-01-20T21:05:29",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-17T08:29:19",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-03-03T21:42:40",
+            "deviceType": "desktop",
+            "location": "Yukon",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-03-24T03:35:50",
+            "deviceType": "mobile",
+            "location": "British Columbia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-01-08T11:32:17",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-01-20T19:47:54",
+            "deviceType": "mobile",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-30T11:51:48",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-02-17T09:35:51",
+            "deviceType": "mobile",
+            "location": "Quebec",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-24T11:15:59",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-01-10T09:28:59",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-26T02:00:25",
+            "deviceType": "mobile",
+            "location": "New Brunswick",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-03-13T08:20:32",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-12T17:02:17",
+            "deviceType": "desktop",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-02-19T21:47:26",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-08-31T02:00:19",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-06-29T06:41:22",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-03-10T05:37:39",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-09-29T04:54:28",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-27T21:26:30",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-23T23:29:00",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-27T10:47:42",
+            "deviceType": "desktop",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-09-04T15:30:57",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-05-18T20:26:13",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-06-10T19:56:02",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-03-11T02:34:10",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-07-28T08:12:20",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-02-06T23:45:08",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-01-16T01:54:16",
+            "deviceType": "desktop",
+            "location": "British Columbia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-01-10T22:02:59",
+            "deviceType": "mobile",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-13T11:37:45",
+            "deviceType": "desktop",
+            "location": "Yukon",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-16T12:21:44",
+            "deviceType": "mobile",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-03-06T16:22:46",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-01-06T18:30:31",
+            "deviceType": "desktop",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-01-02T04:49:46",
+            "deviceType": "desktop",
+            "location": "British Columbia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-10-07T03:26:50",
+            "deviceType": "desktop",
+            "location": "Manitoba",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-01-18T05:12:33",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-20T20:31:32",
+            "deviceType": "desktop",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-12-19T17:17:12",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-08-07T20:15:48",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-09-19T10:45:46",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-07-27T00:45:59",
+            "deviceType": "mobile",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-01-06T05:48:08",
+            "deviceType": "desktop",
+            "location": "Alberta",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-03-17T05:10:25",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-03-13T14:07:07",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-07-26T19:01:50",
+            "deviceType": "mobile",
+            "location": "British Columbia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-21T10:08:42",
+            "deviceType": "desktop",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-07-13T13:21:36",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-09-05T11:27:47",
+            "deviceType": "mobile",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-01-29T07:10:44",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-02-05T08:21:40",
+            "deviceType": "mobile",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-02-26T08:27:00",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-01-18T23:22:19",
+            "deviceType": "desktop",
+            "location": "British Columbia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-11T08:35:31",
+            "deviceType": "desktop",
+            "location": "Manitoba",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-17T02:11:15",
+            "deviceType": "mobile",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-11-23T14:19:23",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-03T09:09:52",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-10-31T14:19:20",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-24T06:07:20",
+            "deviceType": "mobile",
+            "location": "Manitoba",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-01-22T14:14:35",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-08-23T03:18:35",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-17T17:24:29",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-12T12:58:40",
+            "deviceType": "mobile",
+            "location": "Nova Scotia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-10T02:52:47",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-19T13:51:40",
+            "deviceType": "desktop",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-05-09T01:35:58",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-31T11:01:44",
+            "deviceType": "mobile",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-02-15T00:00:19",
+            "deviceType": "mobile",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-12T09:26:05",
+            "deviceType": "mobile",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-13T20:49:44",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-23T14:45:58",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-08-28T19:51:33",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-07-25T21:58:23",
+            "deviceType": "desktop",
+            "location": "New Brunswick",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-09-23T03:10:23",
+            "deviceType": "desktop",
+            "location": "Yukon",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-04T09:04:17",
+            "deviceType": "mobile",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-09T13:54:49",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2024-02-22T02:19:01",
+            "deviceType": "mobile",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-07-13T17:37:00",
+            "deviceType": "mobile",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-01-02T08:51:53",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-11-27T14:55:50",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-08-11T02:33:30",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-01-03T14:50:22",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-14T08:53:13",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-10T08:31:29",
+            "deviceType": "mobile",
+            "location": "Quebec",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-26T22:18:10",
+            "deviceType": "desktop",
+            "location": "Alberta",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-15T23:38:48",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-10-11T07:15:07",
+            "deviceType": "mobile",
+            "location": "Saskatchewan",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-27T18:56:25",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-04-05T09:27:20",
+            "deviceType": "desktop",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-02-04T19:39:02",
+            "deviceType": "desktop",
+            "location": "Manitoba",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-05T18:46:23",
+            "deviceType": "desktop",
+            "location": "British Columbia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-12-03T23:28:08",
+            "deviceType": "desktop",
+            "location": "Saskatchewan",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-12-05T15:28:50",
+            "deviceType": "desktop",
+            "location": "Manitoba",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-08-26T20:09:26",
+            "deviceType": "mobile",
+            "location": "Manitoba",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-03-08T13:51:22",
+            "deviceType": "mobile",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-12-09T06:05:15",
+            "deviceType": "mobile",
+            "location": "Newfoundland and Labrador",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-21T22:26:37",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-05-26T07:04:24",
+            "deviceType": "desktop",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-01-16T06:50:36",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-10-13T18:49:28",
+            "deviceType": "mobile",
+            "location": "Nova Scotia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-11-30T02:35:14",
+            "deviceType": "desktop",
+            "location": "British Columbia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-09-23T13:17:16",
+            "deviceType": "desktop",
+            "location": "Prince Edward Island",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-02-24T13:37:10",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-12-02T12:16:05",
+            "deviceType": "mobile",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-08-23T21:43:09",
+            "deviceType": "mobile",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-25T16:58:23",
+            "deviceType": "mobile",
+            "location": "Ontario",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-11T03:10:48",
+            "deviceType": "desktop",
+            "location": "Northwest Territories",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-05-29T06:45:08",
+            "deviceType": "desktop",
+            "location": "Alberta",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-07-08T08:24:42",
+            "deviceType": "mobile",
+            "location": "Manitoba",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-10-31T20:39:08",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-02-14T07:13:18",
+            "deviceType": "mobile",
+            "location": "Quebec",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-05-14T06:24:36",
+            "deviceType": "desktop",
+            "location": "Quebec",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-03-18T18:46:39",
+            "deviceType": "mobile",
+            "location": "Northwest Territories",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-05-22T14:06:37",
+            "deviceType": "desktop",
+            "location": "Nunavut",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-11-25T14:02:34",
+            "deviceType": "desktop",
+            "location": "Ontario",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-09-05T21:58:32",
+            "deviceType": "desktop",
+            "location": "New Brunswick",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-03-16T22:36:28",
+            "deviceType": "desktop",
+            "location": "Yukon",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-05-30T11:40:48",
+            "deviceType": "mobile",
+            "location": "Nova Scotia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-09-14T06:43:34",
+            "deviceType": "desktop",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2024-02-13T16:08:41",
+            "deviceType": "desktop",
+            "location": "Nova Scotia",
+            "newVsReturning": "returning"
+        },
+        {
+            "visitDate": "2023-04-16T09:36:02",
+            "deviceType": "mobile",
+            "location": "Nova Scotia",
+            "newVsReturning": "new"
+        },
+        {
+            "visitDate": "2023-12-17T22:29:21",
+            "deviceType": "mobile",
+            "location": "Alberta",
+            "newVsReturning": "new"
+        }
+    ]
+}

@@ -1394,7 +1394,6 @@ function formatDate(dateString: string): string {
                     for (const user of data.users) {
 
                         if (userName === user.userName && password === user.password) {
-
                             newUser.fromJSON(user);
                             success = true;
                             break;
@@ -1490,7 +1489,7 @@ function formatDate(dateString: string): string {
     /**
      *
      */
-    function DisplayEventPlanningPage() {
+    function DisplayEventPlanningPage(): void {
 
     }
     //endregion
@@ -1499,8 +1498,31 @@ function formatDate(dateString: string): string {
     /**
      *
      */
-    function DisplayStatisticsPage() {
+    function DisplayStatisticsPage(): void {
+        console.log("Called DisplayStatisticsPage...");
 
+        HarmonyHub.VisitorDataProcessor.GetVisitorData(function(data): void {
+
+            HarmonyHub.ChartUtils.RenderCountsBarChart(HarmonyHub.VisitorDataProcessor.GetCountsByMonthYear(data));
+
+            $('.nav-tabs .nav-link').on('click', function(): void {
+                let activeTabId: string = $(this).attr('id') as string;
+                switch (activeTabId) {
+                    case 'monthlyData':
+                        HarmonyHub.ChartUtils
+                            .RenderCountsBarChart(HarmonyHub.VisitorDataProcessor.GetCountsByMonthYear(data));;
+                        break;
+                    case 'totalVisitorsData':
+                        HarmonyHub.ChartUtils
+                            .RenderVisitsOverTimeChart(HarmonyHub.VisitorDataProcessor.GetTotalVisitsOverTime(data));
+                        break;
+                    case 'visitorLocationData':
+                        HarmonyHub.ChartUtils
+                            .RenderLocationPieChart( HarmonyHub.VisitorDataProcessor.GetLocationCounts(data));
+                        break;
+                }
+            });
+        });
     }
     //endregion
 
@@ -1512,7 +1534,7 @@ function formatDate(dateString: string): string {
     function Start(): void {
         console.log("App Started");
 
-        let page_id = $("body")[0].getAttribute("id");
+        let page_id: string|null = $("body")[0].getAttribute("id");
 
         SetNavbar();
 

@@ -836,6 +836,28 @@ function formatDate(dateString) {
     function DisplayEventPlanningPage() {
     }
     function DisplayStatisticsPage() {
+        console.log("Called DisplayStatisticsPage...");
+        HarmonyHub.VisitorDataProcessor.GetVisitorData(function (data) {
+            HarmonyHub.ChartUtils.RenderCountsBarChart(HarmonyHub.VisitorDataProcessor.GetCountsByMonthYear(data));
+            $('.nav-tabs .nav-link').on('click', function () {
+                let activeTabId = $(this).attr('id');
+                switch (activeTabId) {
+                    case 'monthlyData':
+                        HarmonyHub.ChartUtils
+                            .RenderCountsBarChart(HarmonyHub.VisitorDataProcessor.GetCountsByMonthYear(data));
+                        ;
+                        break;
+                    case 'totalVisitorsData':
+                        HarmonyHub.ChartUtils
+                            .RenderVisitsOverTimeChart(HarmonyHub.VisitorDataProcessor.GetTotalVisitsOverTime(data));
+                        break;
+                    case 'visitorLocationData':
+                        HarmonyHub.ChartUtils
+                            .RenderLocationPieChart(HarmonyHub.VisitorDataProcessor.GetLocationCounts(data));
+                        break;
+                }
+            });
+        });
     }
     function Start() {
         console.log("App Started");
