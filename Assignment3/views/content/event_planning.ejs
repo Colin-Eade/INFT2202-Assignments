@@ -8,3 +8,56 @@
 
 <h1 class="mt-3 text-center">Plan an Event</h1>
 
+<div class="row justify-content-center mt-3">
+    <div>
+        <div id="calendar"></div>
+    </div>
+    <div class="col-12">
+        <div class="card bg-body-tertiary border-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6 px-lg-5">
+                        <form id="contactForm">
+                            <div class="mb-3">
+                                <label for="eventName" class="form-label">Event Name</label>
+                                <div class="input-group">
+                                    <input id="eventName" type="text" class="form-control" name="eventName">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="coordinatorFullName" class="form-label">Coordinator Full Name</label>
+                                <div class="input-group">
+                                    <input id="coordinatorFullName" type="text" class="form-control" name="coordinatorFullName">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="coordinatorEmail" class="form-label">Coordinator Email</label>
+                                <div class="input-group">
+                                    <input id="coordinatorEmail" type="email" class="form-control" name="coordinatorEmail">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Subject (optional)</label>
+                                <div class="input-group">
+                                    <input id="subject"  type="text" class="form-control" name="subject">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <div class="input-group">
+                                    <textarea id="message" class="form-control" name="message" rows="4"></textarea>
+                                </div>
+                            </div>
+
+                            <button id="formSubmit" type="button" class="col-12 btn btn-primary mb-3">
+                                <i class="fa-solid fa-envelope" ></i> Submit
+                            </button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

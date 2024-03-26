@@ -242,6 +242,16 @@ function formatDate(dateString) {
             $("#navMessageWrapper").remove();
         }, 6000);
     }
+    function InitilizeCalendar() {
+        document.addEventListener('DOMContentLoaded', function () {
+            let calendarEl = document.getElementById('calendar');
+            let calendar = new FullCalendar.Calendar(calendarEl, {
+                timeZone: 'UTC',
+                themeSystem: 'bootstrap5'
+            });
+            calendar.render();
+        });
+    }
     function DisplayHomePage() {
         console.log("Called DisplayHomePage...");
         let page = 1;
@@ -871,6 +881,7 @@ function formatDate(dateString) {
         console.log("Called DisplayCareersPage...");
     }
     function DisplayEventPlanningPage() {
+        console.log("Called DisplayEventPlanningPage...");
     }
     function DisplayStatisticsPage() {
         console.log("Called DisplayStatisticsPage...");

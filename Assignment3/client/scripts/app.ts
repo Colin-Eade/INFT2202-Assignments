@@ -10,6 +10,7 @@
 "use strict";
 
 //region Globals
+
 interface GNewsAPIResponse {
     totalArticles: number;
     articles: Array<{
@@ -94,6 +95,7 @@ function formatDate(dateString: string): string {
     function CheckLogout(): boolean {
         return !!sessionStorage.getItem("logout");
     }
+
 
     /**
      *
@@ -494,6 +496,19 @@ function formatDate(dateString: string): string {
             $("#navMessageWrapper").remove();
         }, 6000);
     }
+
+    function InitilizeCalendar(): void {
+        document.addEventListener('DOMContentLoaded', function() {
+            let calendarEl = document.getElementById('calendar');
+            let calendar = new FullCalendar.Calendar(calendarEl, {
+                timeZone: 'UTC',
+                themeSystem: 'bootstrap5'
+            });
+
+            calendar.render();
+        });
+    }
+
     //endregion
 
     //region Home Page Functions
@@ -1550,8 +1565,12 @@ function formatDate(dateString: string): string {
      *
      */
     function DisplayEventPlanningPage(): void {
+        console.log("Called DisplayEventPlanningPage...")
+
 
     }
+
+
     //endregion
 
     //region  Statistics Page Functions

@@ -38,7 +38,4 @@ app.use(function(err: createError.HttpError, req: express.Request, res: express.
   res.render('error');
 });
 
-// Route to handle "like" updates
-
-
 export default app;
