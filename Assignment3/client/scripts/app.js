@@ -248,11 +248,58 @@ function formatDate(dateString) {
             timeZone: 'UTC',
             themeSystem: 'bootstrap5',
             events: getEvents(),
+            eventClick: function (info) {
+                const eventObj = info.event;
+                let details = '';
+                if (eventObj.start) {
+                    const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+                    const optionsTime = { hour: '2-digit', minute: '2-digit' };
+                    details = `<h3><u>${eventObj.title}</u></h3><br>
+                        <strong>Date:</strong> ${eventObj.start.toLocaleDateString(undefined, optionsDate)}<br/>
+                        <strong>Time:</strong> ${eventObj.start.toLocaleTimeString(undefined, optionsTime)}<br/>`;
+                }
+                else {
+                    console.log('Event start date is null.');
+                }
+                if (eventObj.extendedProps) {
+                    details += `<strong>Coordinator:</strong> ${eventObj.extendedProps.coordinatorName}<br/>`;
+                    details += `<strong>Email:</strong> ${eventObj.extendedProps.coordinatorEmail}<br/>`;
+                    details += `<strong>Description:</strong> ${eventObj.extendedProps.description}<br/>`;
+                    details += `<strong>ID:</strong> ${eventObj.eventId}<br/>`;
+                }
+                const currentUser = sessionStorage.getItem("userName");
+                $('#eventModalFooter').empty();
+                if (eventObj.extendedProps.coordinatorUserName === currentUser) {
+                    const updateButton = $('<button id="updateEventBtn" class="btn btn-primary">Update</button>');
+                    const deleteButton = $('<button id="deleteEventBtn" class="btn btn-danger">Delete</button>');
+                    $('#eventModalFooter').append(updateButton, deleteButton);
+                    updateButton.on('click', function () {
+                    });
+                    deleteButton.on('click', function () {
+                        const eventToDelete = eventObj.extendedProps.eventId;
+                        localStorage.removeItem(eventToDelete);
+                        $('#eventDetailsModal').modal('hide');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 500);
+                    });
+                }
+                const closeButton = $('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                $('#eventModalFooter').append(closeButton);
+                const eventDetailsContainer = document.getElementById('eventDetails');
+                const eventDetailsModalElement = document.getElementById('eventDetailsModal');
+                if (eventDetailsContainer && eventDetailsModalElement) {
+                    eventDetailsContainer.innerHTML = details;
+                    const eventDetailsModal = new bootstrap.Modal(eventDetailsModalElement);
+                    eventDetailsModal.show();
+                }
+            }
         });
         calendar.render();
     }
     function getEvents() {
         let events = [];
+        const currentUser = sessionStorage.getItem("userName");
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (key && key.startsWith("event_")) {
@@ -262,7 +309,15 @@ function formatDate(dateString) {
                 try {
                     const formattedEvent = {
                         title: event.eventName,
-                        start: event.eventDate + 'T' + event.eventTime
+                        start: event.eventDate + 'T' + event.eventTime,
+                        backgroundColor: event.coorUserName === currentUser ? '#a2f16d' : '#3a84d0',
+                        extendedProps: {
+                            eventId: key,
+                            description: event.eventDesc,
+                            coordinatorName: event.coorFullName,
+                            coordinatorEmail: event.coorEmail,
+                            coordinatorUserName: event.coorUserName
+                        }
                     };
                     events.push(formattedEvent);
                 }
@@ -852,6 +907,7 @@ function formatDate(dateString) {
                     }
                     if (success) {
                         sessionStorage.setItem("user", newUser.serialize());
+                        sessionStorage.setItem("userName", userName);
                         location.href = "/home";
                     }
                     else {
@@ -904,6 +960,19 @@ function formatDate(dateString) {
     }
     function DisplayEventPlanningPage() {
         console.log("Called DisplayEventPlanningPage...");
+        const userName = sessionStorage.getItem('userName');
+        if (userName !== null) {
+            const coordinatorUserNameInput = document.getElementById('coordinatorUserName');
+            if (coordinatorUserNameInput) {
+                coordinatorUserNameInput.value = userName;
+            }
+            else {
+                console.error('Input element #coordinatorUserName not found');
+            }
+        }
+        else {
+            console.log('No userName found in session storage');
+        }
         InitializeCalendar();
         LoadEventTable();
         $('#eventDescription').on('input', function () {
@@ -917,12 +986,13 @@ function formatDate(dateString) {
             if (CheckSubmissionValidity()) {
                 const eventName = $("#eventName").val();
                 const coordinatorFullName = $("#coordinatorFullName").val();
+                const coordinatorUserName = $("#coordinatorUserName").val();
                 const coordinatorEmail = $("#coordinatorEmail").val();
                 const coordinatorPhone = $("#coordinatorPhone").val();
                 const eventDate = $("#eventDate").val();
                 const eventTime = $("#eventTime").val();
                 const eventDescription = $("#eventDescription").val();
-                AddEvent(eventName, coordinatorFullName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
+                AddEvent(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
                 const eventPlanningModalEl = document.getElementById('eventPlanningModal');
                 if (eventPlanningModalEl) {
                     const eventPlanningModal = bootstrap.Modal.getInstance(eventPlanningModalEl);
@@ -946,8 +1016,8 @@ function formatDate(dateString) {
         ValidateOnEvent($("#coordinatorEmail"), "blur", $("#eventFormSubmit"), /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, coorEmailError);
         ValidateOnEvent($("#coordinatorPhone"), "blur", $("#eventFormSubmit"), /^\+?1?\d{10}$/, coorPhoneError);
     }
-    function AddEvent(eventName, coordinatorFullName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription) {
-        let event = new HarmonyHub.Event(eventName, coordinatorFullName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
+    function AddEvent(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription) {
+        let event = new HarmonyHub.Event(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
         if (event.serialize()) {
             let eventKey = "event_" + event.eventName + "_" + Date.now();
             localStorage.setItem(eventKey, event.serialize());

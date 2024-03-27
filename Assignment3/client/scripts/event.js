@@ -3,15 +3,17 @@ var HarmonyHub;
 (function (HarmonyHub) {
     class Event {
         _eventName;
+        _coorUserName;
         _coorFullName;
         _coorEmail;
         _coorPhone;
         _eventDate;
         _eventTime;
         _eventDesc;
-        constructor(eventName = "", coorFullName = "", coorEmail = "", coorPhone = "", eventDate = "", eventTime = "", eventDesc = "") {
+        constructor(eventName = "", coorFullName = "", coorUserName = "", coorEmail = "", coorPhone = "", eventDate = "", eventTime = "", eventDesc = "") {
             this._eventName = eventName;
             this._coorFullName = coorFullName;
+            this._coorUserName = coorUserName;
             this._coorEmail = coorEmail;
             this._coorPhone = coorPhone;
             this._eventDate = eventDate;
@@ -29,6 +31,12 @@ var HarmonyHub;
         }
         set coorFullName(value) {
             this._coorFullName = value;
+        }
+        get coorUserName() {
+            return this._coorUserName;
+        }
+        set coorUserName(value) {
+            this._coorUserName = value;
         }
         get coorEmail() {
             return this._coorEmail;
@@ -63,6 +71,7 @@ var HarmonyHub;
         toString() {
             return `Event Name: ${this._eventName}\n` +
                 `Coordinator Full Name: ${this._coorFullName}\n` +
+                `Coordinator User Name: ${this._coorUserName}\n` +
                 `Coordinator Email Address: ${this._coorEmail}\n` +
                 `Coordinator Phone Number: ${this._coorPhone}\n` +
                 `Event Date: ${this._eventDate}\n` +
@@ -70,10 +79,11 @@ var HarmonyHub;
                 `Event Description: ${this._eventDesc}\n`;
         }
         serialize() {
-            if (this._eventName !== "" && this._coorFullName !== "" && this._coorEmail !== "" && this._coorPhone !== ""
+            if (this._eventName !== "" && this._coorFullName !== "" && this._coorUserName !== ""
+                && this._coorEmail !== "" && this._coorPhone !== ""
                 && this._eventDate !== "" && this._eventTime !== "" && this._eventDesc !== "") {
-                return `${this._eventName},${this._coorFullName},${this._coorEmail},${this._coorPhone},
-                ${this._eventDate},${this._eventTime},${this._eventDesc}`;
+                return `${this._eventName},${this._coorFullName},${this._coorUserName},${this._coorEmail},
+                ${this._coorPhone},${this._eventDate},${this._eventTime},${this._eventDesc}`;
             }
             console.error("One or more properties of the Event are empty or invalid");
             return null;
@@ -82,16 +92,18 @@ var HarmonyHub;
             let propertyArray = data.split(",");
             this._eventName = propertyArray[0];
             this._coorFullName = propertyArray[1];
-            this._coorEmail = propertyArray[2];
-            this._coorPhone = propertyArray[3];
-            this._eventDate = propertyArray[4];
-            this._eventTime = propertyArray[5];
-            this._eventDesc = propertyArray[6];
+            this._coorUserName = propertyArray[2];
+            this._coorEmail = propertyArray[3];
+            this._coorPhone = propertyArray[4];
+            this._eventDate = propertyArray[5];
+            this._eventTime = propertyArray[6];
+            this._eventDesc = propertyArray[7];
         }
         toJSON() {
             return {
                 eventName: this._eventName,
                 coorFullName: this._coorFullName,
+                coorUserName: this._coorUserName,
                 coorEmail: this._coorEmail,
                 coorPhone: this._coorPhone,
                 eventDate: this._eventDate,
@@ -102,6 +114,7 @@ var HarmonyHub;
         fromJSON(data) {
             this._eventName = data.eventName;
             this._coorFullName = data.coorFullName;
+            this._coorUserName = data.coorUserName;
             this._coorEmail = data.coorEmail;
             this._coorPhone = data.coorPhone;
             this._eventDate = data.eventDate;

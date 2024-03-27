@@ -65,6 +65,7 @@
                             <label for="eventDescription" class="form-label">Brief Event Description</label>
                             <textarea id="eventDescription" class="form-control" name="eventDescription" rows="2" maxlength="300"></textarea>
                             <span id="charCount">0/200</span>
+                            <input type="hidden" id="coordinatorUserName" name="coordinatorUserName" value="">
                         </div>
                     </form>
                 </div>
@@ -89,8 +90,7 @@
                 <div class="modal-body">
                     <p id="eventDetails"></p>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer" id="eventModalFooter">
                 </div>
             </div>
         </div>
