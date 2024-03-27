@@ -7,14 +7,14 @@
   resolved "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-6.5.1.tgz"
   integrity sha512-CNy5vSwN3fsUStPRLX7fUYojyuzoEMSXPl7zSLJ8TgtRfjv24LOnOWKT2zYwaHZCJGkdyRnTmstR0P+Ah503Gw==
 
-"@fullcalendar/core@^6.1.11", "@fullcalendar/core@~6.1.11":
+"@fullcalendar/core@~6.1.11":
   version "6.1.11"
   resolved "https://registry.npmjs.org/@fullcalendar/core/-/core-6.1.11.tgz"
   integrity sha512-TjG7c8sUz+Vkui2FyCNJ+xqyu0nq653Ibe99A66LoW95oBo6tVhhKIaG1Wh0GVKymYiqAQN/OEdYTuj4ay27kA==
   dependencies:
     preact "~10.12.1"
 
-"@fullcalendar/daygrid@^6.1.11", "@fullcalendar/daygrid@~6.1.11":
+"@fullcalendar/daygrid@~6.1.11":
   version "6.1.11"
   resolved "https://registry.npmjs.org/@fullcalendar/daygrid/-/daygrid-6.1.11.tgz"
   integrity sha512-hF5jJB7cgUIxWD5MVjj8IU407HISyLu7BWXcEIuTytkfr8oolOXeCazqnnjmRbnFOncoJQVstTtq6SIhaT32Xg==
@@ -42,11 +42,6 @@
   integrity sha512-0seUHK/ferH89IeuCvV4Bib0zWjgK0nsptNdmAc9wDBxD/d9hm5Mdti0URJX6bDoRtsSfRDu5XsRcrzwoc+AUQ==
   dependencies:
     "@fullcalendar/daygrid" "~6.1.11"
-
-"@fullcalendar/web-component@^6.1.11":
-  version "6.1.11"
-  resolved "https://registry.npmjs.org/@fullcalendar/web-component/-/web-component-6.1.11.tgz"
-  integrity sha512-iK5wltFmeId24cr71Cl3up8Cm9YFfVLMgOUb1tNk/xxwa+MxnJ8b+EuuqiDKTtxLvGYFKbO8WqG+hiOITVJQXQ==
 
 "@kurkle/color@^0.3.0":
   version "0.3.2"

@@ -242,15 +242,36 @@ function formatDate(dateString) {
             $("#navMessageWrapper").remove();
         }, 6000);
     }
-    function InitilizeCalendar() {
-        document.addEventListener('DOMContentLoaded', function () {
-            let calendarEl = document.getElementById('calendar');
-            let calendar = new FullCalendar.Calendar(calendarEl, {
-                timeZone: 'UTC',
-                themeSystem: 'bootstrap5'
-            });
-            calendar.render();
+    function InitializeCalendar() {
+        let calendarEl = document.getElementById('calendar');
+        let calendar = new FullCalendar.Calendar(calendarEl, {
+            timeZone: 'UTC',
+            themeSystem: 'bootstrap5',
+            events: getEvents(),
         });
+        calendar.render();
+    }
+    function getEvents() {
+        let events = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith("event_")) {
+                let event = new HarmonyHub.Event();
+                let eventData = localStorage.getItem(key);
+                event.deserialize(eventData);
+                try {
+                    const formattedEvent = {
+                        title: event.eventName,
+                        start: event.eventDate + 'T' + event.eventTime
+                    };
+                    events.push(formattedEvent);
+                }
+                catch (e) {
+                    console.error("Error parsing event data from localStorage for key:", key, "; Error:", e);
+                }
+            }
+        }
+        return events;
     }
     function DisplayHomePage() {
         console.log("Called DisplayHomePage...");
@@ -592,6 +613,7 @@ function formatDate(dateString) {
     }
     function DisplayEventsPage() {
         console.log("Called DisplayEventsPage...");
+        InitializeCalendar();
         $(function () {
             $('.dropdown-item').on('click', function () {
                 let filterOption = $(this).text().toLowerCase().trim();
@@ -882,6 +904,94 @@ function formatDate(dateString) {
     }
     function DisplayEventPlanningPage() {
         console.log("Called DisplayEventPlanningPage...");
+        InitializeCalendar();
+        LoadEventTable();
+        $('#eventDescription').on('input', function () {
+            const value = $(this).val();
+            const currentLength = value.length;
+            const maxLength = parseInt($(this).attr('maxlength') || '0');
+            $('#charCount').text(`${currentLength}/${maxLength}`);
+        });
+        EventPlanFormValidation();
+        $("#eventFormSubmit").on("click", () => {
+            if (CheckSubmissionValidity()) {
+                const eventName = $("#eventName").val();
+                const coordinatorFullName = $("#coordinatorFullName").val();
+                const coordinatorEmail = $("#coordinatorEmail").val();
+                const coordinatorPhone = $("#coordinatorPhone").val();
+                const eventDate = $("#eventDate").val();
+                const eventTime = $("#eventTime").val();
+                const eventDescription = $("#eventDescription").val();
+                AddEvent(eventName, coordinatorFullName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
+                const eventPlanningModalEl = document.getElementById('eventPlanningModal');
+                if (eventPlanningModalEl) {
+                    const eventPlanningModal = bootstrap.Modal.getInstance(eventPlanningModalEl);
+                    eventPlanningModal?.hide();
+                    location.href = "/event_planning";
+                }
+            }
+            else {
+                console.log("Form is not valid.");
+            }
+        });
+    }
+    function EventPlanFormValidation() {
+        let eventNameError = "Event name should be between 5 and 30 characters. Numbers are allowed, but not special characters.";
+        let coorNameError = "First name should start with a capital letter and can include hyphens, " +
+            "apostrophes, or spaces for compound names.";
+        let coorEmailError = "Please enter a valid email address in the format: yourname@example.com.";
+        let coorPhoneError = "Please enter a valid 10-digit phone number, with or without the country code.";
+        ValidateOnEvent($("#eventName"), "blur", $("#eventFormSubmit"), /^[A-Za-z0-9 '_-]{5,30}$/, eventNameError);
+        ValidateOnEvent($("#coordinatorFullName"), "blur", $("#eventFormSubmit"), /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, coorNameError);
+        ValidateOnEvent($("#coordinatorEmail"), "blur", $("#eventFormSubmit"), /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, coorEmailError);
+        ValidateOnEvent($("#coordinatorPhone"), "blur", $("#eventFormSubmit"), /^\+?1?\d{10}$/, coorPhoneError);
+    }
+    function AddEvent(eventName, coordinatorFullName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription) {
+        let event = new HarmonyHub.Event(eventName, coordinatorFullName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
+        if (event.serialize()) {
+            let eventKey = "event_" + event.eventName + "_" + Date.now();
+            localStorage.setItem(eventKey, event.serialize());
+        }
+    }
+    function LoadEventTable() {
+        if (localStorage.length > 0) {
+            let eventList = document.getElementById("eventList");
+            let data = "";
+            let index = 1;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith("event_")) {
+                    let event = new HarmonyHub.Event();
+                    let eventData = localStorage.getItem(key);
+                    event.deserialize(eventData);
+                    data += `<tr><th scope="row" class="text-center">${index}</th>
+                            <td>${event.eventName}</td>
+                            <td>${event.coorFullName}</td>
+                            <td>${event.coorEmail}</td>
+                            <td>${event.coorPhone}</td>
+                            <td>${event.eventDate}</td>
+                            <td>${event.eventTime}</td>
+                            <td>${event.eventDesc}</td>
+                            <td>
+                                <button value="${key}" class="btn btn-primary btn-sm edit">
+                                    <i class="fas fa-edit fa-sm"></i> Edit
+                                </button>
+                                <button value="${key}" class="btn btn-danger btn-sm delete">
+                                    <i class="fas fa-trash-alt fa-sm"></i> Delete
+                                </button>
+                            </td>
+                         </tr>`;
+                    index++;
+                }
+            }
+            eventList.innerHTML = data;
+        }
+        $("button.delete").on("click", function () {
+            if (confirm("Confirm event delete?")) {
+                localStorage.removeItem($(this).val());
+            }
+            location.href = "/event_planning";
+        });
     }
     function DisplayStatisticsPage() {
         console.log("Called DisplayStatisticsPage...");
