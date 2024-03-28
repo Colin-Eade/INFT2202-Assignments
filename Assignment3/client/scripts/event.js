@@ -82,8 +82,8 @@ var HarmonyHub;
             if (this._eventName !== "" && this._coorFullName !== "" && this._coorUserName !== ""
                 && this._coorEmail !== "" && this._coorPhone !== ""
                 && this._eventDate !== "" && this._eventTime !== "" && this._eventDesc !== "") {
-                return `${this._eventName},${this._coorFullName},${this._coorUserName},${this._coorEmail},
-                ${this._coorPhone},${this._eventDate},${this._eventTime},${this._eventDesc}`;
+                return `${this._eventName},${this._coorFullName},${this._coorUserName},${this._coorEmail},` +
+                    `${this._coorPhone},${this._eventDate},${this._eventTime},${this._eventDesc}`;
             }
             console.error("One or more properties of the Event are empty or invalid");
             return null;

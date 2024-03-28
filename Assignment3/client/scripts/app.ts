@@ -500,7 +500,11 @@ function formatDate(dateString: string): string {
     // endregion
 
     //region Calendar Functions
-    
+
+    /**
+     * Initializes and loads the calendar. Set is the theme and loads events into the calendar using getEvents(). Also
+     * sets up the functionality of clicking on events in the calendar and allowing updates and deleting tof events.
+     */
     function InitializeCalendar(): void {
         let calendarEl = document.getElementById('calendar');
         // @ts-ignore
@@ -509,6 +513,7 @@ function formatDate(dateString: string): string {
             themeSystem: 'bootstrap5',
             events: getEvents(),
             // @ts-ignore
+            // Creates modal pop-ups for events when clicked, with options
             eventClick: function(info) {
                 const eventObj = info.event;
 
@@ -528,7 +533,6 @@ function formatDate(dateString: string): string {
                     details += `<strong>Coordinator:</strong> ${eventObj.extendedProps.coordinatorName}<br/>`;
                     details += `<strong>Email:</strong> ${eventObj.extendedProps.coordinatorEmail}<br/>`;
                     details += `<strong>Description:</strong> ${eventObj.extendedProps.description}<br/>`;
-                    details += `<strong>ID:</strong> ${eventObj.eventId}<br/>`;
                 }
 
                 const currentUser = sessionStorage.getItem("userName");
@@ -544,26 +548,80 @@ function formatDate(dateString: string): string {
 
 
                     updateButton.on('click', function () {
-                        // Handle update logic
+
+                        const eventData = eventObj.extendedProps;
+
+                        $('#eventDetailsModal').modal('hide');
+
+                        $('#eventDetailsModal').on('hidden.bs.modal', function () {
+                            // Populate form fields with event data
+                            $('#editEventName').val(eventObj.title);
+                            $('#editCoordinatorEmail').val(eventData.coordinatorEmail);
+                            $('#editEventDate').val(eventData.eventDate);
+                            $('#editCoordinatorFullName').val(eventData.coordinatorName);
+                            $('#editCoordinatorPhone').val(eventData.coordinatorPhone);
+                            $('#editEventTime').val(eventData.eventTime);
+                            $('#editEventDescription').val(eventData.description);
+                            $('#coordinatorUserName').val(eventData.coordinatorUserName);
+
+                            // Show the edit event modal
+                            const editEventDetailsModalElement = document.getElementById('eventEditModal');
+                            if (editEventDetailsModalElement) {
+                                const editEventDetailsModal = new bootstrap.Modal(editEventDetailsModalElement);
+                                editEventDetailsModal.show();
+                            }
+
+                            // Ensure the 'hidden.bs.modal' event handler is removed after it runs to prevent duplication
+                            $(this).off('hidden.bs.modal');
+
+                            EventPlanFormValidation();
+
+                            $('#editEventFormSubmit').on('click', function() {
+
+                                // Read values from the form
+                                const eventName = $('#editEventName').val() as string;
+                                const coordinatorEmail = $('#editCoordinatorEmail').val() as string;
+                                const eventDate = $('#editEventDate').val() as string;
+                                const coordinatorFullName = $('#editCoordinatorFullName').val() as string;
+                                const coordinatorPhone = $('#editCoordinatorPhone').val() as string;
+                                const eventTime = $('#editEventTime').val() as string;
+                                const eventDescription = $('#editEventDescription').val() as string;
+                                const coordinatorUserName = $('#coordinatorUserName').val() as string;
+
+
+                                AddEvent(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone,
+                                    eventDate, eventTime, eventDescription);
+
+                                // Delete the old event object
+                                localStorage.removeItem(eventData.eventId);
+
+                                // Close the edit modal
+                                $('#eventEditModal').modal('hide');
+
+                                // Optional: Refresh the page or calendar view to reflect changes
+                                window.location.reload();
+                            });
+                        });
+
                     });
 
                     deleteButton.on('click', function () {
                         // Retrieve the event's unique identifier
                         const eventToDelete = eventObj.extendedProps.eventId as string;
 
-                        // Remove the event from localStorage
-                        localStorage.removeItem(eventToDelete);
+                        if (confirm("Confirm event delete?")){
+                            localStorage.removeItem(eventToDelete);
 
-                        // Hide the modal after deletion
-                        $('#eventDetailsModal').modal('hide');
+                            // Hide the modal after deletion
+                            $('#eventDetailsModal').modal('hide');
 
-                        // Refresh the page
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 500);
+                            // Refresh the page
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 500);
+                        }
+
                     });
-
-
 
                 }
 
@@ -578,13 +636,15 @@ function formatDate(dateString: string): string {
                     const eventDetailsModal = new bootstrap.Modal(eventDetailsModalElement);
                     eventDetailsModal.show();
                 }
-
-
             }
         });
         calendar.render();
     }
 
+    /**
+     * Creates and returns an array of all events in local storage. Each event contains all attributes and details
+     * from the object stored in local sotrage.
+     */
     function getEvents(): any[] {
         let events: any[] = [];
         const currentUser = sessionStorage.getItem("userName"); // Get the current user
@@ -606,7 +666,11 @@ function formatDate(dateString: string): string {
                             description: event.eventDesc,
                             coordinatorName: event.coorFullName,
                             coordinatorEmail: event.coorEmail,
-                            coordinatorUserName: event.coorUserName
+                            coordinatorUserName: event.coorUserName,
+                            coordinatorPhone: event.coorPhone,
+                            eventDate: event.eventDate,
+                            eventTime: event.eventTime
+
                         }
                     };
                     events.push(formattedEvent);
@@ -1214,8 +1278,6 @@ function formatDate(dateString: string): string {
     function DisplayEventsPage(): void {
         console.log("Called DisplayEventsPage...");
 
-        InitializeCalendar();
-
         $(function(): void {
             // Event listener for dropdown items
             $('.dropdown-item').on('click', function(): void {
@@ -1676,7 +1738,8 @@ function formatDate(dateString: string): string {
 
     //region Events Planning Page Functions
     /**
-     *
+     * Function called when the Event Planning page is called. It calls to initialize the calendar and contains the
+     * validation for the event form submission.
      */
     function DisplayEventPlanningPage(): void {
         console.log("Called DisplayEventPlanningPage...")
@@ -1701,7 +1764,6 @@ function formatDate(dateString: string): string {
         }
 
         InitializeCalendar();
-        LoadEventTable();
 
         $('#eventDescription').on('input', function() {
             const value: string = $(this).val() as string;
@@ -1744,6 +1806,9 @@ function formatDate(dateString: string): string {
 
     }
 
+    /**
+     * Validates the inputs on the event form and displays errors if the inputs are not correct
+     */
     function EventPlanFormValidation(): void {
 
         let eventNameError: string = "Event name should be between 5 and 30 characters. Numbers are allowed, but not special characters.";
@@ -1762,6 +1827,18 @@ function formatDate(dateString: string): string {
             /^\+?1?\d{10}$/, coorPhoneError);
     }
 
+    /**
+     * Takes all event information and creates an event Object, serializes the object and stores it in local storage.
+     * @param eventName
+     * @param coordinatorFullName
+     * @param coordinatorUserName
+     * @param coordinatorEmail
+     * @param coordinatorPhone
+     * @param eventDate
+     * @param eventTime
+     * @param eventDescription
+     * @constructor
+     */
     function AddEvent(eventName:string, coordinatorFullName:string, coordinatorUserName:string,
                       coordinatorEmail:string,coordinatorPhone:string,
                       eventDate:string, eventTime:string, eventDescription:string): void{
@@ -1773,52 +1850,6 @@ function formatDate(dateString: string): string {
         }
     }
 
-    function LoadEventTable(){
-        if (localStorage.length > 0) {
-            let eventList = document.getElementById("eventList") as HTMLElement;
-            let data = "";
-            let index = 1;
-
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && key.startsWith("event_")) { // Check if the key starts with 'event_'
-                    let event = new HarmonyHub.Event();
-                    let eventData = localStorage.getItem(key) as string;
-                    event.deserialize(eventData);
-
-                    // Assuming 'event' object has the properties after being deserialized
-                    data += `<tr><th scope="row" class="text-center">${index}</th>
-                            <td>${event.eventName}</td>
-                            <td>${event.coorFullName}</td>
-                            <td>${event.coorEmail}</td>
-                            <td>${event.coorPhone}</td>
-                            <td>${event.eventDate}</td>
-                            <td>${event.eventTime}</td>
-                            <td>${event.eventDesc}</td>
-                            <td>
-                                <button value="${key}" class="btn btn-primary btn-sm edit">
-                                    <i class="fas fa-edit fa-sm"></i> Edit
-                                </button>
-                                <button value="${key}" class="btn btn-danger btn-sm delete">
-                                    <i class="fas fa-trash-alt fa-sm"></i> Delete
-                                </button>
-                            </td>
-                         </tr>`;
-                    index++;
-                }
-            }
-            eventList.innerHTML = data;
-
-        }
-
-        $("button.delete").on("click", function () {
-
-            if (confirm("Confirm event delete?")){
-                localStorage.removeItem($(this).val() as string);
-            }
-            location.href = "/event_planning";
-        });
-    }
 
     //endregion
 
