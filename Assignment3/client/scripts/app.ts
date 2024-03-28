@@ -10,6 +10,7 @@
 "use strict";
 
 //region Globals
+
 interface GNewsAPIResponse {
     totalArticles: number;
     articles: Array<{
@@ -94,6 +95,7 @@ function formatDate(dateString: string): string {
     function CheckLogout(): boolean {
         return !!sessionStorage.getItem("logout");
     }
+
 
     /**
      *
@@ -494,6 +496,194 @@ function formatDate(dateString: string): string {
             $("#navMessageWrapper").remove();
         }, 6000);
     }
+    
+    // endregion
+
+    //region Calendar Functions
+
+    /**
+     * Initializes and loads the calendar. Set is the theme and loads events into the calendar using getEvents(). Also
+     * sets up the functionality of clicking on events in the calendar and allowing updates and deleting tof events.
+     */
+    function InitializeCalendar(): void {
+        let calendarEl = document.getElementById('calendar');
+        // @ts-ignore
+        let calendar = new FullCalendar.Calendar(calendarEl, {
+            timeZone: 'UTC',
+            themeSystem: 'bootstrap5',
+            events: getEvents(),
+            // @ts-ignore
+            // Creates modal pop-ups for events when clicked, with options
+            eventClick: function(info) {
+                const eventObj = info.event;
+
+                let details = '';
+
+                if (eventObj.start) {
+                    const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+                    const optionsTime = { hour: '2-digit', minute: '2-digit' };
+                    details = `<h3><u>${eventObj.title}</u></h3><br>
+                        <strong>Date:</strong> ${eventObj.start.toLocaleDateString(undefined, optionsDate)}<br/>
+                        <strong>Time:</strong> ${eventObj.start.toLocaleTimeString(undefined, optionsTime)}<br/>`;
+                } else {
+                    console.log('Event start date is null.');
+                }
+
+                if (eventObj.extendedProps) {
+                    details += `<strong>Coordinator:</strong> ${eventObj.extendedProps.coordinatorName}<br/>`;
+                    details += `<strong>Email:</strong> ${eventObj.extendedProps.coordinatorEmail}<br/>`;
+                    details += `<strong>Description:</strong> ${eventObj.extendedProps.description}<br/>`;
+                }
+
+                const currentUser = sessionStorage.getItem("userName");
+                // Clear previous buttons to avoid duplication
+                $('#eventModalFooter').empty();
+
+                if (eventObj.extendedProps.coordinatorUserName === currentUser) {
+                    const updateButton = $('<button id="updateEventBtn" class="btn btn-primary">Update</button>');
+                    const deleteButton = $('<button id="deleteEventBtn" class="btn btn-danger">Delete</button>');
+
+                    // Append buttons to the modal's footer
+                    $('#eventModalFooter').append(updateButton, deleteButton);
+
+
+                    updateButton.on('click', function () {
+
+                        const eventData = eventObj.extendedProps;
+
+                        $('#eventDetailsModal').modal('hide');
+
+                        $('#eventDetailsModal').on('hidden.bs.modal', function () {
+                            // Populate form fields with event data
+                            $('#editEventName').val(eventObj.title);
+                            $('#editCoordinatorEmail').val(eventData.coordinatorEmail);
+                            $('#editEventDate').val(eventData.eventDate);
+                            $('#editCoordinatorFullName').val(eventData.coordinatorName);
+                            $('#editCoordinatorPhone').val(eventData.coordinatorPhone);
+                            $('#editEventTime').val(eventData.eventTime);
+                            $('#editEventDescription').val(eventData.description);
+                            $('#coordinatorUserName').val(eventData.coordinatorUserName);
+
+                            // Show the edit event modal
+                            const editEventDetailsModalElement = document.getElementById('eventEditModal');
+                            if (editEventDetailsModalElement) {
+                                const editEventDetailsModal = new bootstrap.Modal(editEventDetailsModalElement);
+                                editEventDetailsModal.show();
+                            }
+
+                            // Ensure the 'hidden.bs.modal' event handler is removed after it runs to prevent duplication
+                            $(this).off('hidden.bs.modal');
+
+                            EventPlanFormValidation();
+
+                            $('#editEventFormSubmit').on('click', function() {
+
+                                // Read values from the form
+                                const eventName = $('#editEventName').val() as string;
+                                const coordinatorEmail = $('#editCoordinatorEmail').val() as string;
+                                const eventDate = $('#editEventDate').val() as string;
+                                const coordinatorFullName = $('#editCoordinatorFullName').val() as string;
+                                const coordinatorPhone = $('#editCoordinatorPhone').val() as string;
+                                const eventTime = $('#editEventTime').val() as string;
+                                const eventDescription = $('#editEventDescription').val() as string;
+                                const coordinatorUserName = $('#coordinatorUserName').val() as string;
+
+
+                                AddEvent(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone,
+                                    eventDate, eventTime, eventDescription);
+
+                                // Delete the old event object
+                                localStorage.removeItem(eventData.eventId);
+
+                                // Close the edit modal
+                                $('#eventEditModal').modal('hide');
+
+                                // Optional: Refresh the page or calendar view to reflect changes
+                                window.location.reload();
+                            });
+                        });
+
+                    });
+
+                    deleteButton.on('click', function () {
+                        // Retrieve the event's unique identifier
+                        const eventToDelete = eventObj.extendedProps.eventId as string;
+
+                        if (confirm("Confirm event delete?")){
+                            localStorage.removeItem(eventToDelete);
+
+                            // Hide the modal after deletion
+                            $('#eventDetailsModal').modal('hide');
+
+                            // Refresh the page
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 500);
+                        }
+
+                    });
+
+                }
+
+                // Create and append the Close button for all users
+                const closeButton = $('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                $('#eventModalFooter').append(closeButton);
+
+                const eventDetailsContainer = document.getElementById('eventDetails');
+                const eventDetailsModalElement = document.getElementById('eventDetailsModal');
+                if (eventDetailsContainer && eventDetailsModalElement) {
+                    eventDetailsContainer.innerHTML = details;
+                    const eventDetailsModal = new bootstrap.Modal(eventDetailsModalElement);
+                    eventDetailsModal.show();
+                }
+            }
+        });
+        calendar.render();
+    }
+
+    /**
+     * Creates and returns an array of all events in local storage. Each event contains all attributes and details
+     * from the object stored in local sotrage.
+     */
+    function getEvents(): any[] {
+        let events: any[] = [];
+        const currentUser = sessionStorage.getItem("userName"); // Get the current user
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i) as string;
+            if (key && key.startsWith("event_")) { // Check if the key starts with 'event_'
+                let event = new HarmonyHub.Event();
+                let eventData = localStorage.getItem(key) as string;
+                event.deserialize(eventData);
+
+                try {
+                    const formattedEvent = {
+                        title: event.eventName,
+                        start: event.eventDate + 'T' + event.eventTime,
+                        backgroundColor: event.coorUserName === currentUser ? '#a2f16d' : '#3a84d0', // Conditional color
+                        extendedProps: {
+                            eventId: key,
+                            description: event.eventDesc,
+                            coordinatorName: event.coorFullName,
+                            coordinatorEmail: event.coorEmail,
+                            coordinatorUserName: event.coorUserName,
+                            coordinatorPhone: event.coorPhone,
+                            eventDate: event.eventDate,
+                            eventTime: event.eventTime
+
+                        }
+                    };
+                    events.push(formattedEvent);
+                } catch (e) {
+                    console.error("Error parsing event data from localStorage for key:", key, "; Error:", e);
+                }
+
+            }
+        }
+        return events;
+    }
+
+
     //endregion
 
     //region Home Page Functions
@@ -1462,6 +1652,7 @@ function formatDate(dateString: string): string {
                     // If credentials are valid, log the user in and redirect
                     if (success) {
                         sessionStorage.setItem("user", newUser.serialize() as string);
+                        sessionStorage.setItem("userName", userName as string);
                         location.href = "/home";
                     } else {
                         // Reset form and display error message if credentials are invalid
@@ -1547,11 +1738,119 @@ function formatDate(dateString: string): string {
 
     //region Events Planning Page Functions
     /**
-     *
+     * Function called when the Event Planning page is called. It calls to initialize the calendar and contains the
+     * validation for the event form submission.
      */
     function DisplayEventPlanningPage(): void {
+        console.log("Called DisplayEventPlanningPage...")
+
+        const userName = sessionStorage.getItem('userName') as string;
+
+        // Check if userName exists
+        if (userName !== null) {
+            // Get the input element by its ID
+            const coordinatorUserNameInput =
+                    document.getElementById('coordinatorUserName') as HTMLInputElement;
+
+            // Check if the element exists and is an input element
+            if (coordinatorUserNameInput) {
+                // Set the value of the input field with the userName
+                coordinatorUserNameInput.value = userName;
+            } else {
+                console.error('Input element #coordinatorUserName not found');
+            }
+        } else {
+            console.log('No userName found in session storage');
+        }
+
+        InitializeCalendar();
+
+        $('#eventDescription').on('input', function() {
+            const value: string = $(this).val() as string;
+            const currentLength: number = value.length;
+            const maxLength: number = parseInt($(this).attr('maxlength') || '0');
+            $('#charCount').text(`${currentLength}/${maxLength}`);
+        });
+
+        EventPlanFormValidation();
+
+        $("#eventFormSubmit").on("click", (): void => {
+            if (CheckSubmissionValidity()) {
+
+                const eventName = $("#eventName").val() as string;
+                const coordinatorFullName = $("#coordinatorFullName").val() as string;
+                const coordinatorUserName = $("#coordinatorUserName").val() as string;
+                const coordinatorEmail = $("#coordinatorEmail").val() as string;
+                const coordinatorPhone = $("#coordinatorPhone").val() as string;
+                const eventDate = $("#eventDate").val() as string;
+                const eventTime = $("#eventTime").val() as string;
+                const eventDescription = $("#eventDescription").val() as string;
+
+                AddEvent(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone,
+                    eventDate, eventTime, eventDescription);
+
+                // Close the modal after submission
+                const eventPlanningModalEl = document.getElementById('eventPlanningModal');
+                if (eventPlanningModalEl) {
+                    const eventPlanningModal = bootstrap.Modal.getInstance(eventPlanningModalEl);
+                    eventPlanningModal?.hide();
+                    location.href = "/event_planning";
+                }
+
+            } else {
+                // Handle the invalid case
+                console.log("Form is not valid.");
+            }
+        });
+
 
     }
+
+    /**
+     * Validates the inputs on the event form and displays errors if the inputs are not correct
+     */
+    function EventPlanFormValidation(): void {
+
+        let eventNameError: string = "Event name should be between 5 and 30 characters. Numbers are allowed, but not special characters.";
+        let coorNameError: string = "First name should start with a capital letter and can include hyphens, " +
+            "apostrophes, or spaces for compound names.";
+        let coorEmailError: string = "Please enter a valid email address in the format: yourname@example.com.";
+        let coorPhoneError: string = "Please enter a valid 10-digit phone number, with or without the country code.";
+
+        ValidateOnEvent($("#eventName"), "blur", $("#eventFormSubmit"),
+            /^[A-Za-z0-9 '_-]{5,30}$/, eventNameError);
+        ValidateOnEvent($("#coordinatorFullName"), "blur", $("#eventFormSubmit"),
+            /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, coorNameError);
+        ValidateOnEvent($("#coordinatorEmail"), "blur", $("#eventFormSubmit"),
+            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, coorEmailError);
+        ValidateOnEvent($("#coordinatorPhone"), "blur", $("#eventFormSubmit"),
+            /^\+?1?\d{10}$/, coorPhoneError);
+    }
+
+    /**
+     * Takes all event information and creates an event Object, serializes the object and stores it in local storage.
+     * @param eventName
+     * @param coordinatorFullName
+     * @param coordinatorUserName
+     * @param coordinatorEmail
+     * @param coordinatorPhone
+     * @param eventDate
+     * @param eventTime
+     * @param eventDescription
+     * @constructor
+     */
+    function AddEvent(eventName:string, coordinatorFullName:string, coordinatorUserName:string,
+                      coordinatorEmail:string,coordinatorPhone:string,
+                      eventDate:string, eventTime:string, eventDescription:string): void{
+        let event = new HarmonyHub.Event(eventName, coordinatorFullName, coordinatorUserName,
+            coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
+        if (event.serialize()) {
+            let eventKey = "event_" + event.eventName + "_" + Date.now();
+            localStorage.setItem(eventKey, event.serialize() as string);
+        }
+    }
+
+
     //endregion
 
     //region  Statistics Page Functions

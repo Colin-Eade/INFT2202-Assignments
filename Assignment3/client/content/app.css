@@ -249,3 +249,48 @@ main {
     height: auto;
     display: block;
 }
+
+
+#calendar-container {
+    width: 90%;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+@media (min-width: 768px) {
+    #calendar-container {
+        width: 85%; /* Larger screens get a smaller calendar, percentage-wise */
+    }
+}
+
+@media (min-width: 1024px) {
+    #calendar-container {
+        width: 1000px; /* Very large screens use a fixed width */
+    }
+}
+
+.fc-header-toolbar {
+    /*
+    the calendar will be butting up against the edges,
+    but let's scoot in the header's buttons
+    */
+    padding-top: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.fc .fc-daygrid-day-number {
+    color: rgba(0, 0, 0, 0.7) /* Day numbers in month view */
+}
+.fc .fc-col-header-cell{
+    color: rgba(0, 0, 0, 0.7)  /* Column headers like "Sunday, Monday, etc." */
+}
+.fc .fc-button { /* Buttons like "today", "month", "week" */
+    color: #a19e9e; /* Dark grey color; replace with your desired color */
+}
+
+
+

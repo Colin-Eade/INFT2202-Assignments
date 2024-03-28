@@ -242,6 +242,129 @@ function formatDate(dateString) {
             $("#navMessageWrapper").remove();
         }, 6000);
     }
+    function InitializeCalendar() {
+        let calendarEl = document.getElementById('calendar');
+        let calendar = new FullCalendar.Calendar(calendarEl, {
+            timeZone: 'UTC',
+            themeSystem: 'bootstrap5',
+            events: getEvents(),
+            eventClick: function (info) {
+                const eventObj = info.event;
+                let details = '';
+                if (eventObj.start) {
+                    const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+                    const optionsTime = { hour: '2-digit', minute: '2-digit' };
+                    details = `<h3><u>${eventObj.title}</u></h3><br>
+                        <strong>Date:</strong> ${eventObj.start.toLocaleDateString(undefined, optionsDate)}<br/>
+                        <strong>Time:</strong> ${eventObj.start.toLocaleTimeString(undefined, optionsTime)}<br/>`;
+                }
+                else {
+                    console.log('Event start date is null.');
+                }
+                if (eventObj.extendedProps) {
+                    details += `<strong>Coordinator:</strong> ${eventObj.extendedProps.coordinatorName}<br/>`;
+                    details += `<strong>Email:</strong> ${eventObj.extendedProps.coordinatorEmail}<br/>`;
+                    details += `<strong>Description:</strong> ${eventObj.extendedProps.description}<br/>`;
+                }
+                const currentUser = sessionStorage.getItem("userName");
+                $('#eventModalFooter').empty();
+                if (eventObj.extendedProps.coordinatorUserName === currentUser) {
+                    const updateButton = $('<button id="updateEventBtn" class="btn btn-primary">Update</button>');
+                    const deleteButton = $('<button id="deleteEventBtn" class="btn btn-danger">Delete</button>');
+                    $('#eventModalFooter').append(updateButton, deleteButton);
+                    updateButton.on('click', function () {
+                        const eventData = eventObj.extendedProps;
+                        $('#eventDetailsModal').modal('hide');
+                        $('#eventDetailsModal').on('hidden.bs.modal', function () {
+                            $('#editEventName').val(eventObj.title);
+                            $('#editCoordinatorEmail').val(eventData.coordinatorEmail);
+                            $('#editEventDate').val(eventData.eventDate);
+                            $('#editCoordinatorFullName').val(eventData.coordinatorName);
+                            $('#editCoordinatorPhone').val(eventData.coordinatorPhone);
+                            $('#editEventTime').val(eventData.eventTime);
+                            $('#editEventDescription').val(eventData.description);
+                            $('#coordinatorUserName').val(eventData.coordinatorUserName);
+                            const editEventDetailsModalElement = document.getElementById('eventEditModal');
+                            if (editEventDetailsModalElement) {
+                                const editEventDetailsModal = new bootstrap.Modal(editEventDetailsModalElement);
+                                editEventDetailsModal.show();
+                            }
+                            $(this).off('hidden.bs.modal');
+                            EventPlanFormValidation();
+                            $('#editEventFormSubmit').on('click', function () {
+                                const eventName = $('#editEventName').val();
+                                const coordinatorEmail = $('#editCoordinatorEmail').val();
+                                const eventDate = $('#editEventDate').val();
+                                const coordinatorFullName = $('#editCoordinatorFullName').val();
+                                const coordinatorPhone = $('#editCoordinatorPhone').val();
+                                const eventTime = $('#editEventTime').val();
+                                const eventDescription = $('#editEventDescription').val();
+                                const coordinatorUserName = $('#coordinatorUserName').val();
+                                AddEvent(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
+                                localStorage.removeItem(eventData.eventId);
+                                $('#eventEditModal').modal('hide');
+                                window.location.reload();
+                            });
+                        });
+                    });
+                    deleteButton.on('click', function () {
+                        const eventToDelete = eventObj.extendedProps.eventId;
+                        if (confirm("Confirm event delete?")) {
+                            localStorage.removeItem(eventToDelete);
+                            $('#eventDetailsModal').modal('hide');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 500);
+                        }
+                    });
+                }
+                const closeButton = $('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                $('#eventModalFooter').append(closeButton);
+                const eventDetailsContainer = document.getElementById('eventDetails');
+                const eventDetailsModalElement = document.getElementById('eventDetailsModal');
+                if (eventDetailsContainer && eventDetailsModalElement) {
+                    eventDetailsContainer.innerHTML = details;
+                    const eventDetailsModal = new bootstrap.Modal(eventDetailsModalElement);
+                    eventDetailsModal.show();
+                }
+            }
+        });
+        calendar.render();
+    }
+    function getEvents() {
+        let events = [];
+        const currentUser = sessionStorage.getItem("userName");
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith("event_")) {
+                let event = new HarmonyHub.Event();
+                let eventData = localStorage.getItem(key);
+                event.deserialize(eventData);
+                try {
+                    const formattedEvent = {
+                        title: event.eventName,
+                        start: event.eventDate + 'T' + event.eventTime,
+                        backgroundColor: event.coorUserName === currentUser ? '#a2f16d' : '#3a84d0',
+                        extendedProps: {
+                            eventId: key,
+                            description: event.eventDesc,
+                            coordinatorName: event.coorFullName,
+                            coordinatorEmail: event.coorEmail,
+                            coordinatorUserName: event.coorUserName,
+                            coordinatorPhone: event.coorPhone,
+                            eventDate: event.eventDate,
+                            eventTime: event.eventTime
+                        }
+                    };
+                    events.push(formattedEvent);
+                }
+                catch (e) {
+                    console.error("Error parsing event data from localStorage for key:", key, "; Error:", e);
+                }
+            }
+        }
+        return events;
+    }
     function DisplayHomePage() {
         console.log("Called DisplayHomePage...");
         let page = 1;
@@ -820,6 +943,7 @@ function formatDate(dateString) {
                     }
                     if (success) {
                         sessionStorage.setItem("user", newUser.serialize());
+                        sessionStorage.setItem("userName", userName);
                         location.href = "/home";
                     }
                     else {
@@ -871,6 +995,68 @@ function formatDate(dateString) {
         console.log("Called DisplayCareersPage...");
     }
     function DisplayEventPlanningPage() {
+        console.log("Called DisplayEventPlanningPage...");
+        const userName = sessionStorage.getItem('userName');
+        if (userName !== null) {
+            const coordinatorUserNameInput = document.getElementById('coordinatorUserName');
+            if (coordinatorUserNameInput) {
+                coordinatorUserNameInput.value = userName;
+            }
+            else {
+                console.error('Input element #coordinatorUserName not found');
+            }
+        }
+        else {
+            console.log('No userName found in session storage');
+        }
+        InitializeCalendar();
+        $('#eventDescription').on('input', function () {
+            const value = $(this).val();
+            const currentLength = value.length;
+            const maxLength = parseInt($(this).attr('maxlength') || '0');
+            $('#charCount').text(`${currentLength}/${maxLength}`);
+        });
+        EventPlanFormValidation();
+        $("#eventFormSubmit").on("click", () => {
+            if (CheckSubmissionValidity()) {
+                const eventName = $("#eventName").val();
+                const coordinatorFullName = $("#coordinatorFullName").val();
+                const coordinatorUserName = $("#coordinatorUserName").val();
+                const coordinatorEmail = $("#coordinatorEmail").val();
+                const coordinatorPhone = $("#coordinatorPhone").val();
+                const eventDate = $("#eventDate").val();
+                const eventTime = $("#eventTime").val();
+                const eventDescription = $("#eventDescription").val();
+                AddEvent(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
+                const eventPlanningModalEl = document.getElementById('eventPlanningModal');
+                if (eventPlanningModalEl) {
+                    const eventPlanningModal = bootstrap.Modal.getInstance(eventPlanningModalEl);
+                    eventPlanningModal?.hide();
+                    location.href = "/event_planning";
+                }
+            }
+            else {
+                console.log("Form is not valid.");
+            }
+        });
+    }
+    function EventPlanFormValidation() {
+        let eventNameError = "Event name should be between 5 and 30 characters. Numbers are allowed, but not special characters.";
+        let coorNameError = "First name should start with a capital letter and can include hyphens, " +
+            "apostrophes, or spaces for compound names.";
+        let coorEmailError = "Please enter a valid email address in the format: yourname@example.com.";
+        let coorPhoneError = "Please enter a valid 10-digit phone number, with or without the country code.";
+        ValidateOnEvent($("#eventName"), "blur", $("#eventFormSubmit"), /^[A-Za-z0-9 '_-]{5,30}$/, eventNameError);
+        ValidateOnEvent($("#coordinatorFullName"), "blur", $("#eventFormSubmit"), /^[A-Z][a-z]+(?:[ '-][A-Z][a-z]+)*$/, coorNameError);
+        ValidateOnEvent($("#coordinatorEmail"), "blur", $("#eventFormSubmit"), /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/, coorEmailError);
+        ValidateOnEvent($("#coordinatorPhone"), "blur", $("#eventFormSubmit"), /^\+?1?\d{10}$/, coorPhoneError);
+    }
+    function AddEvent(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription) {
+        let event = new HarmonyHub.Event(eventName, coordinatorFullName, coordinatorUserName, coordinatorEmail, coordinatorPhone, eventDate, eventTime, eventDescription);
+        if (event.serialize()) {
+            let eventKey = "event_" + event.eventName + "_" + Date.now();
+            localStorage.setItem(eventKey, event.serialize());
+        }
     }
     function DisplayStatisticsPage() {
         console.log("Called DisplayStatisticsPage...");
