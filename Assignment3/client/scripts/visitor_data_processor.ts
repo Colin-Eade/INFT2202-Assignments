@@ -3,7 +3,7 @@
 namespace HarmonyHub {
 
     /**
-     *
+     * Represents the structure of a visitor's data.
      */
     interface Visitor {
         visitDate: string;
@@ -13,13 +13,14 @@ namespace HarmonyHub {
     }
 
     /**
-     *
+     * Provides static methods to process and analyze visitor data.
      */
     export class VisitorDataProcessor {
 
         /**
+         * Fetches visitor data from the visitor_statistics.json file and passes it to the provided callback function.
          *
-         * @param callback
+         * @param callback - A function to be called with the fetched visitor data.
          */
         static GetVisitorData(callback: (data: Visitor[]) => void): void {
             $.get("./data/visitor_statistics.json", function (data): void {
@@ -28,8 +29,11 @@ namespace HarmonyHub {
         }
 
         /**
+         * Aggregates visitor data by month and year, providing counts of total visitors, device types used,
+         * and new vs returning visitors for each time period.
          *
-         * @param visitors
+         * @param visitors - An array of Visitor objects to aggregate.
+         * @returns An object mapping each month and year to the aggregated visitor statistics for that period.
          */
         static GetCountsByMonthYear(visitors: Visitor[]): Record<string, {
             visitors: number,
@@ -64,8 +68,10 @@ namespace HarmonyHub {
         }
 
         /**
+         * Calculates the cumulative total of visits over time, sorted by month and year.
          *
-         * @param visitors
+         * @param visitors - An array of Visitor objects to process.
+         * @returns A record mapping each month and year to the cumulative total of visits up to that time.
          */
         static GetTotalVisitsOverTime(visitors: Visitor[]): Record<string, number> {
             let monthlyData: Record<string, number> = {};
@@ -92,8 +98,10 @@ namespace HarmonyHub {
         }
 
         /**
+         * Counts the number of visits from each location.
          *
-         * @param visitors
+         * @param visitors - An array of Visitor objects to analyze.
+         * @returns A record mapping locations to the number of visits from each location.
          */
         static GetLocationCounts(visitors: Visitor[]): Record<string, number> {
             let locationCounts: Record<string, number> = {};

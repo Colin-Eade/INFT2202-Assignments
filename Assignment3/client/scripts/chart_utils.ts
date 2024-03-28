@@ -3,18 +3,21 @@
 namespace HarmonyHub {
 
     /**
-     *
+     * Provides static methods to render different types of charts using the Chart.js library.
      */
     export class ChartUtils {
 
         /**
-         *
+         * Holds the currently active Chart.js chart instance or null if no chart is active.
          */
         static chart: Chart | null = null;
 
         /**
+         * Renders a bar chart displaying various visitor statistics including total visitors, new vs returning visitors,
+         * and device type usage.
          *
-         * @param data
+         * @param data - A record mapping time intervals to visitor statistics including total visitors,
+         * device types, and new vs returning visitors counts.
          */
         static RenderCountsBarChart(data: Record<string, {
             visitors: number,
@@ -92,14 +95,25 @@ namespace HarmonyHub {
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Monthly Visitor Data'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
                 }
             });
         }
 
         /**
+         * Renders a line chart displaying the total number of visits over time.
          *
-         * @param data
+         * @param data - A record mapping time intervals to the total number of visits during those intervals.
          */
         static RenderVisitsOverTimeChart(data: Record<string, number>): void {
 
@@ -138,13 +152,23 @@ namespace HarmonyHub {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Total Visitors Over Time'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
                 }
             });
         }
 
         /**
+         * Renders a pie chart displaying the distribution of visits from different locations.
          *
-         * @param data
+         * @param data - A record mapping locations to the number of visits from those locations.
          */
         static RenderLocationPieChart(data: Record<string, number>): void {
 
@@ -178,12 +202,23 @@ namespace HarmonyHub {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Total Visitors Per Province/Territory'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                            onClick: (e: MouseEvent) => e.stopPropagation()
+                        }
+                    }
                 }
             });
         }
 
         /**
-         *
+         * Destroys the currently active Chart.js chart instance if it exists.
          */
         static DestroyActiveChart(): void {
             if (this.chart) {
@@ -192,8 +227,10 @@ namespace HarmonyHub {
         }
 
         /**
+         * Generates sets of background and border colors for chart elements.
          *
-         * @param dataLength
+         * @param dataLength - The number of data points for which colors need to be generated.
+         * @returns An object containing arrays of background and border colors for the chart elements.
          */
         static GenerateColorSets(dataLength: number): { backgroundColors: string[], borderColors: string[] } {
             let backgroundColors: string[] = [];

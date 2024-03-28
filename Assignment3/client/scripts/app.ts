@@ -96,7 +96,9 @@ function formatDate(dateString: string): string {
     }
 
     /**
-     *
+     * Restricts access to protected routes for unauthorized users.
+     * This function checks if the current URL is in the `protected_routes` array. If it is and there's no
+     * "user" key in sessionStorage, it redirects the user to the login page.
      */
     function AuthGuard(): void {
         let protected_routes: string[] = ["/event_planning", "/statistics"];
@@ -560,7 +562,9 @@ function formatDate(dateString: string): string {
     }
 
     /**
-     *
+     * Displays placeholder content in the #homeArticleArea element.
+     * This function generates a placeholder HTML structure consisting of three list-group items with
+     * empty headings and paragraphs styled as placeholders for the G News API articles.
      */
     function ShowPlaceholder(): void {
         let placeholdersHtml: string = '';
@@ -569,12 +573,12 @@ function formatDate(dateString: string): string {
         <div class="list-group-item mt-1 border-top">
             <div class="placeholder-glow">
                 <h5 class="placeholder col-12"></h5>
-                <h5 class="mb-1 placeholder col-6"></h5><br>
+                <h5 class="mb-1 placeholder col-6 text-muted"></h5><br>
                 <p class="mb-2 placeholder col-5 text-muted small"></p><br>
-                <p class="mb-1 placeholder col-12"></p>
-                <p class="mb-1 placeholder col-12"></p>
-                <p class="mb-1 placeholder col-12"></p>
-                <p class="mb-1 placeholder col-6"></p>
+                <p class="mb-1 placeholder col-12 text-muted"></p>
+                <p class="mb-1 placeholder col-12 text-muted"></p>
+                <p class="mb-1 placeholder col-12 text-muted"></p>
+                <p class="mb-1 placeholder col-6 text-muted"></p>
             </div>
         </div>`;
         }
@@ -850,7 +854,7 @@ function formatDate(dateString: string): string {
     }
     //endregion
 
-    //region Blog Page Functions
+    //region News Page Functions
     /**
      * Called when the Blog page is displayed, logs to the console and updates the DOM to display "Community News"
      * instead of "Community Blog"
@@ -1556,7 +1560,8 @@ function formatDate(dateString: string): string {
 
     //region  Statistics Page Functions
     /**
-     *
+     * Initializes the statistics page content.
+     * This function fetches visitor data, renders charts, and handles tab clicks for the statistics page.
      */
     function DisplayStatisticsPage(): void {
         console.log("Called DisplayStatisticsPage...");

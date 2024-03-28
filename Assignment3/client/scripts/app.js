@@ -286,12 +286,12 @@ function formatDate(dateString) {
         <div class="list-group-item mt-1 border-top">
             <div class="placeholder-glow">
                 <h5 class="placeholder col-12"></h5>
-                <h5 class="mb-1 placeholder col-6"></h5><br>
+                <h5 class="mb-1 placeholder col-6 text-muted"></h5><br>
                 <p class="mb-2 placeholder col-5 text-muted small"></p><br>
-                <p class="mb-1 placeholder col-12"></p>
-                <p class="mb-1 placeholder col-12"></p>
-                <p class="mb-1 placeholder col-12"></p>
-                <p class="mb-1 placeholder col-6"></p>
+                <p class="mb-1 placeholder col-12 text-muted"></p>
+                <p class="mb-1 placeholder col-12 text-muted"></p>
+                <p class="mb-1 placeholder col-12 text-muted"></p>
+                <p class="mb-1 placeholder col-6 text-muted"></p>
             </div>
         </div>`;
         }
