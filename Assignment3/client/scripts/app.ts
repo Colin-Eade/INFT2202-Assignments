@@ -511,7 +511,7 @@ function formatDate(dateString: string): string {
         let calendarEl = document.getElementById('calendar');
         // @ts-ignore
         let calendar = new FullCalendar.Calendar(calendarEl, {
-            timeZone: 'UTC',
+            timeZone: 'local',
             themeSystem: 'bootstrap5',
             events: getEvents(),
             // @ts-ignore

@@ -245,7 +245,7 @@ function formatDate(dateString) {
     function InitializeCalendar() {
         let calendarEl = document.getElementById('calendar');
         let calendar = new FullCalendar.Calendar(calendarEl, {
-            timeZone: 'UTC',
+            timeZone: 'local',
             themeSystem: 'bootstrap5',
             events: getEvents(),
             eventClick: function (info) {
