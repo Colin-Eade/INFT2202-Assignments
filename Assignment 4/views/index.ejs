@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="author" content="Colin Eade, Megan Clarke">
+
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="@fortawesome/fontawesome-free/css/all.css">
+  <link href=" https://cdn.jsdelivr.net/npm/fullcalendar@5.0.0/main.min.css " rel="stylesheet">
+  <link rel="stylesheet" href="content/app.css">
+  <link rel="icon" type="image/svg+xml" href="./assets/img/favicon/HarmonyHub.svg">
+
+  <script src="scripts/namespace.js"></script>
+  <script src="scripts/user.js"></script>
+  <script src="scripts/visitor_data_processor.js"></script>
+  <script src="scripts/chart_utils.js"></script>
+  <script src="scripts/event.js"></script>
+
+
+</head>
+
+<body id="<%= page %>" class="d-flex flex-column min-vh-100">
+
+<header>
+  <%- include('./components/header') %>
+</header>
+
+<main class="container flex-grow-1">
+  <%- include('./content/' + page) %>
+</main>
+
+<footer>
+  <%- include('./components/footer') %>
+</footer>
+
+<script src="jquery/dist/jquery.min.js"></script>
+<script src="bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="chart.js/dist/chart.umd.js"></script>
+<script src="lodash/lodash.min.js"></script>
+<script src=" https://cdn.jsdelivr.net/npm/fullcalendar@5.0.0/main.min.js "></script>
+<script src="scripts/app.js"></script>
+
+</body>
+
+</html>

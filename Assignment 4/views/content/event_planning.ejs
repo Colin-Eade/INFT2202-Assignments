@@ -1,0 +1,190 @@
+<!--
+    Name: Colin Eade (ID:100329105) and Megan Clarke (ID:100881229).
+    Date: 2024 Mar 24
+    File: event_planning.ejs
+    Description: This is the events page for the Harmony Hub website. It is a placeholder for an injection of
+                  a Full Calendar (https://fullcalendar.io/) to display events suggest by users.
+-->
+
+<h1 class="mt-3 text-center">Event Planning</h1>
+
+<div class="row justify-content-center mt-3">
+    <p  class="mt-3 text-center">
+        Have an idea for an event? Need to book some space at our recreational centre?<br/>
+        Click the button below to propose an event to our board.<br/>
+        You can view all events suggested by other users, but can only update or delete those that you have created.
+    </p>
+    <div class="d-flex justify-content-center">
+        <button id="openModalButton" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventPlanningModal">
+            <i class="fa-regular fa-calendar-plus"></i> Propose an Event
+        </button>
+
+    </div>
+    <div id="calendar-container" class="container-md mt-3">
+        <div id="calendar"></div>
+    </div>
+    <!-- Add Event Modal -->
+    <div class="modal fade" id="eventPlanningModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Plan New Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="EventPlanningForm">
+                        <div class="row">
+                            <!-- Left Column -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="eventName" class="form-label">Event Name</label>
+                                        <div class="input-group">
+                                            <input id="eventName" type="text" class="form-control" name="eventName">
+                                        </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="coordinatorEmail" class="form-label">Coordinator Email</label>
+                                    <div class="input-group">
+                                    <input id="coordinatorEmail" type="email" class="form-control" name="coordinatorEmail">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eventDate" class="form-label">Event Date</label>
+                                    <div class="input-group">
+                                    <input id="eventDate" type="date" class="form-control" name="eventDate">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="coordinatorFullName" class="form-label">Coordinator Full Name</label>
+                                    <div class="input-group">
+                                    <input id="coordinatorFullName" type="text" class="form-control" name="coordinatorFullName">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="coordinatorPhone" class="form-label">Coordinator Phone Number</label>
+                                    <div class="input-group">
+                                    <input id="coordinatorPhone" type="text" class="form-control" name="coordinatorPhone">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eventTime" class="form-label">Event Time</label>
+                                    <div class="input-group">
+                                    <input id="eventTime" type="time" class="form-control" name="eventTime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDescription" class="form-label">Brief Event Description</label>
+                            <textarea id="eventDescription" class="form-control" name="eventDescription" rows="2" maxlength="300"></textarea>
+                            <span id="charCount">0/200</span>
+                            <input type="hidden" id="coordinatorUserName" name="coordinatorUserName" value="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="eventFormSubmit" type="button" class="btn btn-primary">
+                        <i class="fa-regular fa-calendar-plus"></i> Submit Event
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Edit Event Modal -->
+    <div class="modal fade" id="eventEditModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Edit Your Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="EventEditForm">
+                        <div class="row">
+                            <!-- Left Column -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editEventName" class="form-label">Event Name</label>
+                                    <div class="input-group">
+                                    <input id="editEventName" type="text" class="form-control" name="editEventName">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCoordinatorEmail" class="form-label">Coordinator Email</label>
+                                    <div class="input-group">
+                                    <input id="editCoordinatorEmail" type="email" class="form-control" name="editCoordinatorEmail">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editEventDate" class="form-label">Event Date</label>
+                                    <div class="input-group">
+                                    <input id="editEventDate" type="date" class="form-control" name="editEventDate">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editCoordinatorFullName" class="form-label">Coordinator Full Name</label>
+                                    <div class="input-group">
+                                    <input id="editCoordinatorFullName" type="text" class="form-control" name="editCoordinatorFullName">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCoordinatorPhone" class="form-label">Coordinator Phone Number</label>
+                                    <div class="input-group">
+                                    <input id="editCoordinatorPhone" type="text" class="form-control" name="editCoordinatorPhone">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editEventTime" class="form-label">Event Time</label>
+                                    <div class="input-group">
+                                    <input id="editEventTime" type="time" class="form-control" name="editEventTime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventDescription" class="form-label">Brief Event Description</label>
+                            <textarea id="editEventDescription" class="form-control" name="editEventDescription" rows="2" maxlength="300"></textarea>
+                            <span id="charCount">0/200</span>
+                            <input type="hidden" id="coordinatorUserName" name="coordinatorUserName" value="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="editEventFormSubmit" type="button" class="btn btn-primary">
+                        <i class="fa-regular fa-calendar-plus"></i> Save Changes
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Event Details Modal -->
+    <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventDetailsModalLabel">Event Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="eventDetails"></p>
+                </div>
+                <div class="modal-footer" id="eventModalFooter">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

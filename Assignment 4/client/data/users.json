@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "emailAddress": "johnsmith@example.com",
+      "phone": "1234567890",
+      "address": "123 Example St",
+      "birthday": "1990-04-15",
+      "userName": "John123",
+      "password": "Abc123!!"
+    },
+    {
+      "firstName": "Admin",
+      "lastName": "Admin",
+      "emailAddress": "admin@admin.com",
+      "phone": "1234567890",
+      "address": "123 Example St",
+      "birthday": "1990-04-15",
+      "userName": "Admin",
+      "password": "admin"
+    }
+  ]
+}
