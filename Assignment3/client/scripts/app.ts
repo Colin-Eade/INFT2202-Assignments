@@ -33,7 +33,6 @@ interface ProjectData {
 }
 
 interface EventData {
-
     eventId: string;
     eventName: string;
     eventLocation: string;
