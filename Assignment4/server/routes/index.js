@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = __importDefault(require("../models/user"));
 const chatMessage_1 = __importDefault(require("../models/chatMessage"));
+const event_1 = __importDefault(require("../models/event"));
 const utils_1 = require("../utils");
 const passport_1 = __importDefault(require("passport"));
 const router = express_1.default.Router();
