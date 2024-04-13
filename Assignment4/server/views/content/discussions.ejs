@@ -4,6 +4,7 @@
     <%- messages %>
 <% } %>
 
+<!-- Display all chatMessages from collection -->
 <% for(i = 0; i < chatMessages.length; i ++) { %>
 <div class="media mb-3 card border-0 bg-light">
     <div class="card-body">
@@ -20,11 +21,13 @@
                     }) %>
                 </small>
             </h5>
+            <!-- Options for editing and deleting messages if the user made the message or if the user is an admin -->
             <% if (chatMessages[i].username === user.username || user.type === "admin") { %>
                 <button class="nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
                     <i class="fa-solid fa-ellipsis"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
+                    <!-- Option for editing and deleting messages if the user made the message -->
                     <% if(chatMessages[i].username === user.username) { %>
                         <li>
                             <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editMessageModal-<%= chatMessages[i]._id %>">Edit Message</button>
@@ -34,7 +37,7 @@
                         <a href="/delete_message/<%= chatMessages[i]._id %>" class="dropdown-item">Delete Message</a>
                     </li>
                 </ul>
-
+                <!-- Modal popup for editing and submitting the modified message -->
                 <% if(chatMessages[i].username === user.username) { %>
                     <div class="modal fade" id="editMessageModal-<%= chatMessages[i]._id %>" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
@@ -61,6 +64,7 @@
             <% } %>
         </div>
         <p class="mb-1"><%= chatMessages[i].content %></p>
+        <!-- Only display the edit date if a message has been edited -->
         <% if (chatMessages[i].editDate) { %>
             <p class="mb-1 text-muted small">
                 Last edited: <%= new Date(chatMessages[i].editDate).toLocaleString('en-US', {
@@ -77,6 +81,7 @@
     </div>
 </div>
 <% } %>
+<!-- Form to add a new message -->
 <div class="container fixed-bottom" style="bottom: 175px;">
     <form id="chatForm" class="input-group" method="post" action="/submit_message">
         <input type="hidden" name="username" value="<%= user.username %>">
