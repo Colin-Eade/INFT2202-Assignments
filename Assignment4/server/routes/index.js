@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = __importDefault(require("../models/user"));
+const event_1 = __importDefault(require("../models/event"));
 const utils_1 = require("../utils");
 const passport_1 = __importDefault(require("passport"));
 const router = express_1.default.Router();
@@ -25,7 +26,13 @@ router.get('/gallery', function (req, res, next) {
     res.render('index', { title: `${titlePrefix} Gallery`, page: "gallery", displayName: (0, utils_1.UserDisplayName)(req) });
 });
 router.get('/events', function (req, res, next) {
-    res.render('index', { title: `${titlePrefix} Events`, page: "events", displayName: (0, utils_1.UserDisplayName)(req) });
+    event_1.default.find().then(function (data) {
+        console.log(data);
+        res.render('index', { title: `${titlePrefix} Events`, page: "events", events: data, displayName: (0, utils_1.UserDisplayName)(req) });
+    }).catch(function (err) {
+        console.error("Error reading events from Database - " + err);
+        res.end();
+    });
 });
 router.get('/news', function (req, res, next) {
     res.render('index', { title: `${titlePrefix} News`, page: "news", displayName: (0, utils_1.UserDisplayName)(req) });
@@ -103,7 +110,7 @@ router.post('/delete_profile', utils_1.AuthGuard, function (req, res, next) {
     user_1.default.deleteOne({ _id: req.body.id }).then(function () {
         req.flash("loginMessage", '<div class="alert alert-success">Account deletion successful!</div>');
         res.redirect("/login");
-    }).catch(function (err) {
+    }).catch(function () {
         req.flash("dashboardMessage", '<div class="alert alert-danger">Account deletion failed. Please try again.</div>');
         res.redirect("/dashboard");
     });

@@ -27,6 +27,21 @@
     </div>
 
     <div class="row g-1" id="events-container">
-        <!-- Event Cards go here -->
+        <% events.forEach(event => { %>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 d-flex">
+                <div class="card" style="margin: 5px; width: 18rem; position: relative;">
+                    <img class="card-img-top" src="<%= event.eventImage %>" alt="<%= event.eventName %>">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= event.eventName %></h5>
+                        <p class="card-text">Date: <%= formatDate(event.eventDate) %></p>
+                        <p class="card-text">Location: <%= event.eventLocation %></p>
+                        <p class="card-text"><%= event.eventDescription %></p>
+<!--                        <i class="far fa-heart heart-icon" style="cursor: pointer; position: absolute; bottom: 8px; right: 10px; color: red;"></i>-->
+<!--                        <span class="like-counter" style="position: absolute; bottom: 5px; right: 30px; color: black">-->
+<!--                    <= event.eventLikeCount >-->
+                    </div>
+                </div>
+            </div>
+        <% }) %>
     </div>
 </div>

@@ -1239,142 +1239,142 @@ function formatDate(dateString: string): string {
     function DisplayEventsPage(): void {
         console.log("Called DisplayEventsPage...");
 
-        $(function(): void {
-            // Event listener for dropdown items
-            $('.dropdown-item').on('click', function(): void {
-                let filterOption: string = $(this).text().toLowerCase().trim();
-                displayEventCards(filterOption);
-            });
-
-            // Initial display of events with default filter option
-            displayEventCards('upcoming');
-        });
+        // $(function(): void {
+        //     // Event listener for dropdown items
+        //     $('.dropdown-item').on('click', function(): void {
+        //         let filterOption: string = $(this).text().toLowerCase().trim();
+        //         displayEventCards(filterOption);
+        //     });
+        //
+        //     // Initial display of events with default filter option
+        //     displayEventCards('upcoming');
+        // });
     }
 
     /**
      * Function to filter the events by the selected filter option
      * @param filterOption
      */
-    function displayEventCards(filterOption: string): void {
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', './data/events.json', true);
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                let eventsData: EventData[] = JSON.parse(xhr.responseText).events;
-
-                // Filter events based on the selected option
-                let filteredEvents = filterEvents(eventsData, filterOption);
-
-                // Sort filtered events by event date
-                filteredEvents.sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
-
-                const eventsContainer = $("#events-container");
-                eventsContainer.empty(); // Clear existing events before adding filtered events
-
-                // Create cards for filtered events
-                filteredEvents.forEach(event => {
-                    const eventCard = createEventCard(event);
-                    eventCard.hide();
-                    eventsContainer.append(eventCard);
-                    eventCard.fadeIn('slow');
-                });
-            } else {
-                console.error('Error fetching JSON data:', xhr.statusText);
-            }
-        };
-        xhr.onerror = function() {
-            console.error('Error fetching JSON data:', xhr.statusText);
-        };
-        xhr.send();
-    }
+    // function displayEventCards(filterOption: string): void {
+    //     let xhr = new XMLHttpRequest();
+    //     xhr.open('GET', './data/events.json', true);
+    //     xhr.onload = function() {
+    //         if (xhr.status === 200) {
+    //             let eventsData: EventData[] = JSON.parse(xhr.responseText).events;
+    //
+    //             // Filter events based on the selected option
+    //             let filteredEvents = filterEvents(eventsData, filterOption);
+    //
+    //             // Sort filtered events by event date
+    //             filteredEvents.sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
+    //
+    //             const eventsContainer = $("#events-container");
+    //             eventsContainer.empty(); // Clear existing events before adding filtered events
+    //
+    //             // Create cards for filtered events
+    //             filteredEvents.forEach(event => {
+    //                 const eventCard = createEventCard(event);
+    //                 eventCard.hide();
+    //                 eventsContainer.append(eventCard);
+    //                 eventCard.fadeIn('slow');
+    //             });
+    //         } else {
+    //             console.error('Error fetching JSON data:', xhr.statusText);
+    //         }
+    //     };
+    //     xhr.onerror = function() {
+    //         console.error('Error fetching JSON data:', xhr.statusText);
+    //     };
+    //     xhr.send();
+    // }
 
     /**
      * Creates a card for an event with the event details and image
      * @param event
      * @returns card
      */
-    function createEventCard(event: EventData) {
-
-        const colDiv = $("<div>").addClass("col-xl-3 col-lg-4 col-md-6 col-sm-12 d-flex");
-
-        const card = $("<div>").addClass("card")
-            .css({ "margin": "5px", "width": "18rem", "position": "relative"});
-
-        // Create an image element for the event
-        const cardImage = $("<img>").addClass("card-img-top").attr("src", event.eventImage).attr("alt", event.eventName);
-
-        const cardBody = $("<div>").addClass("card-body");
-
-        const title = $("<h5>").addClass("card-title").text(event.eventName);
-        const date = $("<p>").addClass("card-text").text("Date: " + formatDate(event.eventDate));
-        const location = $("<p>").addClass("card-text").text("Location: " + event.eventLocation);
-        const description = $("<p>").addClass("card-text").text(event.eventDescription);
-
-        const heartIcon = $("<i>")
-            .addClass("far fa-heart")
-            .css({"cursor": "pointer", "position": "absolute", "bottom": "8px", "right": "10px", "color": "red"});
-        // Set the initial like count from localStorage or default to 0 if not found
-        const initialLikeCount: number = parseInt(localStorage.getItem(`likeCount-${event.eventId}`) || '0');
-
-
-        // Create like counter
-        const likeCounter: JQuery<HTMLElement> = $("<span>")
-            .addClass("like-counter")
-            .text(event.eventLikeCount)
-            .css({"position": "absolute", "bottom": "5px", "right": "30px", "color": "black"
-            });
-
-        likeCounter.text(initialLikeCount.toString());
-
-        // Initial state of the heart icon based on sessionStorage
-        if (sessionStorage.getItem(`liked-${event.eventId}`) === 'true') {
-            heartIcon.removeClass("far fa-heart").addClass("fas fa-heart");
-        } else {
-            heartIcon.addClass("far fa-heart");
-        }
-
-        // Toggle heart fill on click
-        heartIcon.on("click", function() {
-            const eventIdKey = `liked-${event.eventId}`;
-            const likeCountKey = `likeCount-${event.eventId}`;
-
-            // Check if the event is already liked in this session
-            if (sessionStorage.getItem(eventIdKey) === 'true') {
-                // If yes, the user is unliking the event.
-                $(this).removeClass("fas fa-heart").addClass("far fa-heart");
-
-                // Decrement the like counter in localStorage
-                let currentCount: number = parseInt(localStorage.getItem(likeCountKey) || '0');
-                let newLikeCount: number = Math.max(currentCount - 1, 0); // Prevent negative counts
-                localStorage.setItem(likeCountKey, newLikeCount.toString());
-                likeCounter.text(newLikeCount.toString());
-
-                // Update sessionStorage to reflect the event is no longer liked
-                sessionStorage.removeItem(eventIdKey);
-            } else {
-                // If not, the user is liking the event.
-                $(this).removeClass("far fa-heart").addClass("fas fa-heart");
-
-                // Increment the like counter in localStorage
-                let currentCount: number = parseInt(localStorage.getItem(likeCountKey) || '0');
-                let newLikeCount: number = currentCount + 1;
-                localStorage.setItem(likeCountKey, newLikeCount.toString());
-                likeCounter.text(newLikeCount.toString());
-
-                // Mark the event as liked in this session
-                sessionStorage.setItem(eventIdKey, 'true');
-            }
-        });
-
-        // Append the image and body to the card
-        card.append(cardImage, cardBody);
-        cardBody.append(title, date, location, description, heartIcon, likeCounter);
-
-        // Append the card to the column div
-        colDiv.append(card);
-
-        return colDiv;
-    }
+    // function createEventCard(event: EventData) {
+    //
+    //     const colDiv = $("<div>").addClass("col-xl-3 col-lg-4 col-md-6 col-sm-12 d-flex");
+    //
+    //     const card = $("<div>").addClass("card")
+    //         .css({ "margin": "5px", "width": "18rem", "position": "relative"});
+    //
+    //     // Create an image element for the event
+    //     const cardImage = $("<img>").addClass("card-img-top").attr("src", event.eventImage).attr("alt", event.eventName);
+    //
+    //     const cardBody = $("<div>").addClass("card-body");
+    //
+    //     const title = $("<h5>").addClass("card-title").text(event.eventName);
+    //     const date = $("<p>").addClass("card-text").text("Date: " + formatDate(event.eventDate));
+    //     const location = $("<p>").addClass("card-text").text("Location: " + event.eventLocation);
+    //     const description = $("<p>").addClass("card-text").text(event.eventDescription);
+    //
+    //     const heartIcon = $("<i>")
+    //         .addClass("far fa-heart")
+    //         .css({"cursor": "pointer", "position": "absolute", "bottom": "8px", "right": "10px", "color": "red"});
+    //     // Set the initial like count from localStorage or default to 0 if not found
+    //     const initialLikeCount: number = parseInt(localStorage.getItem(`likeCount-${event.eventId}`) || '0');
+    //
+    //
+    //     // Create like counter
+    //     const likeCounter: JQuery<HTMLElement> = $("<span>")
+    //         .addClass("like-counter")
+    //         .text(event.eventLikeCount)
+    //         .css({"position": "absolute", "bottom": "5px", "right": "30px", "color": "black"
+    //         });
+    //
+    //     likeCounter.text(initialLikeCount.toString());
+    //
+    //     // Initial state of the heart icon based on sessionStorage
+    //     if (sessionStorage.getItem(`liked-${event.eventId}`) === 'true') {
+    //         heartIcon.removeClass("far fa-heart").addClass("fas fa-heart");
+    //     } else {
+    //         heartIcon.addClass("far fa-heart");
+    //     }
+    //
+    //     // Toggle heart fill on click
+    //     heartIcon.on("click", function() {
+    //         const eventIdKey = `liked-${event.eventId}`;
+    //         const likeCountKey = `likeCount-${event.eventId}`;
+    //
+    //         // Check if the event is already liked in this session
+    //         if (sessionStorage.getItem(eventIdKey) === 'true') {
+    //             // If yes, the user is unliking the event.
+    //             $(this).removeClass("fas fa-heart").addClass("far fa-heart");
+    //
+    //             // Decrement the like counter in localStorage
+    //             let currentCount: number = parseInt(localStorage.getItem(likeCountKey) || '0');
+    //             let newLikeCount: number = Math.max(currentCount - 1, 0); // Prevent negative counts
+    //             localStorage.setItem(likeCountKey, newLikeCount.toString());
+    //             likeCounter.text(newLikeCount.toString());
+    //
+    //             // Update sessionStorage to reflect the event is no longer liked
+    //             sessionStorage.removeItem(eventIdKey);
+    //         } else {
+    //             // If not, the user is liking the event.
+    //             $(this).removeClass("far fa-heart").addClass("fas fa-heart");
+    //
+    //             // Increment the like counter in localStorage
+    //             let currentCount: number = parseInt(localStorage.getItem(likeCountKey) || '0');
+    //             let newLikeCount: number = currentCount + 1;
+    //             localStorage.setItem(likeCountKey, newLikeCount.toString());
+    //             likeCounter.text(newLikeCount.toString());
+    //
+    //             // Mark the event as liked in this session
+    //             sessionStorage.setItem(eventIdKey, 'true');
+    //         }
+    //     });
+    //
+    //     // Append the image and body to the card
+    //     card.append(cardImage, cardBody);
+    //     cardBody.append(title, date, location, description, heartIcon, likeCounter);
+    //
+    //     // Append the card to the column div
+    //     colDiv.append(card);
+    //
+    //     return colDiv;
+    // }
 
     /**
      * Receives an array of events to sort according to the filter option selected.

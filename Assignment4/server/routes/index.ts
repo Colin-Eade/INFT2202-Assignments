@@ -1,5 +1,6 @@
 import express from 'express';
 import User from '../models/user'
+import Event from '../models/event'
 import {UserDisplayName, AuthGuard} from '../utils';
 import passport from 'passport';
 
@@ -23,8 +24,16 @@ router.get('/gallery', function(req, res, next): void {
   res.render('index', { title: `${titlePrefix} Gallery`, page: "gallery", displayName: UserDisplayName(req) });
 });
 router.get('/events', function(req, res, next): void {
-  res.render('index', { title: `${titlePrefix} Events`, page: "events", displayName: UserDisplayName(req) });
+
+  Event.find().then(function(data) {
+    console.log(data)
+    res.render('index', { title: `${titlePrefix} Events`, page: "events", events: data, displayName: UserDisplayName(req) });
+  }).catch(function(err: string){
+    console.error("Error reading events from Database - " + err);
+    res.end();
+  })
 });
+
 router.get('/news', function(req, res, next): void {
   res.render('index', { title: `${titlePrefix} News`, page: "news", displayName: UserDisplayName(req) });
 });
@@ -129,6 +138,8 @@ router.post('/delete_profile', AuthGuard, function(req, res, next) {
 
 router.get('/event_planning', AuthGuard, function(req, res, next): void {
   res.render('index', { title: `${titlePrefix} Plan an Event`, page: "event_planning", displayName: UserDisplayName(req) });
+
+
 });
 
 router.get('/statistics', AuthGuard, function(req, res, next): void {
