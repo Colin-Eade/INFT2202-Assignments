@@ -1,1 +1,64 @@
 <h1 class="mt-3 text-center">Dashboard</h1>
+
+<% if(messages.length > 0) { %>
+    <%- messages %>
+<% } %>
+
+<div class="row justify-content-center mt-3">
+    <div class="col-12">
+        <div class="card bg-body-tertiary border-0">
+            <div class="card-header border-0 d-flex justify-content-between">
+                <h3>Profile</h3>
+                <button class="nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-ellipsis"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navUserButton">
+                    <li><a class="dropdown-item" href="/edit_profile">Edit Profile</a></li>
+                    <li>
+                        <form action="/delete_profile" method="post"
+                              onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+                            <input type="hidden" name="id" value="<%= user._id %>" />
+                            <button type="submit" class="dropdown-item">Delete Profile</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="row card-body">
+                <div class="two-col-grid-lg">
+                    <div>
+                        <h5>Username</h5>
+                        <p><%= user.username %></p>
+                    </div>
+                    <div>
+                        <h5>Display Name</h5>
+                        <p><%= user.displayName %></p>
+                    </div>
+                    <div>
+                        <h5>Email Address</h5>
+                        <p><%= user.emailAddress %></p>
+                    </div>
+                    <div>
+                        <h5>Phone Number</h5>
+                        <p><%= user.phone %></p>
+                    </div>
+                    <div>
+                        <h5>Address</h5>
+                        <p><%= user.address %></p>
+                    </div>
+                    <div>
+                        <h5>Birthday</h5>
+                        <p><%= user.birthday.toISOString().split('T')[0] %></p>
+                    </div>
+                    <div>
+                        <h5>Creation Date</h5>
+                        <p><%= user.created.toISOString().split('T')[0] %></p>
+                    </div>
+                    <div>
+                        <h5>Last Updated</h5>
+                        <p><%= user.updated.toISOString().split('T')[0] %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -292,5 +292,26 @@ main {
     color: #a19e9e; /* Dark grey color; replace with your desired color */
 }
 
+.two-col-grid-lg {
+    display: grid;
+    gap: 1rem;
+}
+
+@media (min-width: 992px) {
+    .two-col-grid-lg {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+.two-col-grid-lg input {
+    margin-right: calc(1rem / 2);
+}
+
+@media (max-width: 991px) {
+    .two-col-grid-lg input {
+        margin-right: 0;
+    }
+}
 
 
