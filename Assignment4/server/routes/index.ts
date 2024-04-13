@@ -1,5 +1,6 @@
 import express from 'express';
 import User from '../models/user'
+import ChatMessage from '../models/chatMessage';
 import Event from '../models/event'
 import {UserDisplayName, AuthGuard} from '../utils';
 import passport from 'passport';
@@ -136,10 +137,91 @@ router.post('/delete_profile', AuthGuard, function(req, res, next) {
   });
 });
 
+router.get('/discussions', AuthGuard, function(req, res, next) {
+
+  ChatMessage.find().sort({ creationDate: -1 })
+      .then(function(data) {
+        res.render('index', {
+          title: `${titlePrefix} Discussions`,
+          page: "discussions",
+          user: req.user,
+          chatMessages: data,
+          messages: req.flash('discussionsMessage'),
+          displayName: UserDisplayName(req),
+        });
+      })
+      .catch(function(err) {
+        req.flash('dashboardMessage', '<div class="alert alert-danger">Failed to load discussions. Please try again later.</div>');
+        res.redirect('/dashboard');
+      });
+});
+
+router.get('/delete_message/:id', AuthGuard, function(req, res) {
+
+  let id = req.params.id;
+
+  ChatMessage.deleteOne({_id: id}).then(function() {
+    req.flash("discussionsMessage", '<div class="alert alert-success">Message deletion successful.</div>');
+    res.redirect("/discussions");
+  }).catch(function(err) {
+    req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to delete message. Please try again later.</div>');
+    res.redirect('/discussions');
+  })
+});
+
+router.get('/like_message/:id', AuthGuard, function(req, res) {
+
+  let id = req.params.id;
+
+  ChatMessage.updateOne({ _id: id }, { $inc: { likes: 1 } }).then(function() {
+      res.redirect('/discussions');
+    }).catch(function(err) {
+      req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update likes. Please try again later.</div>');
+      res.redirect('/discussions');
+    });
+});
+
+router.post('/submit_message', AuthGuard, function(req, res, next) {
+
+  let newMessage = new ChatMessage({
+    username: req.body.username,
+    content: req.body.content,
+    creationDate: new Date()
+  });
+
+  ChatMessage.create(newMessage).then(function(): void {
+    res.redirect("/discussions")
+  }).catch(function(err) {
+    req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to submit message. Please try again.</div>');
+    res.redirect("/discussions");
+  });
+});
+
+router.post('/edit_message', AuthGuard, function(req, res, next) {
+
+  if (!req.body.content || req.body.content.trim() === '') {
+    req.flash("discussionsMessage", '<div class="alert alert-danger">Message content cannot be empty.</div>');
+    return res.redirect("/discussions");
+  }
+
+  let updatedContent = {
+    $set: {
+      content: req.body.content,
+      editDate: new Date()
+    }
+  };
+
+  ChatMessage.updateOne({_id: req.body.id}, updatedContent).then(function(): void {
+      req.flash("discussionsMessage", '<div class="alert alert-success">Message update successful.</div>');
+      res.redirect("/discussions");
+    }).catch(function(err): void {
+      req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update message. Please try again.</div>');
+      res.redirect("/discussions");
+    });
+});
+
 router.get('/event_planning', AuthGuard, function(req, res, next): void {
   res.render('index', { title: `${titlePrefix} Plan an Event`, page: "event_planning", displayName: UserDisplayName(req) });
-
-
 });
 
 router.get('/statistics', AuthGuard, function(req, res, next): void {

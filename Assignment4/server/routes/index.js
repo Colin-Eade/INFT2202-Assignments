@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = __importDefault(require("../models/user"));
-const event_1 = __importDefault(require("../models/event"));
+const chatMessage_1 = __importDefault(require("../models/chatMessage"));
 const utils_1 = require("../utils");
 const passport_1 = __importDefault(require("passport"));
 const router = express_1.default.Router();
@@ -113,6 +113,74 @@ router.post('/delete_profile', utils_1.AuthGuard, function (req, res, next) {
     }).catch(function () {
         req.flash("dashboardMessage", '<div class="alert alert-danger">Account deletion failed. Please try again.</div>');
         res.redirect("/dashboard");
+    });
+});
+router.get('/discussions', utils_1.AuthGuard, function (req, res, next) {
+    chatMessage_1.default.find().sort({ creationDate: -1 })
+        .then(function (data) {
+        res.render('index', {
+            title: `${titlePrefix} Discussions`,
+            page: "discussions",
+            user: req.user,
+            chatMessages: data,
+            messages: req.flash('discussionsMessage'),
+            displayName: (0, utils_1.UserDisplayName)(req),
+        });
+    })
+        .catch(function (err) {
+        req.flash('dashboardMessage', '<div class="alert alert-danger">Failed to load discussions. Please try again later.</div>');
+        res.redirect('/dashboard');
+    });
+});
+router.get('/delete_message/:id', utils_1.AuthGuard, function (req, res) {
+    let id = req.params.id;
+    chatMessage_1.default.deleteOne({ _id: id }).then(function () {
+        req.flash("discussionsMessage", '<div class="alert alert-success">Message deletion successful.</div>');
+        res.redirect("/discussions");
+    }).catch(function (err) {
+        req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to delete message. Please try again later.</div>');
+        res.redirect('/discussions');
+    });
+});
+router.get('/like_message/:id', utils_1.AuthGuard, function (req, res) {
+    let id = req.params.id;
+    chatMessage_1.default.updateOne({ _id: id }, { $inc: { likes: 1 } }).then(function () {
+        res.redirect('/discussions');
+    }).catch(function (err) {
+        req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update likes. Please try again later.</div>');
+        res.redirect('/discussions');
+    });
+});
+router.post('/submit_message', utils_1.AuthGuard, function (req, res, next) {
+    let newMessage = new chatMessage_1.default({
+        username: req.body.username,
+        content: req.body.content,
+        creationDate: new Date()
+    });
+    chatMessage_1.default.create(newMessage).then(function () {
+        res.redirect("/discussions");
+    }).catch(function (err) {
+        req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to submit message. Please try again.</div>');
+        res.redirect("/discussions");
+    });
+});
+router.post('/edit_message', utils_1.AuthGuard, function (req, res, next) {
+    if (!req.body.content || req.body.content.trim() === '') {
+        req.flash("discussionsMessage", '<div class="alert alert-danger">Message content cannot be empty.</div>');
+        return res.redirect("/discussions");
+    }
+    let updatedContent = {
+        $set: {
+            content: req.body.content,
+            editDate: new Date()
+        }
+    };
+    chatMessage_1.default.updateOne({ _id: req.body.id }, updatedContent).then(function () {
+        req.flash("discussionsMessage", '<div class="alert alert-success">Message update successful.</div>');
+        res.redirect("/discussions");
+    }).catch(function (err) {
+        req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update message. Please try again.</div>');
+        res.redirect("/discussions");
     });
 });
 router.get('/event_planning', utils_1.AuthGuard, function (req, res, next) {

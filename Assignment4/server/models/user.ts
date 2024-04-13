@@ -10,6 +10,7 @@ const UserSchema : any = new Schema(
         phone: { type: String, required: true },
         address: { type: String, required: true },
         birthday: { type: Date, required: true },
+        type: { type: String, default: 'user'},
         created: { type: Date, default: Date.now },
         updated: { type: Date, default: Date.now }
     },

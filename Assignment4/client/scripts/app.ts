@@ -1814,6 +1814,12 @@ function formatDate(dateString: string): string {
     }
     //endregion
 
+    //region Discussions Page Functions
+    function DisplayDiscussionsPage() {
+        console.log("Called DisplayDiscussionsPage...");
+    }
+    //endregion
+
     //region Start Function
     /**
      * Called when the website is launched to create the header and footer to display on the page. A switch statement
@@ -1872,7 +1878,9 @@ function formatDate(dateString: string): string {
             case "statistics":
                 DisplayStatisticsPage();
                 break;
-
+            case "discussions":
+                DisplayDiscussionsPage();
+                break;
         }
     }
     //endregion
