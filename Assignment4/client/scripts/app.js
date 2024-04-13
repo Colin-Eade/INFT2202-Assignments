@@ -1036,6 +1036,9 @@ function formatDate(dateString) {
             });
         });
     }
+    function DisplayDiscussionsPage() {
+        console.log("Called DisplayDiscussionsPage...");
+    }
     function Start() {
         console.log("App Started");
         let page_id = $("body")[0].getAttribute("id");
@@ -1085,6 +1088,9 @@ function formatDate(dateString) {
                 break;
             case "statistics":
                 DisplayStatisticsPage();
+                break;
+            case "discussions":
+                DisplayDiscussionsPage();
                 break;
         }
     }
