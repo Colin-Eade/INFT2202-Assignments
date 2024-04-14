@@ -3,7 +3,8 @@
     Date: 2024 Mar 24
     File: event_planning.ejs
     Description: This is the event planning page for the Harmony Hub website that includes a form to plan
-                    an event
+                    an event and also offers the option to delete and edit the events. Only logged in users
+                    are allowed to see this page.
 -->
 
 <h1 class="mt-3 text-center">Event Planning</h1>
@@ -12,7 +13,6 @@
     <p  class="mt-3 text-center">
         Have an idea for an event? Need to book some space at our recreational centre?<br/>
         Click the button below to propose an event to our board.<br/>
-        You can view all events suggested by other users, but can only update or delete those that you have created.
     </p>
     <div class="d-flex justify-content-center">
         <button id="openModalButton" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventPlanningModal">
@@ -29,7 +29,6 @@
             <th scope="col">Event Time</th>
             <th scope="col">Coordinator Contact</th>
             <th scope="col">Brief Description</th>
-            <th scope="col"></th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -55,12 +54,7 @@
             </td>
             <td><%= events[i].eventDescription %></td>
             <td>
-                <a class="btn btn-primary btn-sm edit" data-bs-target="#eventEditModal-<%= events[i]._id %>">
-                    <i class="fas fa-edit fa-sm"></i> Edit
-                </a>
-            </td>
-            <td>
-                <a href="/delete<%= events[i]._id %>" class="btn btn-danger btn-sm delete">
+                <a href="/eventDelete/<%= events[i]._id %>" class="btn btn-danger btn-sm delete">
                     <i class="fas fa-trash-alt fa-sm"></i> Delete
                 </a>
             </td>
@@ -77,7 +71,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="EventPlanningForm" method="post">
+                        <form id="EventPlanningForm" method="post" action="/addEvent">
                             <div class="row">
                                 <!-- Left Column -->
                                 <div class="col-md-6">
@@ -130,14 +124,15 @@
                                 <span id="charCount">0/200</span>
                                 <input type="hidden" id="coordinatorUserName" name="coordinatorUserName" value="">
                             </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-regular fa-calendar-plus"></i> Submit Event
+                                </button>
+                            </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button id="/addEvent" type="submit" class="btn btn-primary">
-                            <i class="fa-regular fa-calendar-plus"></i> Submit Event
-                        </button>
-                    </div>
+
 
                 </div>
             </div>
@@ -158,19 +153,22 @@
                                     <div class="mb-3">
                                         <label for="editEventName" class="form-label">Event Name</label>
                                         <div class="input-group">
-                                            <input id="editEventName" type="text" class="form-control" name="editEventName">
+                                            <input id="editEventName" type="text" class="form-control" name="editEventName"
+                                            value="<%= events[i].eventName %>">
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editCoordinatorEmail" class="form-label">Coordinator Email</label>
                                         <div class="input-group">
-                                            <input id="editCoordinatorEmail" type="email" class="form-control" name="editCoordinatorEmail">
+                                            <input id="editCoordinatorEmail" type="email" class="form-control" name="editCoordinatorEmail"
+                                                   value="<%= events[i].coordinatorEmail %>">
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editEventDate" class="form-label">Event Date</label>
                                         <div class="input-group">
-                                            <input id="editEventDate" type="date" class="form-control" name="editEventDate">
+                                            <input id="editEventDate" type="date" class="form-control" name="editEventDate"
+                                                   value="<%= events[i].eventDate %>">
                                         </div>
                                     </div>
 
@@ -181,19 +179,22 @@
                                     <div class="mb-3">
                                         <label for="editCoordinatorFullName" class="form-label">Coordinator Full Name</label>
                                         <div class="input-group">
-                                            <input id="editCoordinatorFullName" type="text" class="form-control" name="editCoordinatorFullName">
+                                            <input id="editCoordinatorFullName" type="text" class="form-control" name="editCoordinatorFullName"
+                                                   value="<%= events[i].coordinatorFullName %>">
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editCoordinatorPhone" class="form-label">Coordinator Phone Number</label>
                                         <div class="input-group">
-                                            <input id="editCoordinatorPhone" type="text" class="form-control" name="editCoordinatorPhone">
+                                            <input id="editCoordinatorPhone" type="text" class="form-control" name="editCoordinatorPhone"
+                                                   value="<%= events[i].coordinatorPhone %>">
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editEventTime" class="form-label">Event Time</label>
                                         <div class="input-group">
-                                            <input id="editEventTime" type="time" class="form-control" name="editEventTime">
+                                            <input id="editEventTime" type="time" class="form-control" name="editEventTime"
+                                                   value="<%= events[i].eventTime %>">
 
                                         </div>
                                     </div>
@@ -201,7 +202,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="editEventDescription" class="form-label">Brief Event Description</label>
-                                <textarea id="editEventDescription" class="form-control" name="editEventDescription" rows="2" maxlength="300"></textarea>
+                                <textarea id="editEventDescription" class="form-control" name="editEventDescription" rows="2" maxlength="300"
+                                          value="<%= events[i].description %>"></textarea>
                                 <span id="charCount">0/200</span>
                                 <input type="hidden" name="id" value="<%= events[i]._id %>">
                             </div>

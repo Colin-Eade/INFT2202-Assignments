@@ -204,7 +204,7 @@ router.post('/edit_message', utils_1.AuthGuard, function (req, res, next) {
     });
 });
 router.get('/event_planning', utils_1.AuthGuard, function (req, res, next) {
-    event_1.default.find().then(function (data) {
+    event_1.default.find().sort({ eventDate: -1 }).then(function (data) {
         console.log(data);
         res.render('index', {
             title: `${titlePrefix} Event Planning`,
@@ -219,12 +219,15 @@ router.get('/event_planning', utils_1.AuthGuard, function (req, res, next) {
     });
 });
 router.post('/addEvent', utils_1.AuthGuard, function (req, res, next) {
+    const datePart = req.body.eventDate;
+    const timePart = req.body.eventTime;
+    const dateTimeISO = `${datePart}T${timePart}:00`;
     let newEvent = new event_1.default({
         "eventName": req.body.eventName,
         "eventLocation": '',
-        "eventDate": req.body.eventDate + req.body.eventTime,
+        "eventDate": new Date(dateTimeISO),
         "eventImage": '',
-        "eventDescription": req.body.description,
+        "eventDescription": req.body.eventDescription,
         "eventLikeCount": 0,
         "coordinatorFullName": req.body.coordinatorFullName,
         "coordinatorEmail": req.body.coordinatorEmail,
@@ -237,31 +240,10 @@ router.post('/addEvent', utils_1.AuthGuard, function (req, res, next) {
         res.end();
     });
 });
-router.post('/eventDelete:id', utils_1.AuthGuard, function (req, res, next) {
+router.get('/eventDelete/:id', utils_1.AuthGuard, function (req, res, next) {
     let id = req.params.id;
     event_1.default.deleteOne({ _id: id }).then(function () {
         res.redirect('/event_planning');
-    }).catch(function (err) {
-        console.error(err);
-        res.end();
-    });
-});
-router.post('/eventEdit:id', utils_1.AuthGuard, function (req, res, next) {
-    let id = req.params.id;
-    let updatedEvent = new event_1.default({
-        "_id": id,
-        "eventName": req.body.eventName,
-        "eventLocation": '',
-        "eventDate": req.body.eventDate + req.body.eventTime,
-        "eventImage": '',
-        "eventDescription": req.body.description,
-        "eventLikeCount": 0,
-        "coordinatorFullName": req.body.coordinatorFullName,
-        "coordinatorEmail": req.body.coordinatorEmail,
-        "coordinatorPhone": req.body.coordinatorPhone
-    });
-    event_1.default.updateOne({ _id: id }, updatedEvent).then(function () {
-        res.redirect("/event_planning");
     }).catch(function (err) {
         console.error(err);
         res.end();
