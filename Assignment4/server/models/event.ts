@@ -10,7 +10,11 @@ const EventsSchema : any = new Schema (
         eventDate: Date,
         eventImage: String,
         eventDescription: String,
-        eventLikeCount: Number
+        eventLikeCount: Number,
+        coordinatorFullName: String,
+        coordinatorEmail: String,
+        coordinatorPhone: String,
+        description: String
     },
     {
         collection: "events"

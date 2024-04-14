@@ -26,13 +26,31 @@ router.get('/gallery', function(req, res, next): void {
 });
 router.get('/events', function(req, res, next): void {
 
-  Event.find().then(function(data) {
+  Event.find().sort({eventDate: -1 }).then(function(data) {
     console.log(data)
-    res.render('index', { title: `${titlePrefix} Events`, page: "events", events: data, displayName: UserDisplayName(req) });
+    res.render('index', {
+      title: `${titlePrefix} Events`,
+      page: "events",
+      events: data,
+      messages: req.flash('eventsMessage'),
+      displayName: UserDisplayName(req)
+    });
   }).catch(function(err: string){
     console.error("Error reading events from Database - " + err);
     res.end();
   })
+});
+
+router.get('/like_event/:id', function(req, res) {
+
+  let id = req.params.id;
+
+  Event.updateOne({ _id: id }, { $inc: { eventLikeCount: 1 } }).then(function() {
+    res.redirect('/events');
+  }).catch(function(err) {
+    req.flash("eventsMessage", '<div class="alert alert-danger">Failed to update likes. Please try again later.</div>');
+    res.redirect('/events');
+  });
 });
 
 router.get('/news', function(req, res, next): void {
@@ -221,7 +239,44 @@ router.post('/edit_message', AuthGuard, function(req, res, next) {
 });
 
 router.get('/event_planning', AuthGuard, function(req, res, next): void {
-  res.render('index', { title: `${titlePrefix} Plan an Event`, page: "event_planning", displayName: UserDisplayName(req) });
+
+  Event.find().then(function(data) {
+    console.log(data)
+    res.render('index', {
+      title: `${titlePrefix} Event Planning`,
+      page: "event_planning",
+      events: data,
+      messages: req.flash('eventsMessage'),
+      displayName: UserDisplayName(req)
+    });
+  }).catch(function(err: string){
+    console.error("Error reading events from Database - " + err);
+    res.end();
+  })
+
+});
+
+router.post('/addEvent', AuthGuard,function(req, res, next){
+
+  let newEvent = new Event (
+      {
+        "eventName": req.body.eventName,
+        "eventLocation": '',
+        "eventDate": req.body.eventDate + req.body.eventTime,
+        "eventImage": '',
+        "eventDescription": req.body.description,
+        "eventLikeCount": 0,
+        "coordinatorFullName": req.body.coordinatorFullName,
+        "coordinatorEmail": req.body.coordinatorEmail,
+        "coordinatorPhone": req.body.coordinatorPhone
+      }
+  );
+  Event.create(newEvent).then(function(){
+    res.redirect('/event_planning');
+  }).catch(function(err){
+    console.error(err);
+    res.end();
+  });
 });
 
 router.get('/statistics', AuthGuard, function(req, res, next): void {

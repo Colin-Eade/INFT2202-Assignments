@@ -27,12 +27,27 @@ router.get('/gallery', function (req, res, next) {
     res.render('index', { title: `${titlePrefix} Gallery`, page: "gallery", displayName: (0, utils_1.UserDisplayName)(req) });
 });
 router.get('/events', function (req, res, next) {
-    event_1.default.find().then(function (data) {
+    event_1.default.find().sort({ eventDate: -1 }).then(function (data) {
         console.log(data);
-        res.render('index', { title: `${titlePrefix} Events`, page: "events", events: data, displayName: (0, utils_1.UserDisplayName)(req) });
+        res.render('index', {
+            title: `${titlePrefix} Events`,
+            page: "events",
+            events: data,
+            messages: req.flash('eventsMessage'),
+            displayName: (0, utils_1.UserDisplayName)(req)
+        });
     }).catch(function (err) {
         console.error("Error reading events from Database - " + err);
         res.end();
+    });
+});
+router.get('/like_event/:id', function (req, res) {
+    let id = req.params.id;
+    event_1.default.updateOne({ _id: id }, { $inc: { eventLikeCount: 1 } }).then(function () {
+        res.redirect('/events');
+    }).catch(function (err) {
+        req.flash("eventsMessage", '<div class="alert alert-danger">Failed to update likes. Please try again later.</div>');
+        res.redirect('/events');
     });
 });
 router.get('/news', function (req, res, next) {
@@ -185,7 +200,38 @@ router.post('/edit_message', utils_1.AuthGuard, function (req, res, next) {
     });
 });
 router.get('/event_planning', utils_1.AuthGuard, function (req, res, next) {
-    res.render('index', { title: `${titlePrefix} Plan an Event`, page: "event_planning", displayName: (0, utils_1.UserDisplayName)(req) });
+    event_1.default.find().then(function (data) {
+        console.log(data);
+        res.render('index', {
+            title: `${titlePrefix} Event Planning`,
+            page: "event_planning",
+            events: data,
+            messages: req.flash('eventsMessage'),
+            displayName: (0, utils_1.UserDisplayName)(req)
+        });
+    }).catch(function (err) {
+        console.error("Error reading events from Database - " + err);
+        res.end();
+    });
+});
+router.post('/addEvent', utils_1.AuthGuard, function (req, res, next) {
+    let newEvent = new event_1.default({
+        "eventName": req.body.eventName,
+        "eventLocation": '',
+        "eventDate": req.body.eventDate + req.body.eventTime,
+        "eventImage": '',
+        "eventDescription": req.body.description,
+        "eventLikeCount": 0,
+        "coordinatorFullName": req.body.coordinatorFullName,
+        "coordinatorEmail": req.body.coordinatorEmail,
+        "coordinatorPhone": req.body.coordinatorPhone
+    });
+    event_1.default.create(newEvent).then(function () {
+        res.redirect('/event_planning');
+    }).catch(function (err) {
+        console.error(err);
+        res.end();
+    });
 });
 router.get('/statistics', utils_1.AuthGuard, function (req, res, next) {
     res.render('index', { title: `${titlePrefix} Statistics`, page: "statistics", displayName: (0, utils_1.UserDisplayName)(req) });
