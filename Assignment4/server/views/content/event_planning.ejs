@@ -55,7 +55,7 @@
             </td>
             <td><%= event.eventDescription %></td>
             <td>
-                <a href="/edit<%= event._id %>" class="btn btn-primary btn-sm edit">
+                <a href="/edit<%= event._id %>" class="btn btn-primary btn-sm edit" data-bs-target="#eventEditModal">
                     <i class="fas fa-edit fa-sm"></i> Edit
                 </a>
             </td>
@@ -137,7 +137,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="addEvent" type="button" class="btn btn-primary">
+                    <button id="/addEvent" type="submit" class="btn btn-primary">
                         <i class="fa-regular fa-calendar-plus"></i> Submit Event
                     </button>
                 </div>
@@ -216,22 +216,6 @@
                     </button>
                 </div>
 
-            </div>
-        </div>
-    </div>
-    <!-- Event Details Modal -->
-    <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="eventDetailsModalLabel">Event Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p id="eventDetails"></p>
-                </div>
-                <div class="modal-footer" id="eventModalFooter">
-                </div>
             </div>
         </div>
     </div>

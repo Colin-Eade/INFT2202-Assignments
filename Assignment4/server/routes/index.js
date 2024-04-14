@@ -168,6 +168,10 @@ router.get('/like_message/:id', utils_1.AuthGuard, function (req, res) {
     });
 });
 router.post('/submit_message', utils_1.AuthGuard, function (req, res, next) {
+    if (!req.body.content || req.body.content.trim() === '') {
+        req.flash("discussionsMessage", '<div class="alert alert-danger">Message content cannot be empty.</div>');
+        return res.redirect("/discussions");
+    }
     let newMessage = new chatMessage_1.default({
         username: req.body.username,
         content: req.body.content,
@@ -185,13 +189,13 @@ router.post('/edit_message', utils_1.AuthGuard, function (req, res, next) {
         req.flash("discussionsMessage", '<div class="alert alert-danger">Message content cannot be empty.</div>');
         return res.redirect("/discussions");
     }
-    let updatedContent = {
+    let updatedMessage = {
         $set: {
             content: req.body.content,
             editDate: new Date()
         }
     };
-    chatMessage_1.default.updateOne({ _id: req.body.id }, updatedContent).then(function () {
+    chatMessage_1.default.updateOne({ _id: req.body.id }, updatedMessage).then(function () {
         req.flash("discussionsMessage", '<div class="alert alert-success">Message update successful.</div>');
         res.redirect("/discussions");
     }).catch(function (err) {
@@ -233,6 +237,36 @@ router.post('/addEvent', utils_1.AuthGuard, function (req, res, next) {
         res.end();
     });
 });
+router.post('/eventDelete:id', utils_1.AuthGuard, function (req, res, next) {
+    let id = req.params.id;
+    event_1.default.deleteOne({ _id: id }).then(function () {
+        res.redirect('/event_planning');
+    }).catch(function (err) {
+        console.error(err);
+        res.end();
+    });
+});
+router.post('/eventEdit:id', utils_1.AuthGuard, function (req, res, next) {
+    let id = req.params.id;
+    let updatedEvent = new event_1.default({
+        "_id": id,
+        "eventName": req.body.eventName,
+        "eventLocation": '',
+        "eventDate": req.body.eventDate + req.body.eventTime,
+        "eventImage": '',
+        "eventDescription": req.body.description,
+        "eventLikeCount": 0,
+        "coordinatorFullName": req.body.coordinatorFullName,
+        "coordinatorEmail": req.body.coordinatorEmail,
+        "coordinatorPhone": req.body.coordinatorPhone
+    });
+    event_1.default.updateOne({ _id: id }, updatedEvent).then(function () {
+        res.redirect("/event_planning");
+    }).catch(function (err) {
+        console.error(err);
+        res.end();
+    });
+});
 router.get('/statistics', utils_1.AuthGuard, function (req, res, next) {
     res.render('index', { title: `${titlePrefix} Statistics`, page: "statistics", displayName: (0, utils_1.UserDisplayName)(req) });
 });
@@ -268,6 +302,7 @@ router.get('/logout', function (req, res, next) {
             console.error(err);
             res.end();
         }
+        req.flash('loginMessage', '<div class="alert alert-success">Logout successful!</div>');
         res.redirect('/login');
     });
 });

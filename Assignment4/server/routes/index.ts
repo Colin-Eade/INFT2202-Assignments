@@ -311,6 +311,42 @@ router.post('/addEvent', AuthGuard,function(req, res, next){
   });
 });
 
+router.post('/eventDelete:id', AuthGuard, function(req, res, next){
+  let id = req.params.id;
+
+  Event.deleteOne({_id: id}).then(function() {
+    res.redirect('/event_planning');
+  }).catch(function(err){
+    console.error(err);
+    res.end();
+  });
+});
+
+router.post('/eventEdit:id', AuthGuard, function(req, res, next){
+  let id = req.params.id;
+
+  let updatedEvent = new Event (
+      {
+        "_id": id,
+        "eventName": req.body.eventName,
+        "eventLocation": '',
+        "eventDate": req.body.eventDate + req.body.eventTime,
+        "eventImage": '',
+        "eventDescription": req.body.description,
+        "eventLikeCount": 0,
+        "coordinatorFullName": req.body.coordinatorFullName,
+        "coordinatorEmail": req.body.coordinatorEmail,
+        "coordinatorPhone": req.body.coordinatorPhone
+      }
+  );
+  Event.updateOne({_id: id}, updatedEvent).then(function(){
+    res.redirect("/event_planning");
+  }).catch(function(err){
+    console.error(err);
+    res.end();
+  });
+});
+
 router.get('/statistics', AuthGuard, function(req, res, next): void {
   res.render('index', { title: `${titlePrefix} Statistics`, page: "statistics", displayName: UserDisplayName(req) });
 });
