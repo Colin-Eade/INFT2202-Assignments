@@ -207,13 +207,13 @@ router.get('/like_message/:id', AuthGuard, function(req, res) {
 
   // Add 1 to the likes field of the message
   ChatMessage.updateOne({ _id: id }, { $inc: { likes: 1 } }).then(function() {
-      res.redirect('/discussions');
+    res.redirect('/discussions');
 
-      // Inform the user if liking the message failed
-    }).catch(function(err) {
-      req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update likes. Please try again later.</div>');
-      res.redirect('/discussions');
-    });
+    // Inform the user if liking the message failed
+  }).catch(function(err) {
+    req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update likes. Please try again later.</div>');
+    res.redirect('/discussions');
+  });
 });
 
 router.post('/submit_message', AuthGuard, function(req, res, next) {
@@ -260,14 +260,14 @@ router.post('/edit_message', AuthGuard, function(req, res, next) {
 
   // Insert the new content and edit date into the message of the given request body ID
   ChatMessage.updateOne({_id: req.body.id}, updatedMessage).then(function(): void {
-      req.flash("discussionsMessage", '<div class="alert alert-success">Message update successful.</div>');
-      res.redirect("/discussions");
+    req.flash("discussionsMessage", '<div class="alert alert-success">Message update successful.</div>');
+    res.redirect("/discussions");
 
-      // Inform the user if the message update failed
-    }).catch(function(err): void {
-      req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update message. Please try again.</div>');
-      res.redirect("/discussions");
-    });
+    // Inform the user if the message update failed
+  }).catch(function(err): void {
+    req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update message. Please try again.</div>');
+    res.redirect("/discussions");
+  });
 });
 
 router.get('/event_planning', AuthGuard, function(req, res, next): void {
