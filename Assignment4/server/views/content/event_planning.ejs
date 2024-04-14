@@ -35,188 +35,191 @@
         </thead>
         <tbody id="contactList">
         <% let counter = 1; %>
-    <% events.forEach(function(event) { %>
+    <% for(i = 0; i < events.length; i ++) {%>
         <tr>
             <td><%= counter %></td>
-            <td><%= event.eventName %></td>
-            <td><%= new Date(event.eventDate).toLocaleString('en-US', {
+            <td><%= events[i].eventName %></td>
+            <td><%= new Date(events[i].eventDate).toLocaleString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
                 }) %></td>
-            <td><%= new Date(event.eventDate).toLocaleString('en-US', {
+            <td><%= new Date(events[i].eventDate).toLocaleString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit'
                 }) %></td>
             <td>
-                <%= event.coordinatorFullName %><br/>
-                <%= event.coordinatorPhone %><br/>
-                <%= event.coordinatorEmail %><br/>
+                <%= events[i].coordinatorFullName %><br/>
+                <%= events[i].coordinatorPhone %><br/>
+                <%= events[i].coordinatorEmail %><br/>
             </td>
-            <td><%= event.eventDescription %></td>
+            <td><%= events[i].eventDescription %></td>
             <td>
-                <a href="/edit<%= event._id %>" class="btn btn-primary btn-sm edit" data-bs-target="#eventEditModal">
+                <a class="btn btn-primary btn-sm edit" data-bs-target="#eventEditModal-<%= events[i]._id %>">
                     <i class="fas fa-edit fa-sm"></i> Edit
                 </a>
             </td>
             <td>
-                <a href="/delete<%= event._id %>" class="btn btn-danger btn-sm delete">
+                <a href="/delete<%= events[i]._id %>" class="btn btn-danger btn-sm delete">
                     <i class="fas fa-trash-alt fa-sm"></i> Delete
                 </a>
             </td>
         </tr>
 
         <% counter ++ %>
-    <% }) %>
-        </tbody>
-    </table>
-    </div>
-    <!-- Add Event Modal -->
-    <div class="modal fade" id="eventPlanningModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Plan New Event</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="EventPlanningForm">
-                        <div class="row">
-                            <!-- Left Column -->
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="eventName" class="form-label">Event Name</label>
+
+        <!-- Add Event Modal -->
+        <div class="modal fade" id="eventPlanningModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Plan New Event</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="EventPlanningForm" method="post">
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="eventName" class="form-label">Event Name</label>
                                         <div class="input-group">
                                             <input id="eventName" type="text" class="form-control" name="eventName">
                                         </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="coordinatorEmail" class="form-label">Coordinator Email</label>
-                                    <div class="input-group">
-                                    <input id="coordinatorEmail" type="email" class="form-control" name="coordinatorEmail">
                                     </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="eventDate" class="form-label">Event Date</label>
-                                    <div class="input-group">
-                                    <input id="eventDate" type="date" class="form-control" name="eventDate">
+                                    <div class="mb-3">
+                                        <label for="coordinatorEmail" class="form-label">Coordinator Email</label>
+                                        <div class="input-group">
+                                            <input id="coordinatorEmail" type="email" class="form-control" name="coordinatorEmail">
+                                        </div>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="eventDate" class="form-label">Event Date</label>
+                                        <div class="input-group">
+                                            <input id="eventDate" type="date" class="form-control" name="eventDate">
+                                        </div>
+                                    </div>
+
                                 </div>
 
+                                <!-- Right Column -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="coordinatorFullName" class="form-label">Coordinator Full Name</label>
+                                        <div class="input-group">
+                                            <input id="coordinatorFullName" type="text" class="form-control" name="coordinatorFullName">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="coordinatorPhone" class="form-label">Coordinator Phone Number</label>
+                                        <div class="input-group">
+                                            <input id="coordinatorPhone" type="text" class="form-control" name="coordinatorPhone">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="eventTime" class="form-label">Event Time</label>
+                                        <div class="input-group">
+                                            <input id="eventTime" type="time" class="form-control" name="eventTime">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <!-- Right Column -->
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="coordinatorFullName" class="form-label">Coordinator Full Name</label>
-                                    <div class="input-group">
-                                    <input id="coordinatorFullName" type="text" class="form-control" name="coordinatorFullName">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="coordinatorPhone" class="form-label">Coordinator Phone Number</label>
-                                    <div class="input-group">
-                                    <input id="coordinatorPhone" type="text" class="form-control" name="coordinatorPhone">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="eventTime" class="form-label">Event Time</label>
-                                    <div class="input-group">
-                                    <input id="eventTime" type="time" class="form-control" name="eventTime">
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label for="eventDescription" class="form-label">Brief Event Description</label>
+                                <textarea id="eventDescription" class="form-control" name="eventDescription" rows="2" maxlength="300"></textarea>
+                                <span id="charCount">0/200</span>
+                                <input type="hidden" id="coordinatorUserName" name="coordinatorUserName" value="">
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="eventDescription" class="form-label">Brief Event Description</label>
-                            <textarea id="eventDescription" class="form-control" name="eventDescription" rows="2" maxlength="300"></textarea>
-                            <span id="charCount">0/200</span>
-                            <input type="hidden" id="coordinatorUserName" name="coordinatorUserName" value="">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="/addEvent" type="submit" class="btn btn-primary">
-                        <i class="fa-regular fa-calendar-plus"></i> Submit Event
-                    </button>
-                </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button id="/addEvent" type="submit" class="btn btn-primary">
+                            <i class="fa-regular fa-calendar-plus"></i> Submit Event
+                        </button>
+                    </div>
 
+                </div>
             </div>
         </div>
-    </div>
-    <!-- Edit Event Modal -->
-    <div class="modal fade" id="eventEditModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Edit Your Event</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="EventEditForm">
-                        <div class="row">
-                            <!-- Left Column -->
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="editEventName" class="form-label">Event Name</label>
-                                    <div class="input-group">
-                                    <input id="editEventName" type="text" class="form-control" name="editEventName">
+        <!-- Edit Event Modal -->
+        <div class="modal fade" id="eventEditModal-<%= events[i]._id %>" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Edit Your Event</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="EventEditForm">
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="editEventName" class="form-label">Event Name</label>
+                                        <div class="input-group">
+                                            <input id="editEventName" type="text" class="form-control" name="editEventName">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editCoordinatorEmail" class="form-label">Coordinator Email</label>
-                                    <div class="input-group">
-                                    <input id="editCoordinatorEmail" type="email" class="form-control" name="editCoordinatorEmail">
+                                    <div class="mb-3">
+                                        <label for="editCoordinatorEmail" class="form-label">Coordinator Email</label>
+                                        <div class="input-group">
+                                            <input id="editCoordinatorEmail" type="email" class="form-control" name="editCoordinatorEmail">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editEventDate" class="form-label">Event Date</label>
-                                    <div class="input-group">
-                                    <input id="editEventDate" type="date" class="form-control" name="editEventDate">
+                                    <div class="mb-3">
+                                        <label for="editEventDate" class="form-label">Event Date</label>
+                                        <div class="input-group">
+                                            <input id="editEventDate" type="date" class="form-control" name="editEventDate">
+                                        </div>
                                     </div>
+
                                 </div>
 
+                                <!-- Right Column -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="editCoordinatorFullName" class="form-label">Coordinator Full Name</label>
+                                        <div class="input-group">
+                                            <input id="editCoordinatorFullName" type="text" class="form-control" name="editCoordinatorFullName">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editCoordinatorPhone" class="form-label">Coordinator Phone Number</label>
+                                        <div class="input-group">
+                                            <input id="editCoordinatorPhone" type="text" class="form-control" name="editCoordinatorPhone">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editEventTime" class="form-label">Event Time</label>
+                                        <div class="input-group">
+                                            <input id="editEventTime" type="time" class="form-control" name="editEventTime">
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <!-- Right Column -->
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="editCoordinatorFullName" class="form-label">Coordinator Full Name</label>
-                                    <div class="input-group">
-                                    <input id="editCoordinatorFullName" type="text" class="form-control" name="editCoordinatorFullName">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editCoordinatorPhone" class="form-label">Coordinator Phone Number</label>
-                                    <div class="input-group">
-                                    <input id="editCoordinatorPhone" type="text" class="form-control" name="editCoordinatorPhone">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editEventTime" class="form-label">Event Time</label>
-                                    <div class="input-group">
-                                    <input id="editEventTime" type="time" class="form-control" name="editEventTime">
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label for="editEventDescription" class="form-label">Brief Event Description</label>
+                                <textarea id="editEventDescription" class="form-control" name="editEventDescription" rows="2" maxlength="300"></textarea>
+                                <span id="charCount">0/200</span>
+                                <input type="hidden" name="id" value="<%= events[i]._id %>">
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editEventDescription" class="form-label">Brief Event Description</label>
-                            <textarea id="editEventDescription" class="form-control" name="editEventDescription" rows="2" maxlength="300"></textarea>
-                            <span id="charCount">0/200</span>
-                            <input type="hidden" id="coordinatorUserName" name="coordinatorUserName" value="">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="editEventFormSubmit" type="button" class="btn btn-primary">
-                        <i class="fa-regular fa-calendar-plus"></i> Save Changes
-                    </button>
-                </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button id="editEventFormSubmit" type="submit" class="btn btn-primary">
+                            <i class="fa-regular fa-calendar-plus"></i> Save Changes
+                        </button>
+                    </div>
 
+                </div>
             </div>
         </div>
+    <% } %>
+        </tbody>
+    </table>
     </div>
+
 </div>
