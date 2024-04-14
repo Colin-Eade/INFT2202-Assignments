@@ -95,6 +95,7 @@ router.post('/edit_profile', AuthGuard, async function(req, res, next) {
       ]
     });
 
+    // if the username/email address already exists, then return to dashboard and inform the user that their update failed
     if (existingUser) {
       if (existingUser.username === req.body.username) {
         req.flash('dashboardMessage', '<div class="alert alert-danger">Username already taken.</div>');
@@ -139,6 +140,7 @@ router.post('/edit_profile', AuthGuard, async function(req, res, next) {
       return res.redirect('/dashboard');
     });
 
+    // Catch any errors and inform the user of update failure
   } catch (err) {
     req.flash('dashboardMessage', '<div class="alert alert-danger">Sorry, we are unable to process your request at this time.</div>');
     return res.redirect('/dashboard');
@@ -146,9 +148,13 @@ router.post('/edit_profile', AuthGuard, async function(req, res, next) {
 });
 
 router.post('/delete_profile', AuthGuard, function(req, res, next) {
+
+  // Delete the user based on the given id passed through
   User.deleteOne({ _id: req.body.id }).then(function(): void {
     req.flash("loginMessage", '<div class="alert alert-success">Account deletion successful!</div>');
     res.redirect("/login");
+
+    // Inform the user if the deletion fails
   }).catch(function(): void {
     req.flash("dashboardMessage", '<div class="alert alert-danger">Account deletion failed. Please try again.</div>');
     res.redirect("/dashboard");
@@ -157,6 +163,7 @@ router.post('/delete_profile', AuthGuard, function(req, res, next) {
 
 router.get('/discussions', AuthGuard, function(req, res, next) {
 
+  // Find and sort the chatMessages collection with newest first
   ChatMessage.find().sort({ creationDate: -1 })
       .then(function(data) {
         res.render('index', {
@@ -168,6 +175,8 @@ router.get('/discussions', AuthGuard, function(req, res, next) {
           displayName: UserDisplayName(req),
         });
       })
+
+      // Inform the user if the chat messages failed to load and return to dashboard
       .catch(function(err) {
         req.flash('dashboardMessage', '<div class="alert alert-danger">Failed to load discussions. Please try again later.</div>');
         res.redirect('/dashboard');
@@ -176,11 +185,15 @@ router.get('/discussions', AuthGuard, function(req, res, next) {
 
 router.get('/delete_message/:id', AuthGuard, function(req, res) {
 
+  // ID of message to be deleted
   let id = req.params.id;
 
+  // Delete the message and inform the user of successful deletion
   ChatMessage.deleteOne({_id: id}).then(function() {
     req.flash("discussionsMessage", '<div class="alert alert-success">Message deletion successful.</div>');
     res.redirect("/discussions");
+
+    // Inform the user if the message deletion failed
   }).catch(function(err) {
     req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to delete message. Please try again later.</div>');
     res.redirect('/discussions');
@@ -189,10 +202,14 @@ router.get('/delete_message/:id', AuthGuard, function(req, res) {
 
 router.get('/like_message/:id', AuthGuard, function(req, res) {
 
+  // ID of message being liked
   let id = req.params.id;
 
+  // Add 1 to the likes field of the message
   ChatMessage.updateOne({ _id: id }, { $inc: { likes: 1 } }).then(function() {
       res.redirect('/discussions');
+
+      // Inform the user if liking the message failed
     }).catch(function(err) {
       req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update likes. Please try again later.</div>');
       res.redirect('/discussions');
@@ -201,14 +218,24 @@ router.get('/like_message/:id', AuthGuard, function(req, res) {
 
 router.post('/submit_message', AuthGuard, function(req, res, next) {
 
+  // Check if the user submitted an empty message and inform them if they did
+  if (!req.body.content || req.body.content.trim() === '') {
+    req.flash("discussionsMessage", '<div class="alert alert-danger">Message content cannot be empty.</div>');
+    return res.redirect("/discussions");
+  }
+
+  // Create a new message
   let newMessage = new ChatMessage({
     username: req.body.username,
     content: req.body.content,
     creationDate: new Date()
   });
 
+  // Add the message to the chatMessages collection and return to the discussions page
   ChatMessage.create(newMessage).then(function(): void {
     res.redirect("/discussions")
+
+    // Inform the user if the message submission failed
   }).catch(function(err) {
     req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to submit message. Please try again.</div>');
     res.redirect("/discussions");
@@ -217,21 +244,26 @@ router.post('/submit_message', AuthGuard, function(req, res, next) {
 
 router.post('/edit_message', AuthGuard, function(req, res, next) {
 
+  // Check if the editted message is empty
   if (!req.body.content || req.body.content.trim() === '') {
     req.flash("discussionsMessage", '<div class="alert alert-danger">Message content cannot be empty.</div>');
     return res.redirect("/discussions");
   }
 
-  let updatedContent = {
+  // Set the new message content and update the last edit date
+  let updatedMessage = {
     $set: {
       content: req.body.content,
       editDate: new Date()
     }
   };
 
-  ChatMessage.updateOne({_id: req.body.id}, updatedContent).then(function(): void {
+  // Insert the new content and edit date into the message of the given request body ID
+  ChatMessage.updateOne({_id: req.body.id}, updatedMessage).then(function(): void {
       req.flash("discussionsMessage", '<div class="alert alert-success">Message update successful.</div>');
       res.redirect("/discussions");
+
+      // Inform the user if the message update failed
     }).catch(function(err): void {
       req.flash("discussionsMessage", '<div class="alert alert-danger">Failed to update message. Please try again.</div>');
       res.redirect("/discussions");
@@ -287,28 +319,38 @@ router.get('/statistics', AuthGuard, function(req, res, next): void {
 //region Authentication Routes
 router.get('/login', function(req, res, next): void {
 
+  // Stay on the login page if the user is not logged in
   if (!req.user) {
     return res.render('index',
         { title: `${titlePrefix} Login`, page: "login", messages: req.flash('loginMessage'),  displayName: UserDisplayName(req) });
   }
+
+  // Redirect to dashboard if the user is logged in
   return res.redirect("/dashboard");
 });
 
 router.post('/login', function(req, res, next) {
+
+  // Try to authenticate the user
   passport.authenticate('local', function (err: Error, user: Express.User, info: string) {
     if (err) {
       console.error(err);
       res.end();
     }
+    // Inform the user if their credentials are invalid
     if (!user) {
       req.flash('loginMessage', '<div class="alert alert-danger">Invalid credentials. Please try again.</div>');
       return res.redirect('/login');
     }
+
+    // Try to login
     req.login(user, function(err) {
       if (err) {
         console.error(err);
         res.end();
       }
+
+      // Inform the user upon successful login
       req.flash('dashboardMessage', '<div class="alert alert-success">Login successful!</div>');
       res.redirect('/dashboard');
     });
@@ -317,26 +359,33 @@ router.post('/login', function(req, res, next) {
 
 router.get('/logout', function(req, res, next) {
 
+  // Try to logout the user
   req.logout(function (err): void {
     if (err) {
       console.error(err);
       res.end();
     }
+    // inform the user upon successful logout
+    req.flash('loginMessage', '<div class="alert alert-success">Logout successful!</div>');
     res.redirect('/login');
   });
 });
 
 router.get('/register', function(req, res, next) {
 
+  // Stay on register page if user is not logged in
   if(!req.user) {
     return res.render('index',
         { title: 'Register', page: "register", messages: req.flash('registerMessage'), displayName: UserDisplayName(req) });
   }
+
+  // Redirect to dashboard if user is logged in
   return res.redirect("/dashboard");
 });
 
 router.post('/register', function(req, res, next) {
 
+  // Create a new user from the request body submission
   let newUser = new User({
     username: req.body.username,
     emailAddress: req.body.emailAddress,
@@ -346,11 +395,14 @@ router.post('/register', function(req, res, next) {
     birthday: new Date(req.body.birthday)
   });
 
+  // Try to register the user
   User.register(newUser, req.body.password, function(err) {
 
+    // Inform the user upon an error registering
     if (err) {
       let errorMessage = '<div class="alert alert-danger">Sorry, we are unable to process your request at this time.</div>';
 
+      // Inform the user if the register form was submitted with empty fields
       if (err.errors) {
         for (let field in err.errors) {
           if (err.errors[field].kind === 'required') {
@@ -360,14 +412,17 @@ router.post('/register', function(req, res, next) {
         }
       }
 
+      // Inform the user if the email/username they submitted is already taken
       if (err.name == "UserExistsError") {
         errorMessage = '<div class="alert alert-danger">A user with this username or email already exists in the system.</div>';
       }
 
+      // Redirect and flash upon error
       req.flash('registerMessage', errorMessage);
       res.redirect('/register');
     }
 
+    // Log the user in if registration was successful
     return passport.authenticate('local')(req, res, function(){
       req.flash('dashboardMessage', '<div class="alert alert-success">Registration successful! Welcome to the dashboard.</div>');
       return res.redirect('/dashboard');
